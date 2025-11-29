@@ -3,32 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stat Exam Pro - Ace Your Statistics Exams</title>
+    <title>Stat Exam Pro - Master Biostatistics</title>
+    <meta name="description" content="The ultimate bilingual study aid for Medical Students (PASS/LAS). Prepare for your Biostatistics exams with ease.">
+    
+    <!-- Иконка во вкладке (Favicon) - заглушка эмодзи -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; text-align: center; padding: 50px; background-color: #f4f6f8; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; margin-bottom: 10px; }
-        p { font-size: 1.1em; line-height: 1.6; color: #666; }
-        .btn { display: inline-block; background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; }
-        .btn:hover { background: #0056b3; }
-        footer { margin-top: 40px; font-size: 0.9em; color: #999; border-top: 1px solid #eee; padding-top: 20px; }
-        a { color: #007bff; text-decoration: none; }
+        /* --- VARIABLES & THEME --- */
+        :root {
+            --bg-color: #ffffff;
+            --text-main: #1d1d1f;
+            --text-sec: #86868b;
+            --accent: #0071e3;
+            --card-bg: #f5f5f7;
+            --btn-bg: #1d1d1f;
+            --btn-text: #ffffff;
+            --gradient-1: rgba(0, 113, 227, 0.15);
+            --gradient-2: rgba(200, 0, 255, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #000000;
+                --text-main: #f5f5f7;
+                --text-sec: #a1a1a6;
+                --accent: #2997ff;
+                --card-bg: #1c1c1e;
+                --btn-bg: #ffffff;
+                --btn-text: #000000;
+                --gradient-1: rgba(41, 151, 255, 0.2);
+                --gradient-2: rgba(175, 82, 222, 0.15);
+            }
+        }
+
+        /* --- RESET & BASE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- BACKGROUND BLUR EFFECTS --- */
+        .blur-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .orb-1 { top: -100px; left: -100px; width: 500px; height: 500px; background: var(--gradient-1); }
+        .orb-2 { bottom: -100px; right: -100px; width: 400px; height: 400px; background: var(--gradient-2); }
+
+        /* --- HEADER --- */
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-weight: 700; font-size: 1.2rem; letter-spacing: -0.5px; }
+        .contact-link { font-size: 0.9rem; color: var(--text-sec); text-decoration: none; transition: color 0.2s; }
+        .contact-link:hover { color: var(--accent); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 100px 0 60px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+            background: -webkit-linear-gradient(45deg, var(--text-main), var(--text-sec));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-sec);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tagline-fr {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* --- BUTTONS --- */
+        .store-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.2s ease, opacity 0.2s;
+        }
+
+        .btn:hover { transform: scale(1.03); opacity: 0.9; }
+        .btn svg { width: 20px; height: 20px; margin-right: 10px; fill: currentColor; }
+        
+        .btn.disabled {
+            background-color: var(--card-bg);
+            color: var(--text-sec);
+            cursor: default;
+        }
+        .btn.disabled:hover { transform: none; opacity: 1; }
+
+        .status-badge {
+            display: inline-block;
+            background: rgba(0, 113, 227, 0.1);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* --- FEATURES GRID --- */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 80px;
+            margin-bottom: 80px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover { transform: translateY(-5px); }
+
+        .card-icon { font-size: 2rem; margin-bottom: 15px; display: block; }
+        .card h3 { font-size: 1.2rem; margin-bottom: 10px; font-weight: 700; }
+        .card p { color: var(--text-sec); font-size: 0.95rem; }
+
+        /* --- FOOTER --- */
+        footer {
+            border-top: 1px solid rgba(134, 134, 139, 0.2);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-sec);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--text-sec); text-decoration: none; margin: 0 10px; }
+        footer a:hover { text-decoration: underline; }
+
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .hero { padding: 60px 0 40px; }
+        }
     </style>
 </head>
 <body>
+
+    <div class="blur-orb orb-1"></div>
+    <div class="blur-orb orb-2"></div>
+
     <div class="container">
-        <h1>Stat Exam Pro 📊</h1>
-        <p>The ultimate study companion for university statistics.</p>
-        <p><strong>Coming soon to App Store & Google Play.</strong></p>
-        
-        <br>
-        <a href="#" class="btn">Download App (Soon)</a>
+        <header>
+            <div class="logo">Stat Exam Pro 📊</div>
+            <a href="mailto:support@statexampro.com" class="contact-link">Support</a>
+        </header>
+
+        <section class="hero">
+            <span class="status-badge">Coming Soon / Bientôt Disponible</span>
+            
+            <h1>Statistics Made Simple.</h1>
+            
+            <div class="subtitle">
+                The ultimate bilingual study aid for Medical Students.
+                <span class="tagline-fr">L'outil indispensable pour valider vos Biostatistiques (PASS/LAS).</span>
+            </div>
+
+            <div class="store-buttons">
+                <!-- Заглушка App Store -->
+                <a href="#" class="btn disabled" title="Coming Soon">
+                    <svg viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 52.3-11.4 69.5-34.3z"/></svg>
+                    App Store
+                </a>
+                <!-- Заглушка Google Play -->
+                <a href="#" class="btn disabled" title="Coming Soon">
+                    <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+                    Google Play
+                </a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="card">
+                <span class="card-icon">🇫🇷 🇬🇧</span>
+                <h3>Fully Bilingual</h3>
+                <p>Switch between English and French instantly. Perfect for international students and PASS/LAS programs.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">⚡️</span>
+                <h3>Exam Focused</h3>
+                <p>Designed specifically for 1st-year medical exams. High-yield formulas and concepts only.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">🧠</span>
+                <h3>Smart Practice</h3>
+                <p>Interactive quizzes to test your knowledge. Master distributions, hypothesis testing, and probability.</p>
+            </div>
+        </section>
 
         <footer>
-            <p>Support: <a href="mailto:support@statexampro.com">support@statexampro.com</a></p>
-            <p><a href="privacy.html">Privacy Policy</a></p>
-            <p>&copy; 2025 Stat Exam Pro. Australia.</p>
+            <p>&copy; 2025 Stat Exam Pro. All rights reserved.</p>
+            <p>
+                <a href="privacy.html">Privacy Policy</a>
+                <span style="opacity: 0.3">|</span>
+                <a href="mailto:support@statexampro.com">Contact Support</a>
+            </p>
         </footer>
     </div>
+
 </body>
 </html>
