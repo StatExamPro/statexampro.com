@@ -6,11 +6,16 @@
     <title>Stat Exam Pro - Master Biostatistics</title>
     <meta name="description" content="The ultimate bilingual study aid for Medical Students (PASS/LAS). Prepare for your Biostatistics exams with ease.">
     
-    <!-- Иконка во вкладке (Favicon) - заглушка эмодзи -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <!-- Corrected Favicons based on your file list -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" href="favicon.ico">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
 
     <style>
-        /* --- VARIABLES & THEME --- */
+        /* --- VARIABLES & THEME (ORIGINAL LIGHT) --- */
         :root {
             --bg-color: #ffffff;
             --text-main: #1d1d1f;
@@ -23,17 +28,20 @@
             --gradient-2: rgba(200, 0, 255, 0.1);
         }
 
+        /* --- DARK THEME (OPTION A: NATIVE APPLE STYLE) --- */
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #000000;
-                --text-main: #f5f5f7;
-                --text-sec: #a1a1a6;
-                --accent: #2997ff;
-                --card-bg: #1c1c1e;
-                --btn-bg: #ffffff;
-                --btn-text: #000000;
-                --gradient-1: rgba(41, 151, 255, 0.2);
-                --gradient-2: rgba(175, 82, 222, 0.15);
+                --bg-color: #000000; /* Pure Black */
+                --text-main: #FFFFFF; /* Pure White */
+                --text-sec: #98989D;  /* Apple System Grey */
+                --accent: #0A84FF;    /* iOS Blue */
+                --card-bg: #1C1C1E;   /* Secondary System Background */
+                --btn-bg: #FFFFFF;    /* White Buttons */
+                --btn-text: #000000;  /* Black Text */
+                
+                /* Subtle Gradients for Dark Mode */
+                --gradient-1: rgba(10, 132, 255, 0.25);
+                --gradient-2: rgba(94, 92, 230, 0.25);
             }
         }
 
@@ -91,6 +99,7 @@
             font-weight: 800;
             letter-spacing: -1.5px;
             margin-bottom: 20px;
+            /* Gradient text that adapts to variables */
             background: -webkit-linear-gradient(45deg, var(--text-main), var(--text-sec));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -205,7 +214,11 @@
 
     <div class="container">
         <header>
-            <div class="logo">Stat Exam Pro 📊</div>
+            <div class="logo">
+                <!-- Attempt to load SVG logo if exists, otherwise text -->
+                <img src="logo.svg" alt="Stat Exam Pro" style="height: 32px; vertical-align: middle; margin-right: 8px;">
+                <span>Stat Exam Pro</span>
+            </div>
             <a href="mailto:support@statexampro.com" class="contact-link">Support</a>
         </header>
 
@@ -220,12 +233,12 @@
             </div>
 
             <div class="store-buttons">
-                <!-- Заглушка App Store -->
+                <!-- App Store -->
                 <a href="#" class="btn disabled" title="Coming Soon">
                     <svg viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 52.3-11.4 69.5-34.3z"/></svg>
                     App Store
                 </a>
-                <!-- Заглушка Google Play -->
+                <!-- Google Play -->
                 <a href="#" class="btn disabled" title="Coming Soon">
                     <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
                     Google Play
