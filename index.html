@@ -6,50 +6,52 @@
     <title>Stat Exam Pro - Master Biostatistics</title>
     <meta name="description" content="The ultimate bilingual study aid for Medical Students (PASS/LAS). Prepare for your Biostatistics exams with ease.">
     
-    <!-- Favicons (Assuming files are in the root directory) -->
+    <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <meta name="theme-color" content="#5D5FEF">
+    <meta name="theme-color" content="#ffffff">
 
     <style>
-        /* --- VARIABLES & THEME --- */
+        /* --- VARIABLES (LIGHT THEME - ORIGINAL) --- */
         :root {
-            /* Light Mode Palette */
-            --bg-color: #FFFFFF;
-            --text-main: #111827;
-            --text-sec: #6B7280;
-            --accent: #5D5FEF; /* Primary Purple */
-            --card-bg: #F3F4F6;
-            --btn-bg: #111827;
-            --btn-text: #FFFFFF;
+            --bg-color: #ffffff;
+            --text-main: #1d1d1f;
+            --text-sec: #86868b;
+            --accent: #0071e3;
+            --card-bg: #f5f5f7;
+            --btn-bg: #1d1d1f;
+            --btn-text: #ffffff;
             
-            /* Light Mode Gradients (Subtle) */
-            --gradient-blob-1: rgba(93, 95, 239, 0.15); /* Purple */
-            --gradient-blob-2: rgba(56, 189, 248, 0.15); /* Light Blue */
+            /* Оригинальные градиенты для светлой темы */
+            --gradient-1: rgba(0, 113, 227, 0.15);
+            --gradient-2: rgba(200, 0, 255, 0.1);
             
-            /* Text Gradient for H1 (Dark text) */
-            --h1-gradient: linear-gradient(135deg, #111827 0%, #5D5FEF 100%);
+            /* Градиент текста (Темный) */
+            --h1-gradient: -webkit-linear-gradient(45deg, #1d1d1f, #86868b);
         }
 
+        /* --- DARK THEME OVERRIDES (NEW CONCEPT: MIDNIGHT GLASS) --- */
         @media (prefers-color-scheme: dark) {
             :root {
-                /* Dark Mode Palette */
-                --bg-color: #0B0B0F; /* Deep Matte Black/Violet */
-                --text-main: #FFFFFF;
-                --text-sec: #A0A0B0;
-                --accent: #818CF8; /* Lighter Purple for dark mode */
-                --card-bg: #1A1A20;
-                --btn-bg: #FFFFFF;
+                --bg-color: #09090b; /* Очень глубокий темный, почти черный */
+                --text-main: #ffffff; /* Чистый белый для контраста */
+                --text-sec: #a1a1aa;  /* Светло-серый */
+                --accent: #60a5fa;    /* Яркий голубой неон */
+                
+                /* Полупрозрачные карточки */
+                --card-bg: rgba(255, 255, 255, 0.08); 
+                
+                --btn-bg: #ffffff;
                 --btn-text: #000000;
-
-                /* Dark Mode Gradients (Brighter to show on dark bg) */
-                --gradient-blob-1: rgba(93, 95, 239, 0.25);
-                --gradient-blob-2: rgba(56, 189, 248, 0.15);
-
-                /* Text Gradient for H1 (Light text) */
-                --h1-gradient: linear-gradient(135deg, #FFFFFF 30%, #818CF8 100%);
+                
+                /* Блюр делаем ярче, чтобы он светился в темноте */
+                --gradient-1: rgba(0, 113, 227, 0.35);
+                --gradient-2: rgba(140, 0, 255, 0.3);
+                
+                /* Текст заголовка в темной теме - Белый с легким серебром */
+                --h1-gradient: linear-gradient(to right, #ffffff, #e4e4e7);
             }
         }
 
@@ -78,12 +80,12 @@
         .blur-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(90px);
+            filter: blur(80px);
             z-index: -1;
-            opacity: 0.8;
+            opacity: 0.6;
         }
-        .orb-1 { top: -150px; left: -100px; width: 600px; height: 600px; background: var(--gradient-blob-1); }
-        .orb-2 { bottom: -150px; right: -100px; width: 500px; height: 500px; background: var(--gradient-blob-2); }
+        .orb-1 { top: -100px; left: -100px; width: 500px; height: 500px; background: var(--gradient-1); }
+        .orb-2 { bottom: -100px; right: -100px; width: 400px; height: 400px; background: var(--gradient-2); }
 
         /* --- HEADER --- */
         header {
@@ -103,11 +105,7 @@
             color: var(--text-main);
         }
         
-        /* Logo SVG styling */
-        .logo-svg {
-            height: 32px;
-            width: 32px;
-        }
+        .logo-svg { height: 32px; width: 32px; }
 
         .contact-link { font-size: 0.9rem; color: var(--text-sec); text-decoration: none; transition: color 0.2s; }
         .contact-link:hover { color: var(--accent); }
@@ -124,16 +122,11 @@
             letter-spacing: -1.5px;
             margin-bottom: 20px;
             
-            /* Gradient Text Logic */
             background: var(--h1-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* Fallback for browsers that don't support clip */
-            color: var(--text-main); 
-        }
-
-        @supports (-webkit-background-clip: text) {
-            h1 { color: transparent; }
+            /* Fallback */
+            color: var(--text-main);
         }
 
         .subtitle {
@@ -153,7 +146,7 @@
             font-weight: 500;
         }
 
-        /* --- BUTTONS --- */
+        /* --- BUTTONS (ORIGINAL STYLE) --- */
         .store-buttons {
             display: flex;
             gap: 15px;
@@ -168,35 +161,32 @@
             background-color: var(--btn-bg);
             color: var(--btn-text);
             padding: 12px 24px;
-            border-radius: 12px; /* Slightly squarer for modern look */
+            border-radius: 30px; /* Вернули сильное скругление */
             text-decoration: none;
             font-weight: 600;
             font-size: 0.95rem;
             transition: transform 0.2s ease, opacity 0.2s;
-            box-shadow: 0 4px 14px 0 rgba(0,0,0,0.1);
         }
 
-        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
-        .btn svg { width: 22px; height: 22px; margin-right: 10px; fill: currentColor; }
+        .btn:hover { transform: scale(1.03); opacity: 0.9; }
+        .btn svg { width: 20px; height: 20px; margin-right: 10px; fill: currentColor; }
         
         .btn.disabled {
             background-color: var(--card-bg);
             color: var(--text-sec);
             cursor: default;
-            box-shadow: none;
         }
         .btn.disabled:hover { transform: none; opacity: 1; }
 
         .status-badge {
             display: inline-block;
-            background: rgba(93, 95, 239, 0.1);
+            background: rgba(0, 113, 227, 0.1);
             color: var(--accent);
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
             margin-bottom: 20px;
-            border: 1px solid rgba(93, 95, 239, 0.2);
         }
 
         /* --- FEATURES GRID --- */
@@ -211,16 +201,18 @@
         .card {
             background: var(--card-bg);
             padding: 30px;
-            border-radius: 24px;
+            border-radius: 20px;
             text-align: left;
             transition: transform 0.3s ease;
+            /* В темной теме добавляем тонкую рамку для четкости */
             border: 1px solid transparent;
         }
         
-        .card:hover { 
-            transform: translateY(-5px); 
-            border-color: var(--accent);
+        @media (prefers-color-scheme: dark) {
+            .card { border: 1px solid rgba(255,255,255,0.1); }
         }
+        
+        .card:hover { transform: translateY(-5px); }
 
         .card-icon { font-size: 2rem; margin-bottom: 15px; display: block; }
         .card h3 { font-size: 1.2rem; margin-bottom: 10px; font-weight: 700; color: var(--text-main); }
@@ -228,7 +220,7 @@
 
         /* --- FOOTER --- */
         footer {
-            border-top: 1px solid var(--card-bg);
+            border-top: 1px solid rgba(134, 134, 139, 0.2);
             padding: 40px 0;
             text-align: center;
             color: var(--text-sec);
@@ -253,7 +245,6 @@
     <div class="container">
         <header>
             <div class="logo-container">
-                <!-- If you have the logo.svg in root, it will show. Otherwise Alt text shows. -->
                 <img src="logo.svg" alt="Logo" class="logo-svg" onerror="this.style.display='none'">
                 <span>Stat Exam Pro</span>
             </div>
@@ -271,12 +262,12 @@
             </div>
 
             <div class="store-buttons">
-                <!-- App Store Placeholder -->
+                <!-- App Store Button (Original) -->
                 <a href="#" class="btn disabled" title="Coming Soon">
                     <svg viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 52.3-11.4 69.5-34.3z"/></svg>
                     App Store
                 </a>
-                <!-- Google Play Placeholder -->
+                <!-- Google Play Button (Original) -->
                 <a href="#" class="btn disabled" title="Coming Soon">
                     <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
                     Google Play
