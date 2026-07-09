@@ -106,7 +106,7 @@ footer a:hover{text-decoration:underline}
   <div class="subtitle" data-en="Question-based biostatistics prep for medical students." data-fr="Des QCM de biostatistiques pour les étudiants en médecine.">Question-based biostatistics prep for medical students.</div>
   <span class="tagline-fr" data-en="Biostatistiques PASS/LAS - aussi disponible entièrement en français." data-fr="The whole app is also fully available in English.">Biostatistiques PASS/LAS - aussi disponible entièrement en français.</span>
   <div class="store-buttons">
-   <a href="https://apps.apple.com/app/stat-exam-pro/id6755912771" class="btn" onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click',title:'App Store button',event:true})"><svg viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 52.3-11.4 69.5-34.3z"/></svg><span data-en="Download on the App Store" data-fr="Télécharger sur l'App Store">Download on the App Store</span></a>
+   <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn" onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click',title:'App Store button',event:true})"><svg viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 52.3-11.4 69.5-34.3z"/></svg><span data-en="Download on the App Store" data-fr="Télécharger sur l'App Store">Download on the App Store</span></a>
    <span class="btn disabled"><svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>Google Play<span class="soon" data-en="coming soon" data-fr="bientôt">coming soon</span></span>
   </div>
  </div>
@@ -170,6 +170,9 @@ function applyLang(l) {
   document.querySelectorAll('img[data-src-en]').forEach(function(el) {
     el.src = el.getAttribute('data-src-' + l);
     el.alt = el.getAttribute('data-alt-' + l);
+  });
+  document.querySelectorAll('a[data-href-en]').forEach(function(el) {
+    el.href = el.getAttribute('data-href-' + l);
   });
   document.documentElement.lang = l;
   document.getElementById('segEn').classList.toggle('active', l === 'en');
