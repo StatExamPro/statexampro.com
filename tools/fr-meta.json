@@ -1,0 +1,96 @@
+{
+ "fails/epic-sepsis-model/index.html": {
+  "title": "Stat Fails #3 : l'IA de sepsis qui manquait deux cas sur trois | Stat Exam Pro",
+  "description": "Un cas documenté : un modèle de prédiction du sepsis, dans des centaines d'hôpitaux, était vendu avec une AUC de 0,76 à 0,83. La validation indépendante a trouvé 0,63 - il manquait 67% des sepsis en alertant sur 18% des patients.",
+  "og:title": "Stat Fails #3 : l'IA de sepsis notée 0,63, vendue 0,83",
+  "og:description": "Un modèle de sepsis largement déployé manquait deux cas sur trois et noyait les infirmières sous les fausses alertes. L'AUC des slides n'était pas l'AUC de l'hôpital.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"The sepsis AI that missed two thirds of cases\",\"inLanguage\":\"fr\",\"about\":\"External validation of a clinical prediction model and AUC\",\"publisher\":{\"@type\":\"Organization\",\"name\":\"Stat Exam Pro\"}}",
+   "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Accueil\",\"item\":\"https://statexampro.com/fr/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Stat Fails\",\"item\":\"https://statexampro.com/fr/fails/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"L'IA de sepsis qui manquait deux cas sur trois\"}]}"
+  ]
+ },
+ "fails/hiv-false-positives/index.html": {
+  "title": "Stat Fails #1 : les conseillers sûrs à 100 % | Stat Exam Pro",
+  "description": "Une expérience documentée de 1998 : des conseillers VIH annonçaient un dépistage positif comme certain. La vraie probabilité était un pile ou face.",
+  "og:title": "Stat Fails #1 : les conseillers sûrs à 100 %",
+  "og:description": "Une expérience documentée de 1998 : des conseillers VIH annonçaient un dépistage positif comme certain. La vraie probabilité était un pile ou face.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"The counsellors who were 100% sure\",\"inLanguage\":\"fr\",\"about\":\"Base-rate neglect in HIV screening\",\"publisher\":{\"@type\":\"Organization\",\"name\":\"Stat Exam Pro\"}}",
+   "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Accueil\",\"item\":\"https://statexampro.com/fr/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Stat Fails\",\"item\":\"https://statexampro.com/fr/fails/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Les conseillers sûrs à 100 %\"}]}"
+  ]
+ },
+ "fails/index.html": {
+  "title": "Stat Fails - erreurs statistiques documentées aux conséquences réelles | Stat Exam Pro",
+  "description": "Des cas documentés où une erreur statistique a eu des conséquences réelles : des conseillers VIH sûrs d'un pile ou face, la panique de la pilule de 1995, une IA de sepsis notée 0,63. Sources et raisonnement pour chacun.",
+  "og:title": "Stat Fails - erreurs statistiques documentées aux conséquences réelles",
+  "og:description": "Des conseillers VIH sûrs d'un pile ou face, la panique de la pilule de 1995, une IA de sepsis notée 0,63 et vendue 0,83. Des cas réels, des sources réelles, le raisonnement détaillé.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"CollectionPage\",\"name\":\"Stat Fails\",\"inLanguage\":\"fr\",\"about\":\"Cas documentés d'erreurs statistiques aux conséquences réelles\",\"isPartOf\":{\"@type\":\"WebSite\",\"name\":\"Stat Exam Pro\",\"url\":\"https://statexampro.com\"}}"
+  ]
+ },
+ "fails/the-1995-pill-scare/index.html": {
+  "title": "Stat Fails #2 : la panique de la pilule de 1995 et 13 000 avortements | Stat Exam Pro",
+  "description": "Un cas documenté : l'alerte « la pilule double le risque de caillot » a déclenché une panique. La hausse absolue était de 1 sur 7 000 — et la peur a fait chuter l’usage de la pilule chez les jeunes de 40 % à 27 % et causé environ 13 000 avortements supplémentaires.",
+  "og:title": "Stat Fails #2 : la panique de la pilule de 1995",
+  "og:description": "Un cas documenté : l'alerte « la pilule double le risque de caillot » a déclenché une panique. La hausse absolue était de 1 sur 7 000 — et la peur a fait chuter l’usage de la pilule chez les jeunes de 40 % à 27 % et causé environ 13 000 avortements supplémentaires.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"The 1995 pill scare\",\"inLanguage\":\"fr\",\"about\":\"Relative versus absolute risk\",\"publisher\":{\"@type\":\"Organization\",\"name\":\"Stat Exam Pro\"}}",
+   "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Accueil\",\"item\":\"https://statexampro.com/fr/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Stat Fails\",\"item\":\"https://statexampro.com/fr/fails/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"La panique de la pilule et ses 13 000 avortements\"}]}"
+  ]
+ },
+ "index.html": {
+  "title": "Stat Exam Pro - biostatistiques pour étudiants en médecine",
+  "description": "Préparez les statistiques médicales par questions : Se, Sp, VPP/VPN, pièges d'intuition. Bilingue français/anglais, examens blancs chronométrés.",
+  "og:title": "Stat Exam Pro - biostatistiques pour étudiants en médecine",
+  "og:description": "Préparez les statistiques médicales par questions : Se, Sp, VPP/VPN, pièges d'intuition. Bilingue français/anglais, examens blancs chronométrés.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareApplication\",\"name\":\"Stat Exam Pro\",\"operatingSystem\":\"iOS\",\"applicationCategory\":\"EducationalApplication\",\"inLanguage\":\"fr\",\"url\":\"https://apps.apple.com/fr/app/stat-exam-pro/id6755912771\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0\",\"priceCurrency\":\"USD\"},\"description\":\"Biostatistics exam prep for medical students: Se, Sp, PPV/NPV, paradoxes.\"}"
+  ]
+ },
+ "lessons/roc-auc/index.html": {
+  "title": "ROC et AUC expliqués pour les cliniciens : construire la courbe, lire l'aire | Stat Exam Pro",
+  "description": "ROC et AUC expliqués depuis zéro pour les étudiants en médecine : classez les patients par score, construisez la courbe sur une grille, et lisez l'AUC comme la probabilité qu'un malade au hasard devance un sain.",
+  "og:title": "ROC et AUC, expliqués pour les cliniciens",
+  "og:description": "Construisez la courbe ROC case par case et lisez l'AUC en une phrase : la probabilité qu'un malade au hasard devance un sain au hasard.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"ROC and AUC, explained for clinicians\",\"inLanguage\":\"fr\",\"about\":\"ROC curve and area under the curve\",\"publisher\":{\"@type\":\"Organization\",\"name\":\"Stat Exam Pro\"}}"
+  ],
+  "fig1-alt": "Six patients triés par score, avec l'escalier ROC construit sur une grille 3 par 3 : monter pour un malade, aller à droite pour un sain."
+ },
+ "nnt-calculator/index.html": {
+  "title": "Calculateur du NNT : risque relatif vs absolu (RRR, ARR, NNT) | Stat Exam Pro",
+  "description": "Calculateur du NNT interactif. Entrez le risque contrôle et traité et voyez RRR, ARR, NNT et l'odds ratio, avec 100 patients à l'écran.",
+  "og:title": "Calculateur du NNT : risque relatif vs absolu",
+  "og:description": "Calculateur du NNT interactif. Entrez le risque contrôle et traité et voyez RRR, ARR, NNT et l'odds ratio, avec 100 patients à l'écran.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"WebApplication\",\"name\":\"NNT / relative vs absolute risk calculator\",\"applicationCategory\":\"EducationalApplication\",\"operatingSystem\":\"Web\",\"inLanguage\":\"fr\",\"browserRequirements\":\"Requires JavaScript\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0\",\"priceCurrency\":\"USD\"}}"
+  ]
+ },
+ "ppv-calculator/index.html": {
+  "title": "Calculateur VPP / VPN : pourquoi un test positif peut être faux | Stat Exam Pro",
+  "description": "Calculateur VPP/VPN interactif : faites varier prévalence, sensibilité et spécificité et voyez les valeurs prédictives bouger. Pourquoi un test fiable à 99 % se trompe souvent.",
+  "og:title": "Calculateur VPP/VPN : pourquoi votre test positif peut être faux",
+  "og:description": "Calculateur VPP/VPN interactif : faites varier prévalence, sensibilité et spécificité et voyez les valeurs prédictives bouger. Pourquoi un test fiable à 99 % se trompe souvent.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"WebApplication\",\"name\":\"PPV / NPV calculator\",\"applicationCategory\":\"EducationalApplication\",\"operatingSystem\":\"Web\",\"inLanguage\":\"fr\",\"browserRequirements\":\"Requires JavaScript\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0\",\"priceCurrency\":\"USD\"}}"
+  ]
+ },
+ "roc-curve/index.html": {
+  "title": "Courbe ROC &amp; seuil : le compromis sensibilité / spécificité | Stat Exam Pro",
+  "description": "Simulateur ROC interactif : déplacez le seuil de décision et regardez sensibilité et spécificité s'échanger, le point parcourir la courbe ROC, et l'AUC mesurer le test lui-même.",
+  "og:title": "Courbe ROC : le compromis sensibilité / spécificité",
+  "og:description": "Déplacez un seuil et regardez un test troquer la détection des malades contre les fausses alertes, avec la courbe ROC et l'AUC en direct.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"WebApplication\",\"name\":\"ROC curve & threshold playground\",\"applicationCategory\":\"EducationalApplication\",\"operatingSystem\":\"Web\",\"inLanguage\":\"fr\",\"browserRequirements\":\"Requires JavaScript\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0\",\"priceCurrency\":\"USD\"}}"
+  ]
+ },
+ "studies/index.html": {
+  "title": "Études et jeux de données connus | Stat Exam Pro",
+  "description": "Les sources des chiffres de nos calculateurs, avec citation et calcul détaillé pour chacun : dépistage VIH, mammographie, statines.",
+  "og:title": "Études et jeux de données connus - les vrais chiffres des tests",
+  "og:description": "Les études citées derrière nos calculateurs - dépistage VIH, mammographie, statines et une IA de sepsis, chacune avec un calcul détaillé.",
+  "jsonld": [
+   "{\"@context\":\"https://schema.org\",\"@type\":\"CollectionPage\",\"name\":\"Known studies & datasets\",\"inLanguage\":\"fr\",\"isPartOf\":{\"@type\":\"WebSite\",\"name\":\"Stat Exam Pro\",\"url\":\"https://statexampro.com\"}}"
+  ]
+ }
+}
