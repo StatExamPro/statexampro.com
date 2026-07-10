@@ -1,11 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://statexampro.com/</loc>
-    <lastmod>2026-07-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/ppv-calculator/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/ppv-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/ppv-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/ppv-calculator/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/ppv-calculator/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/ppv-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/ppv-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/ppv-calculator/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/nnt-calculator/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/nnt-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/nnt-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/nnt-calculator/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/nnt-calculator/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/nnt-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/nnt-calculator/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/nnt-calculator/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/studies/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/studies/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/studies/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/studies/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/studies/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/studies/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/studies/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/studies/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fails/hiv-false-positives/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/fails/hiv-false-positives/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fails/hiv-false-positives/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/fails/hiv-false-positives/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/fails/hiv-false-positives/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/fails/hiv-false-positives/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fails/hiv-false-positives/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/fails/hiv-false-positives/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fails/the-1995-pill-scare/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/fails/the-1995-pill-scare/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fails/the-1995-pill-scare/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/fails/the-1995-pill-scare/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/fails/the-1995-pill-scare/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/fails/the-1995-pill-scare/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fails/the-1995-pill-scare/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/fails/the-1995-pill-scare/"/>
+    <lastmod>2026-07-10</lastmod>
   </url>
   <url>
     <loc>https://statexampro.com/privacy.html</loc>
     <lastmod>2026-07-09</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/roc-curve/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/roc-curve/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/roc-curve/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/roc-curve/"/>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/roc-curve/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/roc-curve/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/roc-curve/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/roc-curve/"/>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/lessons/roc-auc/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/lessons/roc-auc/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/lessons/roc-auc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/lessons/roc-auc/"/>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/lessons/roc-auc/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/lessons/roc-auc/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/lessons/roc-auc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/lessons/roc-auc/"/>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fails/epic-sepsis-model/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/fails/epic-sepsis-model/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fails/epic-sepsis-model/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/fails/epic-sepsis-model/"/>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/fails/epic-sepsis-model/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/fails/epic-sepsis-model/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fails/epic-sepsis-model/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/fails/epic-sepsis-model/"/>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fails/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/fails/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fails/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/fails/"/>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/fr/fails/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://statexampro.com/fails/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fails/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/fails/"/>
+    <lastmod>2026-07-10</lastmod>
   </url>
 </urlset>

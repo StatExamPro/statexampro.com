@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur VPP / VPN : pourquoi un test positif peut être faux | Stat Exam Pro</title>
+<meta name="description" content="Calculateur VPP/VPN interactif : faites varier prévalence, sensibilité et spécificité et voyez les valeurs prédictives bouger. Pourquoi un test fiable à 99 % se trompe souvent.">
+<meta property="og:title" content="Calculateur VPP/VPN : pourquoi votre test positif peut être faux">
+<meta property="og:description" content="Calculateur VPP/VPN interactif : faites varier prévalence, sensibilité et spécificité et voyez les valeurs prédictives bouger. Pourquoi un test fiable à 99 % se trompe souvent.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="icon" href="../../favicon.ico">
+<link rel="canonical" href="https://statexampro.com/fr/ppv-calculator/">
+<link rel="alternate" hreflang="en" href="https://statexampro.com/ppv-calculator/">
+<link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/ppv-calculator/">
+<link rel="alternate" hreflang="x-default" href="https://statexampro.com/ppv-calculator/">
+<meta property="og:url" content="https://statexampro.com/fr/ppv-calculator/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#ffffff">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../../site.css">
+<style>.play{display:grid;grid-template-columns:340px 1fr;gap:28px;margin:34px 0;align-items:start}
+.smallnum{font-size:1.1rem;font-weight:700;font-variant-numeric:tabular-nums}
+.dots-groups{display:flex;flex-direction:column;gap:16px}
+.dot-group{background:var(--card-bg);border-radius:var(--r-lg);padding:16px}
+.dot-group h4{font-size:.85rem;font-weight:700;margin-bottom:10px}
+.dot-group h4 .cnt{color:var(--text-sec);font-weight:500}
+.dots{display:flex;flex-wrap:wrap;gap:3px}
+.d{width:9px;height:9px;border-radius:50%}
+.d-tp{background:var(--accent)}
+.d-fp{background:var(--fp)}
+.d-fn{background:var(--fn)}
+.d-tn{background:var(--text-sec);opacity:.35}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--text-sec);margin-top:6px}
+.legend span{display:flex;align-items:center;gap:6px}
+.sentence{margin:8px 0 30px}
+section{margin:36px 0}
+h2{font-size:1.4rem;font-weight:800;letter-spacing:-.4px;margin-bottom:10px}
+.stakes{font-size:.98rem}
+.howto p{margin-bottom:10px}
+.table-row{display:grid;grid-template-columns:minmax(240px,330px) 1fr;gap:22px;align-items:start;margin:16px 0}
+.table-card{background:var(--card-bg);border-radius:var(--r-md);padding:14px 18px}
+.table-card table{margin:0}
+.table-help{background:var(--card-bg);border-radius:var(--r-md);padding:20px 22px}
+.table-help p{font-size:.94rem;margin-bottom:12px}
+.cell-list{display:flex;flex-direction:column;gap:9px;margin:12px 0}
+.cell{display:flex;gap:10px;align-items:flex-start;font-size:.92rem}
+.cell .d{margin-top:5px;flex:none}
+.ppv-read{border-top:1px solid var(--hairline);padding-top:12px;margin-bottom:0;font-size:.92rem}
+.interpret{margin:10px 0 26px}
+@media(max-width:820px){.play{grid-template-columns:1fr}.table-row{grid-template-columns:1fr}h1{font-size:1.7rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"PPV / NPV calculator","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"fr","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="container">
+
+<header>
+ <a class="logo" href="/fr/"><img src="../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <div class="header-right">
+  <div class="seg" role="group" aria-label="Language"><a href="/ppv-calculator/" hreflang="en">EN</a><span class="active">FR</span></div>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ </div>
+</header>
+
+<nav class="sitenav">
+ <a href="/fr/ppv-calculator/" class="active">VPP/VPN</a>
+ <a href="/fr/nnt-calculator/">NNT</a>
+ <a href="/fr/roc-curve/">ROC</a>
+ <a href="/fr/lessons/roc-auc/">Cours</a>
+ <a href="/fr/fails/">Stat Fails</a>
+ <a href="/fr/studies/">Études</a>
+</nav>
+
+<h1 data-en="PPV / NPV calculator: why your positive test might be wrong"
+    data-fr="Calculateur VPP / VPN : pourquoi votre test positif peut être faux">PPV / NPV calculator: why your positive test might be wrong</h1>
+<p class="lead" data-en="A simulator: three sliders, 1,000 patients, and a question every doctor eventually faces."
+   data-fr="Un simulateur : trois curseurs, 1 000 patients, et une question que tout médecin finit par rencontrer.">A simulator: three sliders, 1,000 patients, and a question every doctor eventually faces.</p>
+
+<section style="margin:26px 0 10px">
+ <div class="terms">
+  <div class="term-card">
+   <h3 data-en="Sensitivity (Se)" data-fr="Sensibilité (Se)">Sensibilité (Se)</h3>
+   <p data-en="Of 100 people who have the disease, how many the test catches. At 99%: one sick person per hundred slips through."
+      data-fr="Sur 100 personnes malades, combien le test détecte. À 99 % : un malade sur cent passe entre les mailles.">Of 100 people who have the disease, how many the test catches. At 99%: one sick person per hundred slips through.</p>
+  </div>
+  <div class="term-card">
+   <h3 data-en="Specificity (Sp)" data-fr="Spécificité (Sp)">Spécificité (Sp)</h3>
+   <p data-en="Of 100 healthy people, how many it correctly clears. At 99%: one false alarm per hundred healthy."
+      data-fr="Sur 100 personnes saines, combien le test écarte correctement. À 99 % : une fausse alerte pour cent sains.">Of 100 healthy people, how many it correctly clears. At 99%: one false alarm per hundred healthy.</p>
+  </div>
+  <div class="term-card">
+   <h3 data-en="Prevalence" data-fr="Prévalence">Prévalence</h3>
+   <p data-en="How common the disease is among the people being tested. Not in the test's documentation - because it's not about the test. And it changes everything below."
+      data-fr="La fréquence de la maladie parmi les personnes testées. Absente de la notice - car elle ne décrit pas le test. Et c'est elle qui change tout.">How common the disease is among the people being tested. Not in the test's documentation - because it's not about the test. And it changes everything below.</p>
+  </div>
+ </div>
+
+ <div class="callout">
+  <h3 class="eyebrow" data-en="The situation" data-fr="La situation">La situation</h3>
+  <p data-en="You are the doctor. A patient from a low-risk group takes a screening test. You know the test: it catches 99 sick out of 100 (Se = 99%) and clears 99 healthy out of 100 (Sp = 99%). You also know the disease is rare: about 1 person in 1,000. The result comes back positive. The question you have to answer, before you say a word to the patient: how likely is it that they are actually sick?"
+     data-fr="Vous êtes le médecin. Un patient d'un groupe à faible risque passe un test de dépistage. Vous connaissez le test : il détecte 99 malades sur 100 (Se = 99 %) et écarte 99 sains sur 100 (Sp = 99 %). Vous savez aussi que la maladie est rare : environ 1 personne sur 1 000. Le résultat revient positif. La question à laquelle vous devez répondre, avant de dire un mot au patient : quelle est la probabilité qu'il soit réellement malade ?">You are the doctor. A patient from a low-risk group takes a screening test. You know the test: it catches 99 sick out of 100 (Se = 99%) and clears 99 healthy out of 100 (Sp = 99%). You also know the disease is rare: about 1 person in 1,000. The result comes back positive. The question you have to answer, before you say a word to the patient: how likely is it that they are actually sick?</p>
+ </div>
+
+ <div class="callout warn stakes">
+ <span data-en="This is not a textbook risk: real patients - pregnant women among them - have been told they were fatally ill on results that carried coin-flip certainty. One documented case:"
+       data-fr="Ce n'est pas un risque théorique : de vrais patients - y compris des femmes enceintes - se sont entendu annoncer une maladie mortelle sur un résultat qui ne valait guère mieux qu'un pile ou face. Un cas documenté :">This is not a textbook risk: real patients - pregnant women among them - have been told they were fatally ill on results that carried coin-flip certainty. One documented case:</span>
+ <a class="pill ghost" href="/fr/fails/hiv-false-positives/"
+    data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">Les conseillers sûrs à 100 %</a>
+</div>
+
+ <div class="howto">
+ <h3 class="eyebrow" data-en="How to use" data-fr="Mode d'emploi">Mode d'emploi</h3>
+ <p data-en="Below are 1,000 dots - one per person tested. The sliders set how common the disease is and how good the test is; the dots show who the test flags. Start with the presets, then push the sliders to the edges."
+    data-fr="Ci-dessous, 1 000 points - un par personne testée. Les curseurs règlent la fréquence de la maladie et la qualité du test ; les points montrent qui le test signale. Commencez par les préréglages, puis poussez les curseurs aux extrêmes.">Below are 1,000 dots - one per person tested. The sliders set how common the disease is and how good the test is; the dots show who the test flags. Start with the presets, then push the sliders to the edges.</p>
+  <div class="legend">
+   <span><i class="d d-tp" style="display:inline-block"></i><span data-en="sick, caught (TP)" data-fr="malade, détecté (VP)">malade, détecté (VP)</span></span>
+   <span><i class="d d-fp" style="display:inline-block"></i><span data-en="healthy, false alarm (FP)" data-fr="sain, fausse alerte (FP)">sain, fausse alerte (FP)</span></span>
+   <span><i class="d d-fn" style="display:inline-block"></i><span data-en="sick, missed (FN)" data-fr="malade, manqué (FN)">malade, manqué (FN)</span></span>
+   <span><i class="d d-tn" style="display:inline-block"></i><span data-en="healthy, cleared (TN)" data-fr="sain, écarté (VN)">sain, écarté (VN)</span></span>
+  </div>
+</div>
+</section>
+
+<div class="play">
+ <div class="panel">
+  <div class="presets">
+   <button class="preset" onclick="preset(0.10,99,99)" data-en="Start: 10% prevalence" data-fr="Départ : prévalence 10 %">Départ : prévalence 10 %</button>
+   <button class="preset" onclick="preset(0.001,99,99)" data-en="Rare disease screening" data-fr="Dépistage d'une maladie rare">Dépistage d'une maladie rare</button>
+   <button class="preset" onclick="preset(0.20,90,90)" data-en="Symptomatic patient" data-fr="Patient symptomatique">Patient symptomatique</button>
+   <button class="preset" onclick="preset(0.0001,99.9,99.99)" data-en="The 1998 counselling case" data-fr="Le cas des conseillers (1998)">Le cas des conseillers (1998)</button>
+   <button class="preset" onclick="preset(0.01,90,91)" data-en="Mammography (worked below)" data-fr="Mammographie (exemple ci-dessous)">Mammographie (exemple ci-dessous)</button>
+  </div>
+  <div class="ctrl">
+   <label><span data-en="Prevalence" data-fr="Prévalence">Prévalence</span><span class="val" id="pVal"></span></label>
+   <input type="range" id="pSlider" min="0" max="1000" value="0" oninput="update()">
+  </div>
+  <div class="ctrl">
+   <label><span data-en="Sensitivity (Se)" data-fr="Sensibilité (Se)">Sensibilité (Se)</span><span class="val" id="seVal"></span></label>
+   <input type="range" id="seSlider" min="5000" max="9999" value="9900" oninput="update()">
+  </div>
+  <div class="ctrl">
+   <label><span data-en="Specificity (Sp)" data-fr="Spécificité (Sp)">Spécificité (Sp)</span><span class="val" id="spVal"></span></label>
+   <input type="range" id="spSlider" min="5000" max="9999" value="9900" oninput="update()">
+  </div>
+  <div class="bignum" id="ppvNum"></div>
+  <div class="bignum-label" id="ppvLabel"></div>
+  <div class="smallnum" id="npvNum"></div>
+  <div class="bignum-label" id="npvLabel"></div>
+ </div>
+
+ <div class="dots-groups">
+  <div class="dot-group">
+   <h4><span data-en="Tested positive" data-fr="Test positif">Test positif</span> <span class="cnt" id="posCnt"></span></h4>
+   <div class="dots" id="dotsPos"></div>
+  </div>
+  <div class="dot-group">
+   <h4><span data-en="Tested negative" data-fr="Test négatif">Test négatif</span> <span class="cnt" id="negCnt"></span></h4>
+   <div class="dots" id="dotsNeg"></div>
+  </div>
+  <div class="train-card">
+   <a href="/fr/" class="plainlink" data-en="We make Stat Exam Pro, an app for statistics exam prep. Train with us"
+         data-fr="Nous faisons Stat Exam Pro, une app pour préparer les examens de statistiques. Entraînez-vous avec nous">We make Stat Exam Pro, an app for statistics exam prep. Train with us</a>
+   <a class="btn-round" href="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" aria-label="Stat Exam Pro on the App Store"
+      onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click-ppv',title:'App Store round button (PPV panel)',event:true})"><span class="apple-icon"></span></a>
+  </div>
+ </div>
+</div>
+
+<div class="sentence" id="sentence"></div>
+
+<div class="softbox interpret" id="interpret"></div>
+
+<p class="bridge" data-en="The same result laid out as a table - the 2×2 that every one of these problems collapses to:" data-fr="Le même résultat présenté en tableau - le 2×2 auquel se ramène chacun de ces problèmes :">Le même résultat présenté en tableau - le 2×2 auquel se ramène chacun de ces problèmes :</p>
+
+<div class="table-row">
+ <div class="table-card"><table id="t22">
+ <thead><tr><th></th><th data-en="Disease +" data-fr="Malades">Malades</th><th data-en="Disease −" data-fr="Sains">Sains</th><th data-en="Total" data-fr="Total">Total</th></tr></thead>
+ <tbody>
+  <tr><th data-en="Test +" data-fr="Test +">Test +</th><td id="cTP"></td><td id="cFP"></td><td id="cPos"></td></tr>
+  <tr><th data-en="Test −" data-fr="Test −">Test −</th><td id="cFN"></td><td id="cTN"></td><td id="cNeg"></td></tr>
+  <tr><th data-en="Total" data-fr="Total">Total</th><td id="cSick"></td><td id="cHealthy"></td><td>1000</td></tr>
+ </tbody>
+</table></div>
+ <div class="table-help"><h4 class="eyebrow" data-en="The 2×2 table" data-fr="Le tableau 2×2">Le tableau 2×2</h4><p data-en="Every result lands in one of four boxes. Columns are the truth (has the disease or not), rows are what the test said." data-fr="Chaque résultat tombe dans l’une de quatre cases. Les colonnes sont la vérité (malade ou non), les lignes ce qu’a dit le test.">Chaque résultat tombe dans l’une de quatre cases. Les colonnes sont la vérité (malade ou non), les lignes ce qu’a dit le test.</p><div class="cell-list"><div class="cell"><span class="d d-tp"></span><span data-en="<b>TP</b> - has the disease and tests positive: correctly caught." data-fr="<b>VP</b> - a la maladie et test positif : correctement détecté."><b>VP</b> - a la maladie et test positif : correctement détecté.</span></div><div class="cell"><span class="d d-fp"></span><span data-en="<b>FP</b> - healthy but tests positive: a false alarm." data-fr="<b>FP</b> - sain mais test positif : une fausse alerte."><b>FP</b> - sain mais test positif : une fausse alerte.</span></div><div class="cell"><span class="d d-fn"></span><span data-en="<b>FN</b> - has the disease but tests negative: missed." data-fr="<b>FN</b> - a la maladie mais test négatif : manqué."><b>FN</b> - a la maladie mais test négatif : manqué.</span></div><div class="cell"><span class="d d-tn"></span><span data-en="<b>TN</b> - healthy and tests negative: correctly cleared." data-fr="<b>VN</b> - sain et test négatif : correctement écarté."><b>VN</b> - sain et test négatif : correctement écarté.</span></div></div><p class="ppv-read" data-en="PPV reads across the top row: TP / (TP + FP) - of everyone who tested positive, the share who are truly sick." data-fr="La VPP se lit sur la première ligne : VP / (VP + FP) - parmi tous les positifs, la part réellement malade.">La VPP se lit sur la première ligne : VP / (VP + FP) - parmi tous les positifs, la part réellement malade.</p></div>
+</div>
+
+
+<p class="bridge" data-en="So why does the disease’s rarity swing the answer this hard? Here is the reasoning in words, then the formula." data-fr="Alors pourquoi la rareté de la maladie fait-elle autant basculer la réponse ? Voici le raisonnement en mots, puis la formule.">Alors pourquoi la rareté de la maladie fait-elle autant basculer la réponse ? Voici le raisonnement en mots, puis la formule.</p>
+
+<section class="lesson">
+ <h2 data-en="What the numbers actually mean" data-fr="Ce que les chiffres veulent dire">Ce que les chiffres veulent dire</h2>
+ <p data-en="Sensitivity and specificity answer a forward question: if a person is sick, how often does the test say so? Your patient is asking the reverse question: given this positive result, am I actually sick? That reverse answer is the positive predictive value (PPV), and unlike sensitivity or specificity it depends on the prevalence, how common the disease is in the tested group. The test cannot know that, so the test alone cannot answer your patient." data-fr="La sensibilité et la spécificité répondent à une question directe : si une personne est malade, à quelle fréquence le test le dit-il ? Votre patient pose la question inverse : compte tenu de ce résultat positif, suis-je réellement malade ? Cette réponse inverse est la valeur prédictive positive (VPP), et contrairement à la sensibilité ou la spécificité, elle dépend de la prévalence, la fréquence de la maladie dans le groupe testé. Le test ne peut pas la connaître ; le test seul ne peut donc pas répondre à votre patient.">La sensibilité et la spécificité répondent à une question directe : si une personne est malade, à quelle fréquence le test le dit-il ? Votre patient pose la question inverse : compte tenu de ce résultat positif, suis-je réellement malade ? Cette réponse inverse est la valeur prédictive positive (VPP), et contrairement à la sensibilité ou la spécificité, elle dépend de la prévalence, la fréquence de la maladie dans le groupe testé. Le test ne peut pas la connaître ; le test seul ne peut donc pas répondre à votre patient.</p>
+ <div class="formula-box">$$\text{PPV} = \frac{Se \cdot p}{Se \cdot p + (1-Sp)(1-p)} \qquad \text{NPV} = \frac{Sp\,(1-p)}{Sp\,(1-p) + (1-Se)\,p}$$</div>
+ <p class="note" data-en="p is the prevalence, the pre-test probability." data-fr="p est la prévalence, la probabilité pré-test.">p est la prévalence, la probabilité pré-test.</p>
+ <p data-en="There is a trick that makes this effortless, and it is the one the surveyed doctors were missing: reason in people, not percentages. Ten in a thousand, the test catches nine is something anyone can follow; 90% sensitivity at 1% prevalence hides the answer. Whenever a test problem feels slippery, rebuild it as a crowd of 1,000, which is exactly what the dots above do." data-fr="Il existe une astuce qui rend tout cela évident, et c’est celle qui manquait aux médecins interrogés : raisonner en personnes, pas en pourcentages. « Dix sur mille, le test en détecte neuf » est compréhensible par tous ; « 90 % de sensibilité à 1 % de prévalence » cache la réponse. Chaque fois qu’un problème de test paraît glissant, reconstruisez-le en une foule de 1 000 personnes, c’est exactement ce que font les points ci-dessus.">Il existe une astuce qui rend tout cela évident, et c’est celle qui manquait aux médecins interrogés : raisonner en personnes, pas en pourcentages. « Dix sur mille, le test en détecte neuf » est compréhensible par tous ; « 90 % de sensibilité à 1 % de prévalence » cache la réponse. Chaque fois qu’un problème de test paraît glissant, reconstruisez-le en une foule de 1 000 personnes, c’est exactement ce que font les points ci-dessus.</p>
+ <p data-en="If you come from machine learning: PPV is exactly what you call precision, and sensitivity is recall. Same math, different exam." data-fr="Si vous venez du machine learning : la VPP est exactement ce que vous appelez precision, et la sensibilité est le recall. Mêmes maths, autre examen.">Si vous venez du machine learning : la VPP est exactement ce que vous appelez precision, et la sensibilité est le recall. Mêmes maths, autre examen.</p>
+ </section>
+
+<section class="worked">
+ <h2 data-en="The best way to get it: work one by hand" data-fr="Le meilleur moyen de comprendre : en résoudre un à la main">Le meilleur moyen de comprendre : en résoudre un à la main</h2>
+ <div class="callout problem"><h3 class="eyebrow" data-en="Problem" data-fr="Énoncé">Énoncé</h3><p data-en="A 50-year-old woman has a routine screening mammogram. In her age group, about 1 in 100 women has breast cancer at the time of screening. The mammogram detects about 90% of cancers (sensitivity) and returns a false positive in about 9% of healthy women (specificity 91%). Her result is positive. How likely is she to have cancer?" data-fr="Une femme de 50 ans passe une mammographie de dépistage de routine. Dans sa tranche d’âge, environ 1 femme sur 100 a un cancer du sein au moment du dépistage. La mammographie détecte environ 90 % des cancers (sensibilité) et donne un faux positif chez environ 9 % des femmes saines (spécificité 91 %). Son résultat est positif. Quelle est la probabilité qu’elle ait un cancer ?">Une femme de 50 ans passe une mammographie de dépistage de routine. Dans sa tranche d’âge, environ 1 femme sur 100 a un cancer du sein au moment du dépistage. La mammographie détecte environ 90 % des cancers (sensibilité) et donne un faux positif chez environ 9 % des femmes saines (spécificité 91 %). Son résultat est positif. Quelle est la probabilité qu’elle ait un cancer ?</p></div>
+ <p data-en="Do not start with the percentages. Start with 1,000 women like her:" data-fr="Ne commencez pas par les pourcentages. Commencez par 1 000 femmes comme elle :">Ne commencez pas par les pourcentages. Commencez par 1 000 femmes comme elle :</p>
+ <div class="calc" data-en="&bull; About 10 have cancer (1 in 100). The mammogram catches about 9 of them (90%): <b>9 true positives</b>.<br>&bull; About 990 are healthy. About 9% get a false positive: <b>89 false positives</b>.<br>&bull; So about 98 women test positive, and only 9 truly have cancer.<br><b>PPV = 9 / 98 &approx; 9%.</b>" data-fr="&bull; Environ 10 ont un cancer (1 sur 100). La mammographie en détecte environ 9 (90 %) : <b>9 vrais positifs</b>.<br>&bull; Environ 990 sont saines. Environ 9 % ont un faux positif : <b>89 faux positifs</b>.<br>&bull; Donc environ 98 femmes sont positives, et 9 seulement ont réellement un cancer.<br><b>VPP = 9 / 98 &approx; 9 %.</b>">&bull; Environ 10 ont un cancer (1 sur 100). La mammographie en détecte environ 9 (90 %) : <b>9 vrais positifs</b>.<br>&bull; Environ 990 sont saines. Environ 9 % ont un faux positif : <b>89 faux positifs</b>.<br>&bull; Donc environ 98 femmes sont positives, et 9 seulement ont réellement un cancer.<br><b>VPP = 9 / 98 &approx; 9 %.</b></div>
+ <p data-en="The formula agrees, of course:" data-fr="La formule confirme, bien sûr :">La formule confirme, bien sûr :</p>
+ <div class="formula-box">$$\text{PPV} = \frac{0.90 \times 0.01}{0.90 \times 0.01 + 0.09 \times 0.99} = \frac{0.009}{0.098} \approx 0.092$$</div>
+ <div class="softbox answer" data-en="Nine percent. A positive screening mammogram is wrong far more often than it is right, which is exactly why a positive screen leads to a biopsy, not a diagnosis. Press the Mammography preset above to see these same 1,000 women as dots." data-fr="Neuf pour cent. Une mammographie de dépistage positive se trompe bien plus souvent qu’elle n’a raison, c’est précisément pourquoi un dépistage positif mène à une biopsie, pas à un diagnostic. Appuyez sur le préréglage Mammographie ci-dessus pour voir ces mêmes 1 000 femmes en points.">Neuf pour cent. Une mammographie de dépistage positive se trompe bien plus souvent qu’elle n’a raison, c’est précisément pourquoi un dépistage positif mène à une biopsie, pas à un diagnostic. Appuyez sur le préréglage Mammographie ci-dessus pour voir ces mêmes 1 000 femmes en points.</div>
+ </section>
+
+<div class="cta">
+ <p data-en="This is one intuition trap. The Paradoxes &amp; Intuition Traps section of Stat Exam Pro is a whole set of them - exam-style questions with worked answers, in English and French." data-fr="Ceci est un seul piège de l'intuition. La section Paradoxes &amp; Intuition Traps de Stat Exam Pro en contient toute une série : des QCM type examen, corrigés et expliqués, en français et en anglais.">Ceci est un seul piège de l'intuition. La section Paradoxes &amp; Intuition Traps de Stat Exam Pro en contient toute une série : des QCM type examen, corrigés et expliqués, en français et en anglais.</p>
+ <a href="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn"
+    onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click-ppv-bottom',title:'App Store button (app-store-click-ppv-bottom)',event:true})">
+  <span class="apple-icon"></span>
+  <span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Télécharger sur iPhone</span>
+ </a>
+</div>
+
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/fr/">Accueil</a><span style="opacity:.3">|</span><a href="/fr/ppv-calculator/">Simulateur VPP/VPN</a><span style="opacity:.3">|</span><a href="/fr/nnt-calculator/">Simulateur NNT</a><span style="opacity:.3">|</span><a href="/fr/roc-curve/">Simulateur ROC</a><span style="opacity:.3">|</span><a href="/fr/lessons/roc-auc/">Cours ROC et AUC</a></p>
+ <p><a href="/fr/fails/">Stat Fails</a> : <a href="/fr/fails/hiv-false-positives/">Les conseillers sûrs à 100 %</a><span style="opacity:.3">|</span><a href="/fr/fails/the-1995-pill-scare/">La panique de la pilule de 1995</a><span style="opacity:.3">|</span><a href="/fr/fails/epic-sepsis-model/">L'IA de sepsis</a></p>
+ <p><a href="/fr/studies/">Études et jeux de données connus</a><span style="opacity:.3">|</span><a href="/privacy.html">Politique de confidentialité</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+
+</div>
+<script src="../../site.js"></script>
+<script src="../../ppv-calculator/calc.js"></script>
+<script>
+var LANG = 'fr';
+var STR = {
+  en: {
+    ppvLabel: "PPV - chance a positive result is real",
+    npvLabel: "NPV - chance a negative result is real",
+    of1000: function(c, ppvPct) {
+      return "Out of <b>1,000</b> people, <b>" + c.sick + "</b> " + (c.sick === 1 ? "is" : "are") +
+        " actually sick. The test flags <b>" + (c.tp + c.fp) + "</b> as positive: <b>" + c.tp +
+        "</b> genuinely sick and <b>" + c.fp + "</b> false alarms. A positive result here means a <b>" +
+        ppvPct + "</b> chance of actually being sick.";
+    },
+    oneIn: function(n) { return "1 in " + n; },
+    interpret: function(ppv) {
+      var e = '<span class="emoji">&#129658;</span><span>';
+      if (ppv < 0.2) return e + 'As the clinician, you would not announce a diagnosis on this. A positive result here is more likely a false alarm than real disease, a reason to order the confirmatory test, nothing more.</span>';
+      if (ppv < 0.8) return e + 'A positive result raises the odds a lot, but it is far from a verdict. You would explain the uncertainty and confirm before concluding.</span>';
+      return e + 'A positive result here is fairly trustworthy, the disease is common enough in this group to back it up. Even so, a serious diagnosis still gets a confirmatory test.</span>';
+    }
+  },
+  fr: {
+    ppvLabel: "VPP - probabilité qu'un résultat positif soit vrai",
+    npvLabel: "VPN - probabilité qu'un résultat négatif soit vrai",
+    of1000: function(c, ppvPct) {
+      return "Sur <b>1 000</b> personnes, <b>" + c.sick + "</b> " + (c.sick === 1 ? "est réellement malade" : "sont réellement malades") +
+        ". Le test en signale <b>" + (c.tp + c.fp) + "</b> comme positives : <b>" + c.tp +
+        "</b> vrais positifs et <b>" + c.fp + "</b> fausses alertes. Un résultat positif signifie donc <b>" +
+        ppvPct + "</b> de risque d'être réellement malade.";
+    },
+    oneIn: function(n) { return "1 sur " + n; },
+    interpret: function(ppv) {
+      var e = '<span class="emoji">&#129658;</span><span>';
+      if (ppv < 0.2) return e + 'En tant que clinicien, vous n\'annonceriez pas de diagnostic sur cette base. Ici, un résultat positif est plus probablement une fausse alerte qu\'une vraie maladie, une raison de prescrire le test de confirmation, rien de plus.</span>';
+      if (ppv < 0.8) return e + 'Un résultat positif augmente nettement la probabilité, mais reste loin d\'un verdict. Vous expliqueriez l\'incertitude et confirmeriez avant de conclure.</span>';
+      return e + 'Ici, un résultat positif est plutôt fiable, la maladie est assez fréquente dans ce groupe pour l\'appuyer. Malgré tout, un diagnostic sérieux fait l\'objet d\'un test de confirmation.</span>';
+    }
+  }
+};
+function fmtPct(x, digits) {
+  var s = (100 * x).toFixed(digits);
+  if (LANG === 'fr') { return s.replace('.', ',') + " %"; }
+  return s + "%";
+}
+var PMIN = Math.log10(0.0001), PMAX = Math.log10(0.5);
+function sliderToP(v) { return Math.pow(10, PMIN + (v / 1000) * (PMAX - PMIN)); }
+function pToSlider(p) { return Math.round(1000 * (Math.log10(p) - PMIN) / (PMAX - PMIN)); }
+
+function dotHTML(cls, n) {
+  var s = '';
+  for (var i = 0; i < n; i++) { s += '<span class="d ' + cls + '"></span>'; }
+  return s;
+}
+function update() {
+  var p = sliderToP(+document.getElementById('pSlider').value);
+  var se = +document.getElementById('seSlider').value / 10000;
+  var sp = +document.getElementById('spSlider').value / 10000;
+  var S = STR[LANG];
+  var pDigits = p < 0.001 ? 2 : (p < 0.01 ? 1 : (p < 0.1 ? 1 : 0));
+  document.getElementById('pVal').textContent = fmtPct(p, pDigits) + " (" + S.oneIn(Math.round(1 / p)) + ")";
+  document.getElementById('seVal').textContent = fmtPct(se, se >= 0.9995 ? 2 : 1);
+  document.getElementById('spVal').textContent = fmtPct(sp, sp >= 0.9995 ? 2 : 1);
+
+  var ppv = SXPCalc.ppv(se, sp, p), npv = SXPCalc.npv(se, sp, p);
+  var c = SXPCalc.counts(se, sp, p, 1000);
+  document.getElementById('ppvNum').textContent = fmtPct(ppv, 1);
+  document.getElementById('ppvLabel').textContent = S.ppvLabel;
+  document.getElementById('npvNum').textContent = fmtPct(npv, npv > 0.999 ? 2 : 1);
+  document.getElementById('npvLabel').textContent = S.npvLabel;
+
+  document.getElementById('dotsPos').innerHTML = dotHTML('d-tp', c.tp) + dotHTML('d-fp', c.fp);
+  document.getElementById('dotsNeg').innerHTML = dotHTML('d-fn', c.fn) + dotHTML('d-tn', c.tn);
+  document.getElementById('posCnt').textContent = "(" + (c.tp + c.fp) + ")";
+  document.getElementById('negCnt').textContent = "(" + (c.fn + c.tn) + ")";
+  document.getElementById('sentence').innerHTML = S.of1000(c, fmtPct(ppv, 1));
+  document.getElementById('interpret').innerHTML = S.interpret(ppv);
+
+  document.getElementById('cTP').textContent = c.tp;  document.getElementById('cFP').textContent = c.fp;
+  document.getElementById('cFN').textContent = c.fn;  document.getElementById('cTN').textContent = c.tn;
+  document.getElementById('cPos').textContent = c.tp + c.fp; document.getElementById('cNeg').textContent = c.fn + c.tn;
+  document.getElementById('cSick').textContent = c.sick; document.getElementById('cHealthy').textContent = c.healthy;
+}
+function preset(p, sePct, spPct) {
+  document.getElementById('pSlider').value = pToSlider(p);
+  document.getElementById('seSlider').value = Math.round(sePct * 100);
+  document.getElementById('spSlider').value = Math.round(spPct * 100);
+  update();
+}
+preset(0.10, 99, 99);
+  window.addEventListener('load', function() {
+    if (window.renderMathInElement) renderMathInElement(document.body, {
+      delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+      throwOnError: false
+    });
+  });
+</script>
+</body>
+</html>

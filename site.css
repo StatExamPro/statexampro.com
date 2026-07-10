@@ -1,0 +1,169 @@
+/* Stat Exam Pro — design system. Single source of truth: tokens + chrome
+   + reusable components. Pages hold only their own layout.
+   Change a colour, radius, font or spacing HERE, once. */
+
+:root{
+ /* colour */
+ --bg-color:#ffffff; --text-main:#1d1d1f; --text-sec:#86868b; --accent:#0071e3;
+ --card-bg:#f5f5f7; --btn-bg:#1d1d1f; --btn-text:#ffffff;
+ --fp:#ff9500; --fn:#ff3b30;                       /* warn / danger edges + dot colours */
+ --accent-soft:rgba(0,113,227,.10); --warn-soft:rgba(255,149,0,.12); --danger-soft:rgba(255,59,48,.08);
+ --hairline:rgba(134,134,139,.2); --hairline-2:rgba(134,134,139,.15);
+ --gradient-1:rgba(0,113,227,.15); --gradient-2:rgba(200,0,255,.1);
+ /* type */
+ --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ --font-mono:ui-monospace,Menlo,monospace;
+ /* radius */
+ --r-sm:12px; --r-md:16px; --r-lg:20px; --r-pill:999px;
+ /* spacing (padding shorthands) */
+ --pad-card:20px 22px; --pad-box:16px 20px;
+ /* misc */
+ --edge:4px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+ --bg-color:#000; --text-main:#fff; --text-sec:#98989D; --accent:#0A84FF;
+ --card-bg:#1C1C1E; --btn-bg:#fff; --btn-text:#000; --fp:#ff9f0a; --fn:#ff453a;
+ --accent-soft:rgba(10,132,255,.16); --warn-soft:rgba(255,159,10,.16); --danger-soft:rgba(255,69,58,.14);
+ --gradient-1:rgba(10,132,255,.25); --gradient-2:rgba(94,92,230,.25);
+}}
+:root[data-theme="dark"]{
+ --bg-color:#000; --text-main:#fff; --text-sec:#98989D; --accent:#0A84FF;
+ --card-bg:#1C1C1E; --btn-bg:#fff; --btn-text:#000; --fp:#ff9f0a; --fn:#ff453a;
+ --accent-soft:rgba(10,132,255,.16); --warn-soft:rgba(255,159,10,.16); --danger-soft:rgba(255,69,58,.14);
+ --gradient-1:rgba(10,132,255,.25); --gradient-2:rgba(94,92,230,.25);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--bg-color);color:var(--text-main);
+ line-height:1.5;overflow-x:hidden;transition:background-color .3s ease,color .3s ease}
+.container{max-width:980px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+.blur-orb{position:absolute;border-radius:50%;filter:blur(80px);z-index:-1;opacity:.6}
+.orb-1{top:-100px;left:-100px;width:500px;height:500px;background:var(--gradient-1)}
+.orb-2{bottom:-100px;right:-100px;width:400px;height:400px;background:var(--gradient-2)}
+
+header{padding:20px 0;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:700;font-size:1.2rem;letter-spacing:-.5px;display:flex;align-items:center;text-decoration:none;color:var(--text-main)}
+.logo img{height:32px;margin-right:8px}
+.header-right{display:flex;align-items:center;gap:12px}
+.seg{display:flex;background:var(--card-bg);border-radius:var(--r-pill);padding:3px}
+.seg button,.seg a,.seg span{border:none;background:transparent;padding:5px 13px;border-radius:var(--r-pill);font-weight:600;cursor:pointer;color:var(--text-sec);font-family:inherit;font-size:.85rem;text-decoration:none;display:inline-block;line-height:1.4}
+.seg button.active,.seg .active{background:var(--btn-bg);color:var(--btn-text)}
+.theme-btn{border:none;background:var(--card-bg);color:var(--text-main);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1rem;line-height:1}
+.sitenav{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.sitenav::-webkit-scrollbar{display:none}
+.sitenav a{flex:none;background:var(--card-bg);color:var(--text-sec);padding:6px 14px;border-radius:var(--r-pill);font-size:.82rem;font-weight:600;text-decoration:none}
+.sitenav a:hover{color:var(--accent)}
+.sitenav a.active{background:var(--btn-bg);color:var(--btn-text)}
+
+footer{border-top:1px solid var(--hairline);padding:36px 0;text-align:center;color:var(--text-sec);font-size:.85rem;margin-top:40px}
+footer a{color:var(--text-sec);text-decoration:none;margin:0 10px}
+footer a:hover{text-decoration:underline}
+footer p{margin:4px 0}
+
+/* buttons & pills */
+.cta{background:var(--card-bg);border-radius:var(--r-lg);padding:var(--pad-card);margin:44px 0;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.cta p{margin:0;flex:1 1 420px}
+.btn{display:flex;align-items:center;background:var(--btn-bg);color:var(--btn-text);padding:12px 24px;border-radius:var(--r-pill);text-decoration:none;font-weight:600;font-size:.95rem;white-space:nowrap;transition:transform .2s ease}
+.btn:hover{transform:scale(1.03)}
+.btn svg{width:20px;height:20px;margin-right:10px;fill:currentColor}
+.btn.disabled{background:var(--card-bg);color:var(--text-sec);cursor:default}
+.btn.disabled:hover{transform:none}
+.btn-round{width:38px;height:38px;border-radius:50%;background:var(--btn-bg);color:var(--btn-text);display:flex;align-items:center;justify-content:center;text-decoration:none;flex:none}
+.btn-round svg{width:18px;height:18px;fill:currentColor}
+.apple-icon{display:inline-block;width:20px;height:20px;flex:none;background:currentColor;-webkit-mask-image:url(apple.svg);-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;-webkit-mask-size:contain;mask-image:url(apple.svg);mask-repeat:no-repeat;mask-position:center;mask-size:contain}
+.btn .apple-icon{margin-right:10px}
+.btn-round .apple-icon{width:18px;height:18px}
+.pill{display:inline-block;background:var(--btn-bg);color:var(--btn-text);padding:8px 16px;border-radius:var(--r-pill);font-size:.85rem;font-weight:600;text-decoration:none}
+.pill.ghost{background:var(--bg-color);color:var(--text-main);border:1px solid var(--hairline)}
+.pill.ghost:hover{color:var(--accent);border-color:var(--accent)}
+.callout .pill{margin-top:10px}
+.plainlink{color:inherit;text-decoration:none}
+.plainlink:hover{color:var(--accent)}
+
+/* surfaces & callouts (use on new pages; existing boxes already match via tokens) */
+.card{background:var(--card-bg);border-radius:var(--r-md);padding:var(--pad-card)}
+.callout{background:var(--card-bg);border-left:var(--edge) solid var(--accent);border-radius:var(--r-sm);padding:var(--pad-box);margin:16px 0}
+.callout.warn{background:var(--warn-soft);border-color:var(--fp)}
+.callout.danger{background:var(--danger-soft);border-color:var(--fn)}
+.softbox{background:var(--accent-soft);border-radius:var(--r-sm);padding:var(--pad-box);margin:16px 0}
+.chip{display:inline-block;background:var(--accent-soft);color:var(--accent);padding:6px 12px;border-radius:var(--r-pill);font-size:.8rem;font-weight:700;letter-spacing:.4px}
+.eyebrow{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:8px}
+
+/* content primitives */
+.note{color:var(--text-sec);font-size:.85rem;margin:6px 0 22px}
+.calc{background:var(--card-bg);border-radius:var(--r-sm);padding:var(--pad-box);margin:16px 0;font-family:var(--font-mono);font-size:.9rem;line-height:2}
+table{border-collapse:collapse;width:100%;margin:8px 0 6px;font-size:.86rem;font-variant-numeric:tabular-nums}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--hairline)}
+th{color:var(--text-sec);font-weight:600}
+td:first-child,th:first-child{text-align:left}
+
+/* playground: term cards (shared across calculators) */
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:18px 0}
+.term-card{background:var(--card-bg);border-radius:var(--r-md);padding:16px 18px}
+.term-card h3{font-size:.95rem;color:var(--accent);margin-bottom:6px;font-weight:700}
+.term-card p{font-size:.92rem}
+.hook{font-size:.95rem;font-style:italic;color:var(--text-main);margin:0 0 14px;padding-left:12px;border-left:2px solid var(--accent)}
+
+/* shared: subtitle, formula display, list card, figure */
+.lead{color:var(--text-sec);font-size:1.05rem;max-width:640px}
+.formula-box{background:var(--card-bg);border-radius:var(--r-md);padding:18px 16px;margin:16px 0;overflow-x:auto;text-align:center}
+.list{background:var(--card-bg);border-radius:var(--r-sm);padding:6px 20px;margin:16px 0}
+.list div{padding:11px 0;border-bottom:1px solid var(--hairline-2);font-size:.97rem}
+.list div:last-child{border-bottom:none}
+.figure{background:var(--card-bg);border-radius:var(--r-md);padding:18px 16px;margin:18px 0}
+.figure svg,.figure img{width:100%;height:auto;display:block}
+.figure.narrow{max-width:340px;margin-left:auto;margin-right:auto}
+.train-card{background:var(--card-bg);border-radius:var(--r-lg);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.9rem;color:var(--text-sec);font-weight:600}
+
+/* page h1 (playgrounds & lesson use as-is; landing/fails/studies override size/margin locally) */
+h1{font-size:2.1rem;font-weight:800;letter-spacing:-1px;margin:24px 0 10px}
+
+/* playground kit (ppv / nnt / roc): control panel, presets, readouts, lesson blocks */
+.panel{background:var(--card-bg);border-radius:var(--r-lg);padding:22px}
+.ctrl{margin-bottom:18px}
+.ctrl label{display:flex;justify-content:space-between;font-size:.9rem;font-weight:600;margin-bottom:6px}
+.ctrl label .val{color:var(--accent);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 18px}
+.preset{border:none;background:var(--bg-color);color:var(--text-main);border-radius:var(--r-md);padding:6px 12px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit}
+.preset:hover{color:var(--accent)}
+.bignum{font-size:2.6rem;font-weight:800;letter-spacing:-1px;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1.1}
+.bignum-label{font-size:.85rem;color:var(--text-sec);margin-bottom:14px}
+.sentence{background:var(--card-bg);border-left:var(--edge) solid var(--accent);border-radius:var(--r-sm);padding:18px 20px;font-size:1.02rem}
+.interpret{display:flex;gap:14px;align-items:flex-start;font-size:1rem}
+.interpret .emoji{font-size:1.7rem;line-height:1.1;flex:none}
+.howto{background:var(--card-bg);border-radius:var(--r-sm);padding:16px 20px;margin:14px 0}
+.howto p{font-size:.95rem;margin:0}
+.bridge{font-size:1.02rem;margin:26px 0 12px}
+.lesson,.worked{margin:40px 0}
+.lesson h2,.worked h2{font-size:1.5rem;font-weight:800;letter-spacing:-.5px;margin-bottom:12px}
+.lesson p,.worked p{margin-bottom:14px}
+.problem{font-size:1.02rem}
+.answer{font-weight:600}
+
+/* article kit (Stat Fails): chip row, numbers, quotes, takeaways, sources */
+.chip-row{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:20px 0 14px;flex-wrap:wrap}
+.train{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--text-sec);font-weight:600}
+.rubric{color:var(--text-sec);font-size:.95rem;margin-bottom:26px;max-width:640px}
+article p{margin-bottom:16px;font-size:1.02rem}
+.quote{font-size:1.08rem;font-style:italic}
+.pull .big{font-size:1.15rem;font-weight:700;font-style:italic}
+.pull .who{color:var(--text-sec);font-size:.85rem;margin-top:6px}
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:18px 0}
+.num{background:var(--card-bg);border-radius:var(--r-md);padding:16px}
+.num b{display:block;font-size:1.5rem;font-weight:800;letter-spacing:-.5px;margin-bottom:4px}
+.num span{color:var(--text-sec);font-size:.85rem;line-height:1.4}
+.num.hero{background:var(--accent)}
+.num.hero b{color:#fff}
+.num.hero span{color:rgba(255,255,255,.85)}
+.mech{font-weight:600}
+.invite p{margin:0 0 14px}
+.takeaway{background:var(--card-bg);border-radius:var(--r-sm);padding:16px 20px;margin:18px 0}
+.takeaway p{margin:0}
+.sources{margin:34px 0 0}
+.sources h2{font-size:1rem;font-weight:700;margin-bottom:10px}
+.sources li{font-size:.88rem;color:var(--text-sec);margin-bottom:8px;margin-left:18px}
+.sources a{color:var(--accent);text-decoration:none}
+.dive h2{font-size:1.5rem;font-weight:800;letter-spacing:-.5px;margin:40px 0 8px}
+.dive h3{font-size:1.15rem;font-weight:700;margin:28px 0 8px}
+.dive>p{margin-bottom:14px}

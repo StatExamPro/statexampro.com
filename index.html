@@ -13,75 +13,48 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/">
+<link rel="alternate" hreflang="en" href="https://statexampro.com/">
+<link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/">
+<link rel="alternate" hreflang="x-default" href="https://statexampro.com/">
+<meta property="og:url" content="https://statexampro.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#ffffff">
 <script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<style>
-:root { --bg-color:#ffffff; --text-main:#1d1d1f; --text-sec:#86868b; --accent:#0071e3;
- --card-bg:#f5f5f7; --btn-bg:#1d1d1f; --btn-text:#ffffff;
- --gradient-1:rgba(0,113,227,.15); --gradient-2:rgba(200,0,255,.1); }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg-color:#000; --text-main:#fff; --text-sec:#98989D;
- --accent:#0A84FF; --card-bg:#1C1C1E; --btn-bg:#fff; --btn-text:#000;
- --gradient-1:rgba(10,132,255,.25); --gradient-2:rgba(94,92,230,.25);} }
-:root[data-theme="dark"]{ --bg-color:#000; --text-main:#fff; --text-sec:#98989D;
- --accent:#0A84FF; --card-bg:#1C1C1E; --btn-bg:#fff; --btn-text:#000;
- --gradient-1:rgba(10,132,255,.25); --gradient-2:rgba(94,92,230,.25);}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
- background:var(--bg-color);color:var(--text-main);line-height:1.5;overflow-x:hidden;
- transition:background-color .3s ease,color .3s ease}
-.container{max-width:980px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
-.blur-orb{position:absolute;border-radius:50%;filter:blur(80px);z-index:-1;opacity:.6}
-.orb-1{top:-100px;left:-100px;width:500px;height:500px;background:var(--gradient-1)}
-.orb-2{bottom:-100px;right:-100px;width:400px;height:400px;background:var(--gradient-2)}
-header{padding:20px 0;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:700;font-size:1.2rem;letter-spacing:-.5px;display:flex;align-items:center}
-.logo img{height:32px;margin-right:8px}
-.header-right{display:flex;align-items:center;gap:12px}
-.seg{display:flex;background:var(--card-bg);border-radius:20px;padding:3px}
-.seg button{border:none;background:transparent;padding:5px 13px;border-radius:16px;font-weight:600;
- cursor:pointer;color:var(--text-sec);font-family:inherit;font-size:.85rem;transition:all .2s}
-.seg button.active{background:var(--btn-bg);color:var(--btn-text)}
-.theme-btn{border:none;background:var(--card-bg);color:var(--text-main);width:34px;height:34px;
- border-radius:50%;cursor:pointer;font-size:1rem;line-height:1}
-.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding:50px 0 0}
-h1{font-size:2.9rem;font-weight:800;letter-spacing:-1.2px;margin-bottom:20px;
+<link rel="stylesheet" href="site.css">
+<style>.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding:50px 0 0}
+h1{font-size:2.9rem;font-weight:800;letter-spacing:-1.2px;margin:0 0 20px;
  background:-webkit-linear-gradient(45deg,var(--text-main),var(--text-sec));
  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .subtitle{font-size:1.3rem;color:var(--text-sec);margin-bottom:8px}
 .tagline-fr{display:block;font-size:1.05rem;color:var(--accent);margin-top:10px;font-weight:500}
 .store-buttons{display:flex;gap:15px;flex-wrap:wrap;margin-top:30px}
-.btn{display:flex;align-items:center;background:var(--btn-bg);color:var(--btn-text);
- padding:12px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:.95rem;
- transition:transform .2s ease}
-.btn:hover{transform:scale(1.03)}
-.btn svg{width:20px;height:20px;margin-right:10px;fill:currentColor}
-.btn.disabled{background:var(--card-bg);color:var(--text-sec);cursor:default}
-.btn.disabled:hover{transform:none}
-.chip{display:inline-block;background:rgba(0,113,227,.1);color:var(--accent);
- padding:6px 12px;border-radius:20px;font-size:.8rem;font-weight:600;margin-bottom:20px}
 .soon{font-size:.75rem;opacity:.7;margin-left:8px;font-weight:500}
 section{margin:70px 0}
 h2{font-size:1.9rem;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
 .h2-fr{color:var(--accent);font-size:1rem;font-weight:500;margin-bottom:24px}
 .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.card{background:var(--card-bg);padding:26px;border-radius:20px}
-.card h3{font-size:1.15rem;margin-bottom:8px;font-weight:700}
-.card p{color:var(--text-sec);font-size:.95rem}
-.card .fr{color:var(--accent);font-size:.85rem;margin-top:8px}
+.lcard{background:var(--card-bg);padding:26px;border-radius:var(--r-lg)}
+.lcard h3{font-size:1.15rem;margin-bottom:8px;font-weight:700}
+.lcard p{color:var(--text-sec);font-size:.95rem}
+.lcard .fr{color:var(--accent);font-size:.85rem;margin-top:8px}
 .topic-num{color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;margin-right:10px}
 .topics-grid{display:grid;gap:14px}
 .more-line{color:var(--text-sec);font-size:.95rem;margin-top:18px;text-align:center}
-.phone{border-radius:24px;width:85%;height:auto;display:block;margin:0 auto}
-footer{border-top:1px solid rgba(134,134,139,.2);padding:40px 0;text-align:center;
- color:var(--text-sec);font-size:.85rem}
-footer a{color:var(--text-sec);text-decoration:none;margin:0 10px}
-footer a:hover{text-decoration:underline}
+.linkrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.phone{border-radius:var(--r-lg);width:85%;height:auto;display:block;margin:0 auto}
 @media(max-width:768px){
  .hero{grid-template-columns:1fr;padding:30px 0 0}
  .hero img{max-width:340px;margin:0 auto}
  h1{font-size:2.1rem} .subtitle{font-size:1.1rem}
 }
 </style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Stat Exam Pro","operatingSystem":"iOS","applicationCategory":"EducationalApplication","inLanguage":"en","url":"https://apps.apple.com/us/app/stat-exam-pro/id6755912771","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Biostatistics exam prep for medical students: Se, Sp, PPV/NPV, paradoxes."}</script>
 </head>
 <body>
 <div class="blur-orb orb-1"></div>
@@ -91,10 +64,7 @@ footer a:hover{text-decoration:underline}
 <header>
  <div class="logo"><img src="logo.svg" alt=""><span>Stat Exam Pro</span></div>
  <div class="header-right">
-  <div class="seg" role="group" aria-label="Language">
-   <button id="segEn" class="active" onclick="applyLang('en')">EN</button>
-   <button id="segFr" onclick="applyLang('fr')">FR</button>
-  </div>
+  <div class="seg" role="group" aria-label="Language"><span class="active">EN</span><a href="/fr/" hreflang="fr">FR</a></div>
   <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
  </div>
 </header>
@@ -106,7 +76,7 @@ footer a:hover{text-decoration:underline}
   <div class="subtitle" data-en="Question-based biostatistics prep for medical students." data-fr="Des QCM de biostatistiques pour les étudiants en médecine.">Question-based biostatistics prep for medical students.</div>
   <span class="tagline-fr" data-en="Biostatistiques PASS/LAS - aussi disponible entièrement en français." data-fr="The whole app is also fully available in English.">Biostatistiques PASS/LAS - aussi disponible entièrement en français.</span>
   <div class="store-buttons">
-   <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn" onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click',title:'App Store button',event:true})"><svg viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 52.3-11.4 69.5-34.3z"/></svg><span data-en="Download on the App Store" data-fr="Télécharger sur l'App Store">Download on the App Store</span></a>
+   <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn" onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click',title:'App Store button',event:true})"><span class="apple-icon"></span><span data-en="Download on the App Store" data-fr="Télécharger sur l'App Store">Download on the App Store</span></a>
    <span class="btn disabled"><svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>Google Play<span class="soon" data-en="coming soon" data-fr="bientôt">coming soon</span></span>
   </div>
  </div>
@@ -117,12 +87,12 @@ footer a:hover{text-decoration:underline}
  <h2 data-en="Two ways to work" data-fr="Deux façons de réviser">Two ways to work</h2>
  <p class="h2-fr" data-en="Deux façons de réviser :" data-fr="Two ways to work:">Deux façons de réviser :</p>
  <div class="grid-2">
-  <div class="card">
+  <div class="lcard">
    <h3>📚 <span data-en="Study by Topics" data-fr="Révision par thème">Study by Topics</span></h3>
    <p data-en="Pick a topic, answer questions at your own pace, get the explanation right after each answer." data-fr="Choisissez un thème, répondez à votre rythme, la correction expliquée arrive après chaque question.">Pick a topic, answer questions at your own pace, get the explanation right after each answer.</p>
    <p class="fr" data-en="Révision par thème, corrections immédiates." data-fr="Study by topics, instant feedback.">Révision par thème, corrections immédiates.</p>
   </div>
-  <div class="card">
+  <div class="lcard">
    <h3>⏱️ <span data-en="Practice Test" data-fr="Examen blanc">Practice Test</span></h3>
    <p data-en="Timer on, no feedback until the end: you see what you got right only when you submit. Like the real exam, on purpose." data-fr="Chronomètre activé, aucune correction avant la fin : vous découvrez votre score à la remise de la copie. Comme le jour J, et c'est voulu.">Timer on, no feedback until the end: you see what you got right only when you submit. Like the real exam, on purpose.</p>
    <p class="fr" data-en="Examen blanc : chrono, corrections à la fin." data-fr="Mock exam: timer on, answers at the end.">Examen blanc : chrono, corrections à la fin.</p>
@@ -134,70 +104,63 @@ footer a:hover{text-decoration:underline}
  <h2 data-en="What's inside" data-fr="Au programme">What's inside</h2>
  <p class="h2-fr" data-en="Les thèmes, tels qu'ils apparaissent dans l'app :" data-fr="The topics, exactly as they appear in the app:">Les thèmes, tels qu'ils apparaissent dans l'app :</p>
  <div class="topics-grid">
-<div class="card"><h3><span class="topic-num">0.1</span><span data-en="Numbers, Risks and Tests in Medicine" data-fr="Nombres, risques et tests en médecine">Numbers, Risks and Tests in Medicine</span></h3>
+<div class="lcard"><h3><span class="topic-num">0.1</span><span data-en="Numbers, Risks and Tests in Medicine" data-fr="Nombres, risques et tests en médecine">Numbers, Risks and Tests in Medicine</span></h3>
 <p class="fr" data-en="Nombres, risques et tests en médecine" data-fr="Numbers, Risks and Tests in Medicine">Nombres, risques et tests en médecine</p></div>
-<div class="card"><h3><span class="topic-num">0.2</span><span data-en="Probability Foundations for Medical Statistics" data-fr="Fondements probabilistes des statistiques médicales">Probability Foundations for Medical Statistics</span></h3>
+<div class="lcard"><h3><span class="topic-num">0.2</span><span data-en="Probability Foundations for Medical Statistics" data-fr="Fondements probabilistes des statistiques médicales">Probability Foundations for Medical Statistics</span></h3>
 <p class="fr" data-en="Fondements probabilistes des statistiques médicales" data-fr="Probability Foundations for Medical Statistics">Fondements probabilistes des statistiques médicales</p></div>
-<div class="card"><h3><span class="topic-num">1.1</span><span data-en="Intro to Medical Test Accuracy (Se, Sp, PPV, NPV)" data-fr="Introduction à la performance des tests médicaux (Se, Sp, VPP, VPN)">Intro to Medical Test Accuracy (Se, Sp, PPV, NPV)</span></h3>
+<div class="lcard"><h3><span class="topic-num">1.1</span><span data-en="Intro to Medical Test Accuracy (Se, Sp, PPV, NPV)" data-fr="Introduction à la performance des tests médicaux (Se, Sp, VPP, VPN)">Intro to Medical Test Accuracy (Se, Sp, PPV, NPV)</span></h3>
 <p class="fr" data-en="Introduction à la performance des tests médicaux (Se, Sp, VPP, VPN)" data-fr="Intro to Medical Test Accuracy (Se, Sp, PPV, NPV)">Introduction à la performance des tests médicaux (Se, Sp, VPP, VPN)</p></div>
-<div class="card"><h3><span class="topic-num">1.2</span><span data-en="Probability and Diagnostic Test Evaluation" data-fr="Probabilités et évaluation des tests diagnostiques">Probability and Diagnostic Test Evaluation</span></h3>
+<div class="lcard"><h3><span class="topic-num">1.2</span><span data-en="Probability and Diagnostic Test Evaluation" data-fr="Probabilités et évaluation des tests diagnostiques">Probability and Diagnostic Test Evaluation</span></h3>
 <p class="fr" data-en="Probabilités et évaluation des tests diagnostiques" data-fr="Probability and Diagnostic Test Evaluation">Probabilités et évaluation des tests diagnostiques</p></div>
-<div class="card"><h3><span class="topic-num">1.3</span><span data-en="Diagnostic Test Paradoxes &amp; Intuition Traps" data-fr="Paradoxes des tests diagnostiques et pièges de l'intuition">Diagnostic Test Paradoxes &amp; Intuition Traps</span></h3>
+<div class="lcard"><h3><span class="topic-num">1.3</span><span data-en="Diagnostic Test Paradoxes &amp; Intuition Traps" data-fr="Paradoxes des tests diagnostiques et pièges de l'intuition">Diagnostic Test Paradoxes &amp; Intuition Traps</span></h3>
 <p class="fr" data-en="Paradoxes des tests diagnostiques et pièges de l'intuition" data-fr="Diagnostic Test Paradoxes &amp; Intuition Traps">Paradoxes des tests diagnostiques et pièges de l'intuition</p></div>
-<div class="card"><h3><span data-en="Hypothesis Testing, p-values &amp; Confidence Intervals" data-fr="Tests d'hypothèses, valeurs p et intervalles de confiance">Hypothesis Testing, p-values &amp; Confidence Intervals</span></h3>
+<div class="lcard"><h3><span data-en="Hypothesis Testing, p-values &amp; Confidence Intervals" data-fr="Tests d'hypothèses, valeurs p et intervalles de confiance">Hypothesis Testing, p-values &amp; Confidence Intervals</span></h3>
 <p class="fr" data-en="Tests d'hypothèses, valeurs p et intervalles de confiance" data-fr="Hypothesis Testing, p-values &amp; Confidence Intervals">Tests d'hypothèses, valeurs p et intervalles de confiance</p></div>
-<div class="card"><h3><span data-en="Relative Risk, Odds Ratio &amp; NNT" data-fr="Risque relatif, odds ratio et NNT">Relative Risk, Odds Ratio &amp; NNT</span></h3>
+<div class="lcard"><h3><span data-en="Relative Risk, Odds Ratio &amp; NNT" data-fr="Risque relatif, odds ratio et NNT">Relative Risk, Odds Ratio &amp; NNT</span></h3>
 <p class="fr" data-en="Risque relatif, odds ratio et NNT" data-fr="Relative Risk, Odds Ratio &amp; NNT">Risque relatif, odds ratio et NNT</p></div>
  </div>
  <p class="more-line" data-en="...and the question bank keeps growing." data-fr="...et la banque de questions continue de s'agrandir.">...and the question bank keeps growing.</p>
 </section>
 
+<section>
+ <h2>Learn for free</h2>
+ <p class="h2-fr">Apprendre gratuitement :</p>
+ <div class="grid-2">
+  <div class="lcard">
+   <h3>🎛️ Interactive playgrounds</h3>
+   <p>Drag a slider and watch PPV, NNT or the ROC curve react. The fastest way to feel why a 99% accurate test can still be wrong.</p>
+   <div class="linkrow"><a class="pill ghost" href="/ppv-calculator/">PPV/NPV playground</a><a class="pill ghost" href="/nnt-calculator/">NNT playground</a><a class="pill ghost" href="/roc-curve/">ROC playground</a></div>
+  </div>
+  <div class="lcard">
+   <h3>💥 Stat Fails</h3>
+   <p>Documented cases where a statistical error had real consequences, with sources and the reasoning worked through.</p>
+   <div class="linkrow"><a class="pill ghost" href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><a class="pill ghost" href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><a class="pill ghost" href="/fails/epic-sepsis-model/">The sepsis AI</a></div>
+  </div>
+  <div class="lcard">
+   <h3>📖 Lessons &amp; sources</h3>
+   <p>ROC and AUC explained from scratch for clinicians, and the real studies behind every number in our calculators.</p>
+   <div class="linkrow"><a class="pill ghost" href="/lessons/roc-auc/">ROC &amp; AUC lesson</a><a class="pill ghost" href="/studies/">Known studies &amp; datasets</a></div>
+  </div>
+ </div>
+</section>
+
+<div class="cta">
+ <p data-en="Five topics, two exam modes, English and French - in your pocket before the next revision session." data-fr="Cinq thèmes, deux modes d'examen, français et anglais - dans votre poche avant la prochaine révision.">Five topics, two exam modes, English and French - in your pocket before the next revision session.</p>
+ <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn"
+    onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click-home-bottom',title:'App Store button (app-store-click-home-bottom)',event:true})">
+  <span class="apple-icon"></span>
+  <span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Get it on iPhone</span>
+ </a>
+</div>
+
 <footer>
  <p>&copy; 2026 Stat Exam Pro</p>
- <p>
-  <a href="privacy.html" data-en="Privacy Policy" data-fr="Politique de confidentialité">Privacy Policy</a>
-  <span style="opacity:.3">|</span>
-  <a href="mailto:support@statexampro.com">Support</a>
- </p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/ppv-calculator/">PPV/NPV playground</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT playground</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC playground</a><span style="opacity:.3">|</span><a href="/lessons/roc-auc/">ROC &amp; AUC lesson</a></p>
+ <p><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a></p>
+ <p><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
 </footer>
 
 </div>
-<script>
-function applyLang(l) {
-  document.querySelectorAll('[data-en]').forEach(function(el) {
-    el.innerHTML = el.getAttribute('data-' + l);
-  });
-  document.querySelectorAll('img[data-src-en]').forEach(function(el) {
-    el.src = el.getAttribute('data-src-' + l);
-    el.alt = el.getAttribute('data-alt-' + l);
-  });
-  document.querySelectorAll('a[data-href-en]').forEach(function(el) {
-    el.href = el.getAttribute('data-href-' + l);
-  });
-  document.documentElement.lang = l;
-  document.getElementById('segEn').classList.toggle('active', l === 'en');
-  document.getElementById('segFr').classList.toggle('active', l === 'fr');
-  try { localStorage.setItem('sxp-lang', l); } catch(e) {}
-}
-function currentTheme() {
-  var explicit = document.documentElement.getAttribute('data-theme');
-  if (explicit) return explicit;
-  return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-}
-function setTheme(th) {
-  document.documentElement.setAttribute('data-theme', th);
-  document.getElementById('themeBtn').innerHTML = (th === 'dark') ? '&#9788;' : '&#9789;';
-  try { localStorage.setItem('sxp-theme', th); } catch(e) {}
-}
-function toggleTheme() { setTheme(currentTheme() === 'dark' ? 'light' : 'dark'); }
-(function() {
-  var lang = null, theme = null;
-  try { lang = localStorage.getItem('sxp-lang'); theme = localStorage.getItem('sxp-theme'); } catch(e) {}
-  if (!lang) lang = ((navigator.language || '').toLowerCase().indexOf('fr') === 0) ? 'fr' : 'en';
-  if (lang !== 'en') applyLang(lang);
-  if (theme) setTheme(theme);
-  else document.getElementById('themeBtn').innerHTML = (currentTheme() === 'dark') ? '&#9788;' : '&#9789;';
-})();
-</script>
+<script src="site.js"></script>
 </body>
 </html>
