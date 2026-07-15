@@ -46,8 +46,8 @@ header{padding:20px 0;display:flex;justify-content:space-between;align-items:cen
 .logo img{height:32px;margin-right:8px}
 .header-right{display:flex;align-items:center;gap:12px}
 .seg{display:flex;background:var(--card-bg);border-radius:var(--r-pill);padding:3px}
-.seg button,.seg a,.seg span{border:none;background:transparent;padding:5px 13px;border-radius:var(--r-pill);font-weight:600;cursor:pointer;color:var(--text-sec);font-family:inherit;font-size:.85rem;text-decoration:none;display:inline-block;line-height:1.4}
-.seg button.active,.seg .active{background:var(--btn-bg);color:var(--btn-text)}
+.seg a,.seg span{border:none;background:transparent;padding:5px 13px;border-radius:var(--r-pill);font-weight:600;cursor:pointer;color:var(--text-sec);font-family:inherit;font-size:.85rem;text-decoration:none;display:inline-block;line-height:1.4}
+.seg .active{background:var(--btn-bg);color:var(--btn-text)}
 .theme-btn{border:none;background:var(--card-bg);color:var(--text-main);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1rem;line-height:1}
 .sitenav{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
 .sitenav::-webkit-scrollbar{display:none}
@@ -69,7 +69,6 @@ footer p{margin:4px 0}
 .btn.disabled{background:var(--card-bg);color:var(--text-sec);cursor:default}
 .btn.disabled:hover{transform:none}
 .btn-round{width:38px;height:38px;border-radius:50%;background:var(--btn-bg);color:var(--btn-text);display:flex;align-items:center;justify-content:center;text-decoration:none;flex:none}
-.btn-round svg{width:18px;height:18px;fill:currentColor}
 .apple-icon{display:inline-block;width:20px;height:20px;flex:none;background:currentColor;-webkit-mask-image:url(apple.svg);-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;-webkit-mask-size:contain;mask-image:url(apple.svg);mask-repeat:no-repeat;mask-position:center;mask-size:contain}
 .btn .apple-icon{margin-right:10px}
 .btn-round .apple-icon{width:18px;height:18px}
@@ -82,11 +81,19 @@ footer p{margin:4px 0}
 
 /* surfaces & callouts (use on new pages; existing boxes already match via tokens) */
 .card{background:var(--card-bg);border-radius:var(--r-md);padding:var(--pad-card)}
+/* learn-card grid (home "two ways / learn for free", epic "three reasons") */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.lcard{background:var(--card-bg);padding:26px;border-radius:var(--r-lg)}
+.lcard h3{font-size:1.15rem;margin-bottom:8px;font-weight:700}
+.lcard p{color:var(--text-sec);font-size:.95rem}
+.lcard .fr{color:var(--accent);font-size:.85rem;margin-top:8px}
 .callout{background:var(--card-bg);border-left:var(--edge) solid var(--accent);border-radius:var(--r-sm);padding:var(--pad-box);margin:16px 0}
 .callout.warn{background:var(--warn-soft);border-color:var(--fp)}
 .callout.danger{background:var(--danger-soft);border-color:var(--fn)}
 .softbox{background:var(--accent-soft);border-radius:var(--r-sm);padding:var(--pad-box);margin:16px 0}
 .chip{display:inline-block;background:var(--accent-soft);color:var(--accent);padding:6px 12px;border-radius:var(--r-pill);font-size:.8rem;font-weight:700;letter-spacing:.4px}
+.crumb{font-size:.85rem;color:var(--text-sec);margin:0;font-weight:600}
+.crumb a{color:var(--accent);text-decoration:none}
 .eyebrow{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:8px}
 
 /* content primitives */
@@ -100,8 +107,11 @@ td:first-child,th:first-child{text-align:left}
 /* playground: term cards (shared across calculators) */
 .terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:18px 0}
 .term-card{background:var(--card-bg);border-radius:var(--r-md);padding:16px 18px}
-.term-card h3{font-size:.95rem;color:var(--accent);margin-bottom:6px;font-weight:700}
+.term-card h3,.term-card h4{font-size:.95rem;color:var(--accent);margin-bottom:6px;font-weight:700}
 .term-card p{font-size:.92rem}
+.term-card p+p{margin-top:10px}
+.term-card ul{margin:8px 0 0;padding-left:18px}
+.term-card li{font-size:.92rem;margin-bottom:5px}
 .hook{font-size:.95rem;font-style:italic;color:var(--text-main);margin:0 0 14px;padding-left:12px;border-left:2px solid var(--accent)}
 
 /* shared: subtitle, formula display, list card, figure */
@@ -112,13 +122,29 @@ td:first-child,th:first-child{text-align:left}
 .list div:last-child{border-bottom:none}
 .figure{background:var(--card-bg);border-radius:var(--r-md);padding:18px 16px;margin:18px 0}
 .figure svg,.figure img{width:100%;height:auto;display:block}
-.figure.narrow{max-width:340px;margin-left:auto;margin-right:auto}
 .train-card{background:var(--card-bg);border-radius:var(--r-lg);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:.9rem;color:var(--text-sec);font-weight:600}
+
+/* two-up figure rows (lesson-format pages: figure pairs, widget rows) */
+.figrow{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;margin:22px 0}
+.figcap{background:var(--card-bg);border-radius:var(--r-md);padding:18px 20px;font-size:.9rem;color:var(--text-sec)}
+.figcol{display:flex;flex-direction:column;gap:18px}
+.figrow .note{margin:0}
+.figrow .figure{margin:0}
+.wrow{align-items:stretch}
+.wrow .figure{display:flex;flex-direction:column;justify-content:center}
+.wnote{margin:-2px 0 22px}
+@media(max-width:700px){.figrow{grid-template-columns:1fr}}
 
 /* page h1 (playgrounds & lesson use as-is; landing/fails/studies override size/margin locally) */
 h1{font-size:2.1rem;font-weight:800;letter-spacing:-1px;margin:24px 0 10px}
+.story-title{font-size:2rem;margin:0 0 12px}          /* Stat Fails story headline (shared by the 4 story pages) */
+@media(max-width:600px){.story-title{font-size:1.6rem}}
 
 /* playground kit (ppv / nnt / roc): control panel, presets, readouts, lesson blocks */
+.play{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}   /* pages add their own margin */
+@media(max-width:820px){.play{grid-template-columns:1fr}}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--text-sec)}
+.legend span{display:flex;align-items:center;gap:6px}
 .panel{background:var(--card-bg);border-radius:var(--r-lg);padding:22px}
 .ctrl{margin-bottom:18px}
 .ctrl label{display:flex;justify-content:space-between;font-size:.9rem;font-weight:600;margin-bottom:6px}
@@ -129,26 +155,35 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .preset:hover{color:var(--accent)}
 .bignum{font-size:2.6rem;font-weight:800;letter-spacing:-1px;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1.1}
 .bignum-label{font-size:.85rem;color:var(--text-sec);margin-bottom:14px}
+.smallnum{font-size:1.02rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text-sec);margin-top:8px}
 .sentence{background:var(--card-bg);border-left:var(--edge) solid var(--accent);border-radius:var(--r-sm);padding:18px 20px;font-size:1.02rem}
 .interpret{display:flex;gap:14px;align-items:flex-start;font-size:1rem}
 .interpret .emoji{font-size:1.7rem;line-height:1.1;flex:none}
 .howto{background:var(--card-bg);border-radius:var(--r-sm);padding:16px 20px;margin:14px 0}
 .howto p{font-size:.95rem;margin:0}
 .bridge{font-size:1.02rem;margin:26px 0 12px}
-.lesson,.worked{margin:40px 0}
-.lesson h2,.worked h2{font-size:1.5rem;font-weight:800;letter-spacing:-.5px;margin-bottom:12px}
+.lesson,.worked,.faq{margin:40px 0}
+.lesson h2,.worked h2,.faq h2{font-size:1.5rem;font-weight:800;letter-spacing:-.5px;margin-bottom:12px}
 .lesson p,.worked p{margin-bottom:14px}
 .problem{font-size:1.02rem}
 .answer{font-weight:600}
+.faq details{border-top:1px solid var(--hairline)}
+.faq details:last-of-type{border-bottom:1px solid var(--hairline)}
+.faq summary{cursor:pointer;font-weight:700;font-size:1.05rem;padding:16px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--accent);font-size:1.3rem;font-weight:700;flex:none;line-height:1}
+.faq details[open] summary::after{content:"\2212"}
+.faq p{margin:0 0 16px;color:var(--text-sec)}
 
 /* article kit (Stat Fails): chip row, numbers, quotes, takeaways, sources */
 .chip-row{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:20px 0 14px;flex-wrap:wrap}
 .train{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--text-sec);font-weight:600}
 .rubric{color:var(--text-sec);font-size:.95rem;margin-bottom:26px;max-width:640px}
+article h2{font-size:1.4rem;font-weight:800;letter-spacing:-.4px;margin:34px 0 10px}
 article p{margin-bottom:16px;font-size:1.02rem}
 .quote{font-size:1.08rem;font-style:italic}
 .pull .big{font-size:1.15rem;font-weight:700;font-style:italic}
-.pull .who{color:var(--text-sec);font-size:.85rem;margin-top:6px}
+.who{color:var(--text-sec);font-size:.85rem;margin-top:6px;font-style:normal}
 .nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:18px 0}
 .num{background:var(--card-bg);border-radius:var(--r-md);padding:16px}
 .num b{display:block;font-size:1.5rem;font-weight:800;letter-spacing:-.5px;margin-bottom:4px}
@@ -156,6 +191,14 @@ article p{margin-bottom:16px;font-size:1.02rem}
 .num.hero{background:var(--accent)}
 .num.hero b{color:#fff}
 .num.hero span{color:rgba(255,255,255,.85)}
+/* stat-readout tile variants (centred, tabular numbers, tight label): nnt + screening */
+.num.stat{text-align:center;padding:12px 10px}
+.num.stat b{margin-bottom:0;line-height:1.1;font-variant-numeric:tabular-nums}
+.num.stat span{display:block;font-size:.72rem;line-height:1.25;margin:3px 0 0}
+.num.stat.plain{background:var(--bg-color)}   /* tile the colour of the page, not the card */
+.num.stat.accent b{color:var(--accent)}       /* accent-coloured number */
+.num.stat.sm{border-radius:var(--r-sm);padding:12px 8px}
+.num.stat.sm b{letter-spacing:0}
 .mech{font-weight:600}
 .invite p{margin:0 0 14px}
 .takeaway{background:var(--card-bg);border-radius:var(--r-sm);padding:16px 20px;margin:18px 0}
@@ -167,3 +210,47 @@ article p{margin-bottom:16px;font-size:1.02rem}
 .dive h2{font-size:1.5rem;font-weight:800;letter-spacing:-.5px;margin:40px 0 8px}
 .dive h3{font-size:1.15rem;font-weight:700;margin:28px 0 8px}
 .dive>p{margin-bottom:14px}
+
+/* ===== course rail: primary navigation (markup injected by tools/make_nav.py) =====
+   Full-width sticky top bar + a filled left rail that is the whole course, topic-grouped,
+   current lesson highlighted. Collapses on desktop (remembered) and becomes a drawer on
+   phones, both driven by the #burger toggle. The landing page and 404 opt out. */
+.blur-orb{position:fixed}
+.top{display:block;padding:0;position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg-color) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--hairline-2)}
+.top-in{max-width:1200px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px}
+.top .logo{flex:none}
+.top .spacer{flex:1}
+.burger{display:grid;place-items:center}
+.shell{max-width:1200px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:262px 1fr;gap:36px;position:relative;z-index:1}
+.coursenav{position:sticky;top:60px;align-self:start;height:calc(100vh - 76px);overflow-y:auto;scrollbar-width:thin;background:var(--card-bg);border-radius:var(--r-lg);padding:16px 12px 30px}
+.coursenav::-webkit-scrollbar{width:7px}
+.coursenav::-webkit-scrollbar-thumb{background:var(--hairline);border-radius:99px}
+.coursenav ul{list-style:none;margin:0;padding:0}
+.cn-grp{margin:0 0 16px}
+.cn-grp>h4{font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-sec);padding:0 10px;margin:6px 0 6px;display:flex;gap:7px}
+.cn-grp>h4 .cn-n{color:var(--accent);font-variant-numeric:tabular-nums}
+.coursenav a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;text-decoration:none;color:var(--text-main);font-size:.9rem;line-height:1.3}
+.coursenav a .cn-ic{width:18px;height:18px;flex:none;color:var(--text-sec)}
+.coursenav a .cn-ic svg{width:18px;height:18px;display:block}
+.coursenav a .cn-lb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.coursenav a:hover{background:var(--bg-color)}
+.coursenav a:hover .cn-ic{color:var(--accent)}
+.coursenav a.cn-on{background:var(--accent);color:#fff}
+.coursenav a.cn-on .cn-ic{color:#fff}
+.coursenav a.cn-soon{color:var(--text-sec);opacity:.6;pointer-events:none}
+.cn-tag{font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-sec);background:var(--bg-color);padding:2px 6px;border-radius:99px;margin-left:auto}
+.main{padding:24px 0 60px;min-width:0}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:25}
+@media(min-width:901px){
+ body.nav-collapsed .shell{grid-template-columns:1fr}
+ body.nav-collapsed .coursenav{display:none}
+ body.nav-collapsed .main{max-width:820px;margin:0 auto}
+ body.home.nav-collapsed .main{max-width:960px}   /* landing keeps its fuller width when the rail is tucked away */
+}
+@media(max-width:900px){
+ .shell{grid-template-columns:1fr;gap:0}
+ .coursenav{position:fixed;top:0;left:0;z-index:28;height:100vh;width:290px;max-width:86vw;border-radius:0;transform:translateX(-100%);transition:transform .26s ease;box-shadow:0 0 40px rgba(0,0,0,.18)}
+ body.nav-open .coursenav{transform:none}
+ body.nav-open .scrim{display:block}
+ .main{padding:20px 0 50px}
+}

@@ -3,13 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <title>Privacy Policy - Stat Exam Pro</title>
 <meta name="description" content="Privacy policy for the Stat Exam Pro application and website. The app collects no personal data; the website uses cookie-free, privacy-friendly analytics.">
+<meta property="og:title" content="Privacy Policy - Stat Exam Pro">
+<meta property="og:description" content="The Stat Exam Pro app collects no personal data. The website uses cookie-free, privacy-friendly analytics and no cross-site tracking.">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <link rel="canonical" href="https://statexampro.com/privacy.html">
-<meta name="theme-color" content="#ffffff">
+<link rel="alternate" hreflang="en" href="https://statexampro.com/privacy.html">
+<link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/privacy.html">
+<link rel="alternate" hreflang="x-default" href="https://statexampro.com/privacy.html">
+<meta property="og:url" content="https://statexampro.com/privacy.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="stylesheet" href="site.css">
 <style>h1{font-size:2rem;margin:24px 0 6px}
@@ -22,72 +41,109 @@ main li{margin-bottom:6px}
 </head>
 <body>
 <div class="blur-orb orb-1"></div>
-<div class="container">
+<div class="blur-orb orb-2"></div>
 
-<header>
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Course menu">&#9776;</button>
  <a class="logo" href="/"><img src="logo.svg" alt=""><span>Stat Exam Pro</span></a>
- <div class="header-right">
-  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ <span class="spacer"></span><div class="header-right">
+  <div class="seg" role="group" aria-label="Language"><span class="active">EN</span><a href="/fr/privacy.html" hreflang="fr">FR</a></div>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
  </div>
-</header>
-
-<nav class="sitenav">
- <a href="/ppv-calculator/">PPV/NPV</a>
- <a href="/nnt-calculator/">NNT</a>
- <a href="/roc-curve/">ROC</a>
- <a href="/lessons/roc-auc/">Lesson</a>
- <a href="/fails/">Stat Fails</a>
- <a href="/studies/">Studies</a>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Course">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Predictive values</span></h4><ul>
+<li><a href="/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">PPV &amp; NPV, explained</span></a></li>
+<li><a href="/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</span></a></li>
+<li><a href="/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Worked exercises</span></a></li>
+<li><a href="/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Cheat sheet &amp; PDF</span></a></li>
+<li><a href="/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC &amp; AUC</span></h4><ul>
+<li><a href="/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC &amp; AUC, explained</span></a></li>
+<li><a href="/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</span></a></li>
+<li><a href="/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">The sepsis AI that missed two thirds</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Treatment effect</span></h4><ul>
+<li><a href="/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT &amp; absolute risk</span></a></li>
+<li><a href="/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Survival analysis</span></h4><ul>
+<li><a href="/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Kaplan&ndash;Meier curves</span></a></li>
+<li><a href="/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">The 82% survival myth</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Screening &amp; bias</span></h4><ul>
+<li><a href="/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Screening bias, live</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Lead-time &amp; overdiagnosis</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significance &amp; multiplicity</span></h4><ul>
+<li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
+<li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">By format</span></h4><ul>
+<li><a href="/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">All calculators</span></a></li>
+<li><a href="/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">All lessons</span></a></li>
+<li><a href="/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">All exercises</span></a></li>
+<li><a href="/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">All cheat sheets</span></a></li>
+<li><a href="/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">All stat questions</span></a></li>
+</ul></div>
 </nav>
+<main class="main">
 
-<h1>Privacy Policy</h1>
-<p class="note">Last updated: July 10, 2026</p>
+<h1 data-en="Privacy Policy" data-fr="Politique de confidentialité">Privacy Policy</h1>
+<p class="note" data-en="Last updated: July 10, 2026" data-fr="Dernière mise à jour : 10 juillet 2026">Last updated: July 10, 2026</p>
 
 <main>
-<p>This Privacy Policy governs your use of the software application <strong>Stat Exam Pro</strong> ("Application") for mobile devices that was created by <strong>Ozzy App Dev</strong>, and of the website statexampro.com ("Website").</p>
+<p data-en="This Privacy Policy governs your use of the software application <strong>Stat Exam Pro</strong> (“Application”) for mobile devices that was created by <strong>Ozzy App Dev</strong>, and of the website statexampro.com (“Website”)." data-fr="La présente politique de confidentialité régit votre utilisation de l’application logicielle <strong>Stat Exam Pro</strong> (« l’Application ») pour appareils mobiles, créée par <strong>Ozzy App Dev</strong>, ainsi que du site statexampro.com (« le Site »).">This Privacy Policy governs your use of the software application <strong>Stat Exam Pro</strong> (“Application”) for mobile devices that was created by <strong>Ozzy App Dev</strong>, and of the website statexampro.com (“Website”).</p>
 
-<p>The Application is an educational tool designed to help students prepare for statistics exams. The Application does not require any user registration.</p>
+<p data-en="The Application is an educational tool designed to help students prepare for statistics exams. The Application does not require any user registration." data-fr="L’Application est un outil pédagogique conçu pour aider les étudiants à préparer leurs examens de statistiques. Elle ne nécessite aucune inscription.">The Application is an educational tool designed to help students prepare for statistics exams. The Application does not require any user registration.</p>
 
-<h2>1. Information We Collect</h2>
-<p><strong>The Application does not collect, store, use, or share any personal data.</strong></p>
-<p>When you download and use the Application, we do not require you to provide any information and we do not collect any information about you or your device automatically.</p>
-<ul>
- <li>We do not collect your name, email, or phone number.</li>
- <li>We do not track your location.</li>
- <li>We do not access your contacts, camera, or microphone.</li>
- <li>We do not collect usage statistics or analytics in the Application.</li>
-</ul>
+<h2 data-en="1. Information We Collect" data-fr="1. Les informations que nous collectons">1. Information We Collect</h2>
+<p data-en="<strong>The Application does not collect, store, use, or share any personal data.</strong>" data-fr="<strong>L’Application ne collecte, ne stocke, n’utilise et ne partage aucune donnée personnelle.</strong>"><strong>The Application does not collect, store, use, or share any personal data.</strong></p>
+<p data-en="When you download and use the Application, we do not require you to provide any information and we do not collect any information about you or your device automatically." data-fr="Lorsque vous téléchargez et utilisez l’Application, nous ne vous demandons aucune information et nous ne collectons automatiquement aucune information vous concernant ou concernant votre appareil.">When you download and use the Application, we do not require you to provide any information and we do not collect any information about you or your device automatically.</p>
+<ul data-en="<li>We do not collect your name, email, or phone number.</li> <li>We do not track your location.</li> <li>We do not access your contacts, camera, or microphone.</li> <li>We do not collect usage statistics or analytics in the Application.</li>" data-fr="<li>Nous ne collectons ni votre nom, ni votre adresse e-mail, ni votre numéro de téléphone.</li> <li>Nous ne suivons pas votre position.</li> <li>Nous n’accédons ni à vos contacts, ni à votre appareil photo, ni à votre microphone.</li> <li>Nous ne collectons aucune statistique d’usage ni aucune mesure d’audience dans l’Application.</li>"><li>We do not collect your name, email, or phone number.</li> <li>We do not track your location.</li> <li>We do not access your contacts, camera, or microphone.</li> <li>We do not collect usage statistics or analytics in the Application.</li></ul>
 
-<h2>2. Third-Party Access</h2>
-<p>Since the Application does not collect any data, we do not share any data with third parties. The Application operates entirely locally on your device.</p>
+<h2 data-en="2. Third-Party Access" data-fr="2. Accès par des tiers">2. Third-Party Access</h2>
+<p data-en="Since the Application does not collect any data, we do not share any data with third parties. The Application operates entirely locally on your device." data-fr="Comme l’Application ne collecte aucune donnée, nous ne partageons aucune donnée avec des tiers. L’Application fonctionne entièrement en local sur votre appareil.">Since the Application does not collect any data, we do not share any data with third parties. The Application operates entirely locally on your device.</p>
 
-<h2>3. Children&rsquo;s Privacy</h2>
-<p>Our Application does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13. Since the Application does not collect data of any kind, it is safe for users of all ages.</p>
+<h2 data-en="3. Children&rsquo;s Privacy" data-fr="3. Vie privée des enfants">3. Children&rsquo;s Privacy</h2>
+<p data-en="Our Application does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13. Since the Application does not collect data of any kind, it is safe for users of all ages." data-fr="Notre Application ne s’adresse pas aux personnes de moins de 13 ans. Nous ne collectons pas sciemment d’informations personnelles identifiables auprès d’enfants de moins de 13 ans. Comme l’Application ne collecte aucune donnée, elle convient aux utilisateurs de tout âge.">Our Application does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13. Since the Application does not collect data of any kind, it is safe for users of all ages.</p>
 
-<h2>4. Changes to This Privacy Policy</h2>
-<p>This Privacy Policy may be updated from time to time for any reason. We will notify you of any changes to our Privacy Policy by posting the new Privacy Policy here. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes.</p>
+<h2 data-en="4. Changes to This Privacy Policy" data-fr="4. Modifications de cette politique">4. Changes to This Privacy Policy</h2>
+<p data-en="This Privacy Policy may be updated from time to time for any reason. We will notify you of any changes to our Privacy Policy by posting the new Privacy Policy here. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes." data-fr="La présente politique de confidentialité peut être mise à jour de temps à autre, pour quelque raison que ce soit. Nous vous informerons de toute modification en publiant ici la nouvelle version. Nous vous invitons à la consulter régulièrement, l’usage continu valant acceptation de toutes les modifications.">This Privacy Policy may be updated from time to time for any reason. We will notify you of any changes to our Privacy Policy by posting the new Privacy Policy here. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes.</p>
 
-<h2>5. Your Consent</h2>
-<p>By using the Application, you are consenting to our processing of your information as set forth in this Privacy Policy now and as amended by us. "Processing" means using cookies on a computer/hand held device or using or touching information in any way, including, but not limited to, collecting, storing, deleting, using, combining and disclosing information. <strong>However, as stated above, no such processing currently occurs in the Application as no data is collected.</strong></p>
+<h2 data-en="5. Your Consent" data-fr="5. Votre consentement">5. Your Consent</h2>
+<p data-en="By using the Application, you are consenting to our processing of your information as set forth in this Privacy Policy now and as amended by us. “Processing” means using cookies on a computer/hand held device or using or touching information in any way, including, but not limited to, collecting, storing, deleting, using, combining and disclosing information. <strong>However, as stated above, no such processing currently occurs in the Application as no data is collected.</strong>" data-fr="En utilisant l’Application, vous consentez au traitement de vos informations tel qu’exposé dans la présente politique, dans sa version actuelle et dans ses versions modifiées. Le « traitement » désigne l’utilisation de cookies sur un ordinateur ou un appareil mobile, ou toute manipulation d’informations, y compris, sans s’y limiter, leur collecte, leur stockage, leur suppression, leur utilisation, leur combinaison et leur divulgation. <strong>Toutefois, comme indiqué ci-dessus, aucun traitement de ce type n’a lieu actuellement dans l’Application, puisque aucune donnée n’est collectée.</strong>">By using the Application, you are consenting to our processing of your information as set forth in this Privacy Policy now and as amended by us. “Processing” means using cookies on a computer/hand held device or using or touching information in any way, including, but not limited to, collecting, storing, deleting, using, combining and disclosing information. <strong>However, as stated above, no such processing currently occurs in the Application as no data is collected.</strong></p>
 
-<h2>6. Website Analytics</h2>
-<p>The Website uses <a href="https://www.goatcounter.com/" rel="noopener" style="color:var(--accent);text-decoration:none">GoatCounter</a>, a privacy-friendly analytics service, to count page views and clicks on outbound store links. GoatCounter does not use cookies, does not track you across sites, and does not collect personal data; we see only aggregate counts such as which pages were visited and from which country. No advertising or cross-site tracking technology is used on the Website.</p>
+<h2 data-en="6. Website Analytics" data-fr="6. Mesure d’audience du Site">6. Website Analytics</h2>
+<p><span data-en="The Website uses" data-fr="Le Site utilise">The Website uses</span> <a href="https://www.goatcounter.com/" rel="noopener" style="color:var(--accent);text-decoration:none">GoatCounter</a><span data-en=", a privacy-friendly analytics service, to count page views and clicks on outbound store links. GoatCounter does not use cookies, does not track you across sites, and does not collect personal data; we see only aggregate counts such as which pages were visited and from which country. No advertising or cross-site tracking technology is used on the Website." data-fr=", un service de mesure d’audience respectueux de la vie privée, pour compter les pages vues et les clics vers les boutiques d’applications. GoatCounter n’utilise pas de cookies, ne vous suit pas d’un site à l’autre et ne collecte aucune donnée personnelle ; nous ne voyons que des totaux agrégés, comme les pages visitées et le pays d’origine. Aucune technologie publicitaire ni de suivi inter-sites n’est utilisée sur le Site.">, a privacy-friendly analytics service, to count page views and clicks on outbound store links. GoatCounter does not use cookies, does not track you across sites, and does not collect personal data; we see only aggregate counts such as which pages were visited and from which country. No advertising or cross-site tracking technology is used on the Website.</span></p>
 
-<h2>7. Contact Us</h2>
+<h2 data-en="7. Contact Us" data-fr="7. Nous contacter">7. Contact Us</h2>
 <div class="callout">
- <p style="margin:0 0 8px">If you have any questions regarding privacy while using the Application or the Website, or have questions about our practices, please contact us via email at:</p>
+ <p style="margin:0 0 8px" data-en="If you have any questions regarding privacy while using the Application or the Website, or have questions about our practices, please contact us via email at:" data-fr="Pour toute question relative à la confidentialité lors de l’utilisation de l’Application ou du Site, ou sur nos pratiques, écrivez-nous à :">If you have any questions regarding privacy while using the Application or the Website, or have questions about our practices, please contact us via email at:</p>
  <p style="margin:0"><strong><a href="mailto:support@statexampro.com" style="color:var(--accent);text-decoration:none">support@statexampro.com</a></strong></p>
 </div>
 </main>
 
+</main>
+</div>
 <footer>
  <p>&copy; 2026 Stat Exam Pro</p>
- <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/ppv-calculator/">PPV/NPV playground</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT playground</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC playground</a><span style="opacity:.3">|</span><a href="/lessons/roc-auc/">ROC &amp; AUC lesson</a></p>
- <p><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a></p>
- <p><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
 </footer>
-
-</div>
 <script src="site.js"></script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
 </body>
 </html>

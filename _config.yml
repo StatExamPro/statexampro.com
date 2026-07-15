@@ -1,0 +1,19 @@
+# GitHub Pages publishes every file in the branch unless told otherwise.
+#
+# The deliverables that must be SERVED - the cheat-sheet PDFs and their WebP images - live
+# next to the page that links them, in cheatsheets/<topic>/, which is published. The PDFs
+# are meant to be indexed (people search for "cheat sheet pdf"); a PDF cannot be noindex'd
+# on GitHub Pages anyway (no X-Robots-Tag control), and we don't want it to be.
+#
+# What stays OFF the server:
+#   tools/   build scripts, the FR glossary, translation sources. Not web content, and a
+#            .py/.json cannot carry a noindex meta tag, so the only way to keep them out of
+#            search is to keep them off the server.
+#   render/  the print-source HTML - the intermediate files the PDFs are exported FROM.
+#            Build inputs, not deliverables; the deliverables already moved to cheatsheets/.
+#
+# vendor/ is NOT excluded: vendor/katex is a runtime dependency of the pages.
+exclude:
+  - tools
+  - render
+  - README.md

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Biostatistics calculators - interactive tools</title>
+<meta name="description" content="Interactive biostatistics calculators: PPV/NPV, NNT, ROC and AUC, Kaplan-Meier, screening bias and the Fagan nomogram. Drag the inputs, watch the output move.">
+<meta property="og:title" content="Biostatistics calculators - interactive tools">
+<meta property="og:description" content="Drag the inputs and watch the output move: predictive values, NNT, ROC, Kaplan-Meier, screening bias and the Fagan nomogram.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/calculators/">
+<link rel="alternate" hreflang="en" href="https://statexampro.com/calculators/">
+<link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/calculators/">
+<link rel="alternate" hreflang="x-default" href="https://statexampro.com/calculators/">
+<meta property="og:url" content="https://statexampro.com/calculators/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../site.css">
+<style>h1{font-size:2rem;margin:22px 0 8px}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.calc-card{background:var(--card-bg);border-radius:var(--r-lg);padding:20px 22px;display:flex;flex-direction:column}
+.calc-card h2{font-size:1.15rem;font-weight:800;letter-spacing:-.3px;margin:0 0 4px}
+.calc-card h2 a{color:var(--text-main);text-decoration:none}
+.calc-card h2 a:hover{color:var(--accent)}
+.cc-tag{font-size:.78rem;color:var(--text-sec);font-weight:600;margin:0 0 10px}
+.cc-desc{color:var(--text-sec);font-size:.92rem;margin:0 0 14px;flex:1}
+.cc-links{display:flex}
+@media(max-width:680px){.calc-grid{grid-template-columns:1fr}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Biostatistics calculators","inLanguage":"en","url":"https://statexampro.com/calculators/","description":"Interactive biostatistics calculators and tools.","publisher":{"@type":"Organization","name":"Stat Exam Pro","logo":{"@type":"ImageObject","url":"https://statexampro.com/web-app-manifest-512x512.png"}}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://statexampro.com/"},{"@type":"ListItem","position":2,"name":"Calculators"}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Course menu">&#9776;</button>
+ <a class="logo" href="/"><img src="../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <div class="seg" role="group" aria-label="Language"><span class="active">EN</span><a href="/fr/calculators/" hreflang="fr">FR</a></div>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Course">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Predictive values</span></h4><ul>
+<li><a href="/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">PPV &amp; NPV, explained</span></a></li>
+<li><a href="/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</span></a></li>
+<li><a href="/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Worked exercises</span></a></li>
+<li><a href="/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Cheat sheet &amp; PDF</span></a></li>
+<li><a href="/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC &amp; AUC</span></h4><ul>
+<li><a href="/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC &amp; AUC, explained</span></a></li>
+<li><a href="/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</span></a></li>
+<li><a href="/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">The sepsis AI that missed two thirds</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Treatment effect</span></h4><ul>
+<li><a href="/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT &amp; absolute risk</span></a></li>
+<li><a href="/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Survival analysis</span></h4><ul>
+<li><a href="/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Kaplan&ndash;Meier curves</span></a></li>
+<li><a href="/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">The 82% survival myth</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Screening &amp; bias</span></h4><ul>
+<li><a href="/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Screening bias, live</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Lead-time &amp; overdiagnosis</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significance &amp; multiplicity</span></h4><ul>
+<li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
+<li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">By format</span></h4><ul>
+<li><a class="cn-on" href="/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">All calculators</span></a></li>
+<li><a href="/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">All lessons</span></a></li>
+<li><a href="/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">All exercises</span></a></li>
+<li><a href="/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">All cheat sheets</span></a></li>
+<li><a href="/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">All stat questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<h1 data-en="Interactive calculators" data-fr="Calculateurs interactifs">Interactive calculators</h1>
+<p class="lead" data-en="Interactive tools for medical biostatistics: drag the inputs and watch the output move. Each one turns a formula you would otherwise have to trust into a picture you can see." data-fr="Des outils interactifs pour la biostatistique médicale : déplacez les entrées et regardez la sortie bouger. Chacun transforme une formule qu'il faudrait croire sur parole en une image que l'on voit.">Interactive tools for medical biostatistics: drag the inputs and watch the output move. Each one turns a formula you would otherwise have to trust into a picture you can see.</p>
+
+<div class="calc-grid">
+
+ <div class="calc-card">
+  <h2><a href="/ppv-calculator/" data-en="PPV / NPV calculator" data-fr="Calculateur VPP / VPN">PPV / NPV calculator</a></h2>
+  <p class="cc-tag" data-en="Predictive values &middot; prevalence &middot; the 2&times;2" data-fr="Valeurs prédictives &middot; prévalence &middot; le tableau 2&times;2">Predictive values &middot; prevalence &middot; the 2&times;2</p>
+  <p class="cc-desc" data-en="Drag prevalence, sensitivity and specificity, and watch why a 99%-accurate test can still be wrong most of the time &mdash; with the 2&times;2 table and 1,000 patients on screen." data-fr="Faites varier prévalence, sensibilité et spécificité, et voyez pourquoi un test fiable à 99 % peut se tromper la plupart du temps &mdash; avec le tableau 2&times;2 et 1 000 patients à l'écran.">Drag prevalence, sensitivity and specificity, and watch why a 99%-accurate test can still be wrong most of the time &mdash; with the 2&times;2 table and 1,000 patients on screen.</p>
+  <div class="cc-links"><a class="pill" href="/ppv-calculator/" data-en="Open" data-fr="Ouvrir">Open</a></div>
+ </div>
+
+ <div class="calc-card">
+  <h2><a href="/nnt-calculator/" data-en="NNT calculator" data-fr="Calculateur du NNT">NNT calculator</a></h2>
+  <p class="cc-tag" data-en="Relative vs absolute risk &middot; RRR &middot; ARR &middot; NNT" data-fr="Risque relatif vs absolu &middot; RRR &middot; ARR &middot; NNT">Relative vs absolute risk &middot; RRR &middot; ARR &middot; NNT</p>
+  <p class="cc-desc" data-en="Set the control and treatment risk and see RRR, ARR, NNT and the odds ratio on 100 patients &mdash; and how the same trial can be spun three different ways." data-fr="Réglez le risque du groupe contrôle et du groupe traité et voyez RRR, ARR, NNT et le rapport de cotes sur 100 patients &mdash; et comment le même essai se présente de trois façons.">Set the control and treatment risk and see RRR, ARR, NNT and the odds ratio on 100 patients &mdash; and how the same trial can be spun three different ways.</p>
+  <div class="cc-links"><a class="pill" href="/nnt-calculator/" data-en="Open" data-fr="Ouvrir">Open</a></div>
+ </div>
+
+ <div class="calc-card">
+  <h2><a href="/roc-curve/" data-en="ROC curve &amp; threshold" data-fr="Courbe ROC et seuil">ROC curve &amp; threshold</a></h2>
+  <p class="cc-tag" data-en="Sensitivity&ndash;specificity trade-off &middot; AUC" data-fr="Compromis sensibilité&ndash;spécificité &middot; AUC">Sensitivity&ndash;specificity trade-off &middot; AUC</p>
+  <p class="cc-desc" data-en="Move one decision threshold and watch sensitivity and specificity trade off as the point traces the ROC curve and AUC scores the test." data-fr="Déplacez un seuil de décision et regardez la sensibilité et la spécificité s'échanger tandis que le point parcourt la courbe ROC et que l'AUC note le test.">Move one decision threshold and watch sensitivity and specificity trade off as the point traces the ROC curve and AUC scores the test.</p>
+  <div class="cc-links"><a class="pill" href="/roc-curve/" data-en="Open" data-fr="Ouvrir">Open</a></div>
+ </div>
+
+ <div class="calc-card">
+  <h2><a href="/kaplan-meier/" data-en="Kaplan-Meier curve" data-fr="Courbe de Kaplan-Meier">Kaplan-Meier curve</a></h2>
+  <p class="cc-tag" data-en="Survival &middot; censoring &middot; median" data-fr="Survie &middot; censure &middot; médiane">Survival &middot; censoring &middot; median</p>
+  <p class="cc-desc" data-en="Build the survival curve by hand: every step is an event, every tick a censored patient. Drag ten patients around and watch the curve redraw." data-fr="Construisez la courbe de survie à la main : chaque marche est un événement, chaque tick un patient censuré. Déplacez dix patients et regardez la courbe se redessiner.">Build the survival curve by hand: every step is an event, every tick a censored patient. Drag ten patients around and watch the curve redraw.</p>
+  <div class="cc-links"><a class="pill" href="/kaplan-meier/" data-en="Open" data-fr="Ouvrir">Open</a></div>
+ </div>
+
+ <div class="calc-card">
+  <h2><a href="/screening-bias/" data-en="Screening bias" data-fr="Biais du dépistage">Screening bias</a></h2>
+  <p class="cc-tag" data-en="Lead-time bias &middot; length bias &middot; overdiagnosis" data-fr="Biais d'avance au diagnostic &middot; biais de durée &middot; surdiagnostic">Lead-time bias &middot; length bias &middot; overdiagnosis</p>
+  <p class="cc-desc" data-en="Why earlier detection can look like longer survival even when nothing about the disease has changed: lead-time and length bias, made visible." data-fr="Pourquoi une détection plus précoce peut ressembler à une survie plus longue même quand rien n'a changé dans la maladie : les biais d'avance au diagnostic et de durée, rendus visibles.">Why earlier detection can look like longer survival even when nothing about the disease has changed: lead-time and length bias, made visible.</p>
+  <div class="cc-links"><a class="pill" href="/screening-bias/" data-en="Open" data-fr="Ouvrir">Open</a></div>
+ </div>
+
+ <div class="calc-card">
+  <h2><a href="/fagan-nomogram/" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</a></h2>
+  <p class="cc-tag" data-en="Pre-test to post-test &middot; likelihood ratios &middot; Bayes" data-fr="Pré-test vers post-test &middot; rapports de vraisemblance &middot; Bayes">Pre-test to post-test &middot; likelihood ratios &middot; Bayes</p>
+  <p class="cc-desc" data-en="Set the pre-test probability and the likelihood ratio, and read the post-test probability off the third axis. The straight line is Bayes' theorem, drawn in log-odds." data-fr="Réglez la probabilité pré-test et le rapport de vraisemblance, et lisez la probabilité post-test sur le troisième axe. La droite est le théorème de Bayes, tracé en logarithme des cotes.">Set the pre-test probability and the likelihood ratio, and read the post-test probability off the third axis. The straight line is Bayes' theorem, drawn in log-odds.</p>
+  <div class="cc-links"><a class="pill" href="/fagan-nomogram/" data-en="Open" data-fr="Ouvrir">Open</a></div>
+ </div>
+
+</div>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../site.js"></script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>

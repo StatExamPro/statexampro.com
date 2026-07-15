@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Nomogramme de Fagan interactif : pré-test et post-test</title>
+<meta name="description" content="Nomogramme de Fagan interactif : réglez la probabilité pré-test et le rapport de vraisemblance, lisez la probabilité post-test. Et pourquoi une droite suffit.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<meta property="og:title" content="Nomogramme de Fagan, interactif">
+<meta property="og:description" content="Déplacez la probabilité pré-test et le rapport de vraisemblance, regardez la droite bouger. Cette droite est le théorème de Bayes, tracé en logarithme des cotes.">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="icon" href="../../favicon.ico">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/fr/fagan-nomogram/">
+<link rel="alternate" hreflang="en" href="https://statexampro.com/fagan-nomogram/">
+<link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fagan-nomogram/">
+<link rel="alternate" hreflang="x-default" href="https://statexampro.com/fagan-nomogram/">
+<meta property="og:url" content="https://statexampro.com/fr/fagan-nomogram/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../../vendor/katex/katex.min.css">
+<script defer src="../../vendor/katex/katex.min.js"></script>
+<script defer src="../../vendor/katex/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../../site.css">
+<style>h1{font-size:2rem;margin:22px 0 10px}
+.nomo-row{display:grid;grid-template-columns:minmax(280px,340px) 1fr;gap:24px;align-items:start;margin:26px 0}
+.ctl{background:var(--card-bg);border-radius:var(--r-lg);padding:18px 20px}
+.seg2{display:flex;gap:6px;margin-bottom:16px}
+.seg2 button{flex:1;border:none;border-radius:var(--r-sm);padding:7px 6px;font-family:inherit;font-size:.78rem;
+ font-weight:700;cursor:pointer;background:var(--bg-color);color:var(--text-sec)}
+.seg2 button.on{background:var(--accent);color:#fff}
+.grp{display:none}
+.grp.on{display:block}
+.res-tog{display:flex;gap:6px;margin-top:4px}
+.res-tog button{flex:1;border:none;border-radius:var(--r-sm);padding:7px 6px;font-family:inherit;font-size:.82rem;
+ font-weight:700;cursor:pointer;background:var(--bg-color);color:var(--text-sec)}
+.res-tog button.on{background:var(--text-main);color:var(--bg-color)}
+.out{background:var(--card-bg);border-radius:var(--r-lg);padding:16px 20px;margin-top:14px}
+.out .big{font-size:2.1rem;font-weight:800;letter-spacing:-1px;color:var(--accent);
+ font-variant-numeric:tabular-nums;line-height:1.1}
+.out .cap{font-size:.8rem;color:var(--text-sec);font-weight:600}
+.out .lrline{margin-top:10px;font-size:.9rem;color:var(--text-sec);font-variant-numeric:tabular-nums}
+.out .lrline b{color:var(--text-main)}
+.nomo{background:var(--card-bg);border-radius:var(--r-lg);padding:10px 4px}
+.nomo svg{width:100%;height:auto;display:block}
+.ax{stroke:var(--text-sec);stroke-width:1.4;opacity:.55}
+.tk{stroke:var(--text-sec);stroke-width:1;opacity:.45}
+.tl{font-size:9px;fill:var(--text-sec);font-family:inherit;font-variant-numeric:tabular-nums}
+.tl-l,.tl-m{text-anchor:end}
+.tl-r{text-anchor:start}
+.axname{font-size:10px;font-weight:700;fill:var(--text-sec);text-anchor:middle;letter-spacing:.04em}
+.beam{stroke:var(--accent);stroke-width:2.2;stroke-linecap:round}
+.dot{fill:var(--accent)}
+.dot-hollow{fill:var(--card-bg);stroke:var(--accent);stroke-width:2}
+.pz{font-size:.78rem;padding:6px 11px}
+.pzrow{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 0}
+section{margin:34px 0}
+h2{font-size:1.35rem;font-weight:800;letter-spacing:-.4px;margin-bottom:10px}
+@media(max-width:860px){.nomo-row{grid-template-columns:1fr}h1{font-size:1.65rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Nomogramme de Fagan","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"fr","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","inLanguage":"fr","mainEntity":[{"@type":"Question","name":"Qu’est-ce qu’un nomogramme de Fagan ?","acceptedAnswer":{"@type":"Answer","text":"Un nomogramme de Fagan est un graphique à trois axes qui convertit une probabilité pré-test en probabilité post-test à l’aide du rapport de vraisemblance du résultat. Reliez la probabilité pré-test, sur l’axe de gauche, au rapport de vraisemblance, au milieu, par une droite : celle-ci coupe l’axe de droite à la probabilité post-test."}},{"@type":"Question","name":"Pourquoi une droite fonctionne-t-elle sur un nomogramme de Fagan ?","acceptedAnswer":{"@type":"Answer","text":"Parce que le théorème de Bayes sous forme de cotes dit que la cote post-test vaut la cote pré-test multipliée par le rapport de vraisemblance. En prenant le logarithme, cette multiplication devient une addition, et une addition est exactement ce qu’une droite réalise sur des axes logarithmiques. L’axe des rapports de vraisemblance se trouve au milieu, et donc à la moitié de l’écartement des décades des deux autres."}},{"@type":"Question","name":"Qu’est-ce qu’un bon rapport de vraisemblance ?","acceptedAnswer":{"@type":"Answer","text":"Un rapport de vraisemblance positif supérieur à 10, ou un rapport négatif inférieur à 0,1, est décisif dans la plupart des contextes. Entre 2 et 5, il est faible. Un rapport de vraisemblance de 1 ne vaut rien : le résultat est aussi fréquent chez les malades que chez les sains, et il ne change rien."}}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Menu du cours">&#9776;</button>
+ <a class="logo" href="/fr/"><img src="../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <div class="seg" role="group" aria-label="Langue"><a href="/fagan-nomogram/" hreflang="en">EN</a><span class="active">FR</span></div>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Basculer en mode sombre">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Cours">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Valeurs prédictives</span></h4><ul>
+<li><a href="/fr/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">VPP et VPN, expliqués</span></a></li>
+<li><a class="cn-on" href="/fr/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Nomogramme de Fagan</span></a></li>
+<li><a href="/fr/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Exercices corrigés</span></a></li>
+<li><a href="/fr/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Fiche &amp; PDF</span></a></li>
+<li><a href="/fr/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">Les conseillers sûrs à 100 %</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC et AUC</span></h4><ul>
+<li><a href="/fr/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC et AUC, expliqués</span></a></li>
+<li><a href="/fr/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">Simulateur ROC</span></a></li>
+<li><a href="/fr/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">L'IA de sepsis qui en a manqué deux tiers</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Effet du traitement</span></h4><ul>
+<li><a href="/fr/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT et risque absolu</span></a></li>
+<li><a href="/fr/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">La panique de la pilule de 1995</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Analyse de survie</span></h4><ul>
+<li><a href="/fr/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Courbes de Kaplan&ndash;Meier</span></a></li>
+<li><a href="/fr/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">Le mythe des 82 % de survie</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Dépistage et biais</span></h4><ul>
+<li><a href="/fr/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Biais du dépistage, en direct</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Avance au diagnostic et surdiagnostic</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significativité et multiplicité</span></h4><ul>
+<li><a href="/fr/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Une série est-elle réelle ?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">Les valeurs p, bien faites</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Référence</span></h4><ul>
+<li><a href="/fr/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Études et jeux de données connus</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">Par format</span></h4><ul>
+<li><a href="/fr/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">Tous les calculateurs</span></a></li>
+<li><a href="/fr/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">Tous les cours</span></a></li>
+<li><a href="/fr/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">Tous les exercices</span></a></li>
+<li><a href="/fr/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">Toutes les fiches</span></a></li>
+<li><a href="/fr/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">Toutes les Stat Questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<div class="chip-row">
+ <span class="chip" data-en="Interactive" data-fr="Interactif">Interactif</span>
+ <div class="train">
+  <a href="/fr/" class="plainlink" data-en="Train stats with us - and never fail" data-fr="Entraînez vos stats avec nous - et n’échouez jamais">Entraînez vos stats avec nous - et n’échouez jamais</a>
+  <a class="btn-round" href="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" aria-label="Stat Exam Pro sur l'App Store"
+     onclick="sxpGo('app-store-click-fagan-top','App Store round (Fagan top)')"><span class="apple-icon"></span></a>
+ </div>
+</div>
+
+<h1 data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Nomogramme de Fagan</h1>
+<p class="lead" data-en="Set the pre-test probability and the test's performance, and read the post-test probability straight off the third axis. The line is Bayes' theorem: what you believed, times what the result is worth, is what you should believe now." data-fr="Réglez la probabilité pré-test et les performances du test, puis lisez la probabilité post-test directement sur le troisième axe. La droite <i>est</i> le théorème de Bayes : ce que vous croyiez, multiplié par ce que vaut le résultat, donne ce que vous devez croire maintenant.">Réglez la probabilité pré-test et les performances du test, puis lisez la probabilité post-test directement sur le troisième axe. La droite <i>est</i> le théorème de Bayes : ce que vous croyiez, multiplié par ce que vaut le résultat, donne ce que vous devez croire maintenant.</p>
+
+<div class="nomo-row">
+ <div>
+  <div class="ctl">
+   <div class="seg2" role="group" aria-label="Mode de saisie" data-aria-fr="Mode de saisie">
+    <button type="button" id="mSS" class="on" onclick="setMode('ss')"><span data-en="From sensitivity and specificity" data-fr="À partir de la sensibilité et de la spécificité">À partir de la sensibilité et de la spécificité</span></button>
+    <button type="button" id="mLR" onclick="setMode('lr')"><span data-en="Enter a likelihood ratio directly" data-fr="Saisir directement un rapport de vraisemblance">Saisir directement un rapport de vraisemblance</span></button>
+   </div>
+
+   <label for="pre"><span data-en="Pre-test probability" data-fr="Probabilité pré-test">Probabilité pré-test</span> <b id="preV">15 %</b></label>
+   <input type="range" id="pre" min="0" max="500" value="225" step="1" aria-describedby="preV">
+
+   <div id="gSS" class="grp on">
+    <label for="se"><span data-en="Sensitivity" data-fr="Sensibilité">Sensibilité</span> <b id="seV">97 %</b></label>
+    <input type="range" id="se" min="500" max="999" value="970" step="1" aria-describedby="seV">
+    <label for="sp"><span data-en="Specificity" data-fr="Spécificité">Spécificité</span> <b id="spV">40 %</b></label>
+    <input type="range" id="sp" min="100" max="999" value="400" step="1" aria-describedby="spV">
+    <p class="cap" style="margin:12px 0 4px;font-size:.8rem;color:var(--text-sec);font-weight:600" data-en="The test result" data-fr="Le résultat du test">Le résultat du test</p>
+    <div class="res-tog" role="group" aria-label="Résultat du test" data-aria-fr="Résultat du test">
+     <button type="button" id="rPos" onclick="setRes('pos')"><span data-en="Positive" data-fr="Positif">Positif</span></button>
+     <button type="button" id="rNeg" class="on" onclick="setRes('neg')"><span data-en="Negative" data-fr="Négatif">Négatif</span></button>
+    </div>
+   </div>
+
+   <div id="gLR" class="grp">
+    <label for="lr"><span data-en="Likelihood ratio" data-fr="Rapport de vraisemblance">Rapport de vraisemblance</span> <b id="lrV">0,075</b></label>
+    <input type="range" id="lr" min="0" max="600" value="188" step="1" aria-describedby="lrV">
+   </div>
+  </div>
+
+  <div class="out">
+   <div class="cap" data-en="Post-test probability" data-fr="Probabilité post-test">Probabilité post-test</div>
+   <div class="big" id="post" aria-live="polite">1.3%</div>
+   <div class="lrline"><span data-en="Likelihood ratio used" data-fr="Rapport de vraisemblance utilisé">Rapport de vraisemblance utilisé</span>: <b id="lrUsed">0,075</b></div>
+  </div>
+
+  <p class="cap" style="margin:16px 0 0;font-size:.8rem;color:var(--text-sec);font-weight:600" data-en="Real tests, to start with" data-fr="Des tests réels, pour commencer">Des tests réels, pour commencer</p>
+  <div class="pzrow">
+  <button type="button" class="pill ghost pz" data-pre="15" data-se="97" data-sp="40" data-res="neg" data-en="D-dimer, suspected PE" data-fr="D-dimères, suspicion d’EP">D-dimères, suspicion d’EP</button>
+  <button type="button" class="pill ghost pz" data-pre="1" data-se="90" data-sp="91" data-res="pos" data-en="Screening mammography" data-fr="Mammographie de dépistage">Mammographie de dépistage</button>
+  <button type="button" class="pill ghost pz" data-pre="10" data-se="86" data-sp="96" data-res="pos" data-en="Rapid strep antigen" data-fr="Test rapide, angine">Test rapide, angine</button>
+  <button type="button" class="pill ghost pz" data-pre="0.1" data-se="99.9" data-sp="99.8" data-res="pos" data-en="HIV immunoassay, screening" data-fr="Test VIH, dépistage">Test VIH, dépistage</button>
+  </div>
+ </div>
+
+ <div class="nomo" role="img" aria-label="Nomogramme de Fagan : trois axes logarithmiques reliés par une droite" data-aria-fr="Nomogramme de Fagan : trois axes logarithmiques reliés par une droite">
+  <svg viewBox="0 0 640 470" xmlns="http://www.w3.org/2000/svg">
+   <line x1="96" y1="55.0" x2="96" y2="364.7" class="ax"/>
+   <line x1="320" y1="148.0" x2="320" y2="334.0" class="ax"/>
+   <line x1="544" y1="117.3" x2="544" y2="427.0" class="ax"/>
+   <line x1="91" y1="55.0" x2="96" y2="55.0" class="tk"/><text x="87" y="58.4" class="tl tl-l">0,1</text>
+  <line x1="544" y1="427.0" x2="549" y2="427.0" class="tk"/><text x="553" y="430.4" class="tl tl-r">0,1</text>
+  <line x1="91" y1="73.7" x2="96" y2="73.7" class="tk"/><text x="87" y="77.1" class="tl tl-l">0,2</text>
+  <line x1="544" y1="408.3" x2="549" y2="408.3" class="tk"/><text x="553" y="411.7" class="tl tl-r">0,2</text>
+  <line x1="91" y1="98.5" x2="96" y2="98.5" class="tk"/><text x="87" y="101.9" class="tl tl-l">0,5</text>
+  <line x1="544" y1="383.5" x2="549" y2="383.5" class="tk"/><text x="553" y="386.9" class="tl tl-r">0,5</text>
+  <line x1="91" y1="117.3" x2="96" y2="117.3" class="tk"/><text x="87" y="120.7" class="tl tl-l">1</text>
+  <line x1="544" y1="364.7" x2="549" y2="364.7" class="tk"/><text x="553" y="368.1" class="tl tl-r">1</text>
+  <line x1="91" y1="136.2" x2="96" y2="136.2" class="tk"/><text x="87" y="139.6" class="tl tl-l">2</text>
+  <line x1="544" y1="345.8" x2="549" y2="345.8" class="tk"/><text x="553" y="349.2" class="tl tl-r">2</text>
+  <line x1="91" y1="161.7" x2="96" y2="161.7" class="tk"/><text x="87" y="165.1" class="tl tl-l">5</text>
+  <line x1="544" y1="320.3" x2="549" y2="320.3" class="tk"/><text x="553" y="323.7" class="tl tl-r">5</text>
+  <line x1="91" y1="181.8" x2="96" y2="181.8" class="tk"/><text x="87" y="185.2" class="tl tl-l">10</text>
+  <line x1="544" y1="300.2" x2="549" y2="300.2" class="tk"/><text x="553" y="303.6" class="tl tl-r">10</text>
+  <line x1="91" y1="203.7" x2="96" y2="203.7" class="tk"/><text x="87" y="207.1" class="tl tl-l">20</text>
+  <line x1="544" y1="278.3" x2="549" y2="278.3" class="tk"/><text x="553" y="281.7" class="tl tl-r">20</text>
+  <line x1="91" y1="218.2" x2="96" y2="218.2" class="tk"/><text x="87" y="221.6" class="tl tl-l">30</text>
+  <line x1="544" y1="263.8" x2="549" y2="263.8" class="tk"/><text x="553" y="267.2" class="tl tl-r">30</text>
+  <line x1="91" y1="241.0" x2="96" y2="241.0" class="tk"/><text x="87" y="244.4" class="tl tl-l">50</text>
+  <line x1="544" y1="241.0" x2="549" y2="241.0" class="tk"/><text x="553" y="244.4" class="tl tl-r">50</text>
+  <line x1="91" y1="263.8" x2="96" y2="263.8" class="tk"/><text x="87" y="267.2" class="tl tl-l">70</text>
+  <line x1="544" y1="218.2" x2="549" y2="218.2" class="tk"/><text x="553" y="221.6" class="tl tl-r">70</text>
+  <line x1="91" y1="278.3" x2="96" y2="278.3" class="tk"/><text x="87" y="281.7" class="tl tl-l">80</text>
+  <line x1="544" y1="203.7" x2="549" y2="203.7" class="tk"/><text x="553" y="207.1" class="tl tl-r">80</text>
+  <line x1="91" y1="300.2" x2="96" y2="300.2" class="tk"/><text x="87" y="303.6" class="tl tl-l">90</text>
+  <line x1="544" y1="181.8" x2="549" y2="181.8" class="tk"/><text x="553" y="185.2" class="tl tl-r">90</text>
+  <line x1="91" y1="320.3" x2="96" y2="320.3" class="tk"/><text x="87" y="323.7" class="tl tl-l">95</text>
+  <line x1="544" y1="161.7" x2="549" y2="161.7" class="tk"/><text x="553" y="165.1" class="tl tl-r">95</text>
+  <line x1="91" y1="364.7" x2="96" y2="364.7" class="tk"/><text x="87" y="368.1" class="tl tl-l">99</text>
+  <line x1="544" y1="117.3" x2="549" y2="117.3" class="tk"/><text x="553" y="120.7" class="tl tl-r">99</text>
+  <line x1="316" y1="334.0" x2="324" y2="334.0" class="tk"/><text x="312" y="337.4" class="tl tl-m">0,001</text>
+  <line x1="316" y1="324.7" x2="324" y2="324.7" class="tk"/><text x="312" y="328.1" class="tl tl-m">0,002</text>
+  <line x1="316" y1="312.3" x2="324" y2="312.3" class="tk"/><text x="312" y="315.7" class="tl tl-m">0,005</text>
+  <line x1="316" y1="303.0" x2="324" y2="303.0" class="tk"/><text x="312" y="306.4" class="tl tl-m">0,01</text>
+  <line x1="316" y1="293.7" x2="324" y2="293.7" class="tk"/><text x="312" y="297.1" class="tl tl-m">0,02</text>
+  <line x1="316" y1="281.3" x2="324" y2="281.3" class="tk"/><text x="312" y="284.7" class="tl tl-m">0,05</text>
+  <line x1="316" y1="272.0" x2="324" y2="272.0" class="tk"/><text x="312" y="275.4" class="tl tl-m">0,1</text>
+  <line x1="316" y1="262.7" x2="324" y2="262.7" class="tk"/><text x="312" y="266.1" class="tl tl-m">0,2</text>
+  <line x1="316" y1="250.3" x2="324" y2="250.3" class="tk"/><text x="312" y="253.7" class="tl tl-m">0,5</text>
+  <line x1="316" y1="241.0" x2="324" y2="241.0" class="tk"/><text x="312" y="244.4" class="tl tl-m">1</text>
+  <line x1="316" y1="231.7" x2="324" y2="231.7" class="tk"/><text x="312" y="235.1" class="tl tl-m">2</text>
+  <line x1="316" y1="219.3" x2="324" y2="219.3" class="tk"/><text x="312" y="222.7" class="tl tl-m">5</text>
+  <line x1="316" y1="210.0" x2="324" y2="210.0" class="tk"/><text x="312" y="213.4" class="tl tl-m">10</text>
+  <line x1="316" y1="200.7" x2="324" y2="200.7" class="tk"/><text x="312" y="204.1" class="tl tl-m">20</text>
+  <line x1="316" y1="188.3" x2="324" y2="188.3" class="tk"/><text x="312" y="191.7" class="tl tl-m">50</text>
+  <line x1="316" y1="179.0" x2="324" y2="179.0" class="tk"/><text x="312" y="182.4" class="tl tl-m">100</text>
+  <line x1="316" y1="169.7" x2="324" y2="169.7" class="tk"/><text x="312" y="173.1" class="tl tl-m">200</text>
+  <line x1="316" y1="157.3" x2="324" y2="157.3" class="tk"/><text x="312" y="160.7" class="tl tl-m">500</text>
+  <line x1="316" y1="148.0" x2="324" y2="148.0" class="tk"/><text x="312" y="151.4" class="tl tl-m">1000</text>
+   <text x="96" y="41" class="axname" data-en="pre-test %" data-fr="pré-test %">pré-test %</text>
+   <text x="320" y="41" class="axname" data-en="LR" data-fr="RV">RV</text>
+   <text x="544" y="41" class="axname" data-en="post-test %" data-fr="post-test %">post-test %</text>
+   <line id="beam" class="beam" x1="0" y1="0" x2="0" y2="0"/>
+   <circle id="dPre"  class="dot" r="5" cx="0" cy="0"/>
+   <circle id="dLR"   class="dot-hollow" r="4.5" cx="0" cy="0"/>
+   <circle id="dPost" class="dot" r="5.5" cx="0" cy="0"/>
+  </svg>
+ </div>
+</div>
+
+<section>
+<h2 data-en="Why a straight line gives the right answer" data-fr="Pourquoi une droite donne la bonne réponse">Pourquoi une droite donne la bonne réponse</h2>
+<p data-en="Bayes' theorem in odds form says that the odds after the test are the odds before it, multiplied by the likelihood ratio of the result:" data-fr="Le théorème de Bayes sous forme de cotes dit que la cote après le test vaut la cote avant, multipliée par le rapport de vraisemblance du résultat :">Le théorème de Bayes sous forme de cotes dit que la cote après le test vaut la cote avant, multipliée par le rapport de vraisemblance du résultat :</p>
+<div class="formula-box" data-en="$$\text{post-test odds} \;=\; \text{pre-test odds} \;\times\; \mathrm{LR}$$" data-fr="$$\text{cote post-test} \;=\; \text{cote pré-test} \;\times\; \mathrm{RV}$$">$$\text{cote post-test} \;=\; \text{cote pré-test} \;\times\; \mathrm{RV}$$</div>
+<p data-en="Take logarithms of both sides and the multiplication becomes an addition:" data-fr="Prenez le logarithme des deux membres et la multiplication devient une addition :">Prenez le logarithme des deux membres et la multiplication devient une addition :</p>
+<div class="formula-box" data-en="$$\log(\text{post-test odds}) \;=\; \log(\text{pre-test odds}) \;+\; \log(\mathrm{LR})$$" data-fr="$$\log(\text{cote post-test}) \;=\; \log(\text{cote pré-test}) \;+\; \log(\mathrm{RV})$$">$$\log(\text{cote post-test}) \;=\; \log(\text{cote pré-test}) \;+\; \log(\mathrm{RV})$$</div>
+<p data-en="An addition is a thing a ruler can do. Lay the pre-test axis on the left carrying $\log_{10}$ of the odds, and the post-test axis on the right carrying the same scale, and join two points with a straight line. At the midpoint between them the line is at the <i>average</i> of its two endpoints:" data-fr="Une addition, c’est quelque chose qu’une règle sait faire. Placez à gauche l’axe pré-test portant le $\log_{10}$ de la cote, à droite l’axe post-test à la même échelle, et joignez deux points par une droite. Au milieu, la droite se trouve à la <i>moyenne</i> de ses deux extrémités :">Une addition, c’est quelque chose qu’une règle sait faire. Placez à gauche l’axe pré-test portant le $\log_{10}$ de la cote, à droite l’axe post-test à la même échelle, et joignez deux points par une droite. Au milieu, la droite se trouve à la <i>moyenne</i> de ses deux extrémités :</p>
+<div class="formula-box" data-en="$$y_{\text{mid}} \;=\; \frac{y_{\text{pre}} + y_{\text{post}}}{2} \;=\; \frac{\log_{10}(\mathrm{LR})}{2}$$" data-fr="$$y_{\text{mid}} \;=\; \frac{y_{\text{pre}} + y_{\text{post}}}{2} \;=\; \frac{\log_{10}(\mathrm{RV})}{2}$$">$$y_{\text{mid}} \;=\; \frac{y_{\text{pre}} + y_{\text{post}}}{2} \;=\; \frac{\log_{10}(\mathrm{RV})}{2}$$</div>
+<p data-en="So the middle axis reads the likelihood ratio — but at <b>half</b> the decade spacing of the outer two. That halving is not a drawing convention: it falls out of the algebra, and it is why the LR scale on every printed nomogram looks compressed next to its neighbours. The straight line is not an approximation or a lookup trick. It <i>is</i> Bayes' theorem, drawn in log-odds." data-fr="L’axe du milieu lit donc le rapport de vraisemblance — mais à la <b>moitié</b> de l’écartement des décades des deux autres. Ce facteur deux n’est pas une convention de dessin : il sort de l’algèbre, et c’est pourquoi l’échelle des RV paraît comprimée à côté de ses voisines sur tous les nomogrammes imprimés. La droite n’est ni une approximation ni un artifice de lecture. Elle <i>est</i> le théorème de Bayes, tracé en logarithme des cotes.">L’axe du milieu lit donc le rapport de vraisemblance — mais à la <b>moitié</b> de l’écartement des décades des deux autres. Ce facteur deux n’est pas une convention de dessin : il sort de l’algèbre, et c’est pourquoi l’échelle des RV paraît comprimée à côté de ses voisines sur tous les nomogrammes imprimés. La droite n’est ni une approximation ni un artifice de lecture. Elle <i>est</i> le théorème de Bayes, tracé en logarithme des cotes.</p>
+</section>
+
+<section>
+<h2 data-en="How to read it, and what it is for" data-fr="Comment le lire, et à quoi il sert">Comment le lire, et à quoi il sert</h2>
+<p data-en="The nomogram makes visible the one thing a formula hides: <b>how much the test actually moved you</b>. A likelihood ratio of 1 sits at the centre of the middle axis, and the line through it comes out flat — the result taught you nothing. The further the LR is from 1, the steeper the line, and the further the answer travels." data-fr="Le nomogramme rend visible ce qu’une formule dissimule : <b>de combien le test vous a réellement déplacé</b>. Un rapport de vraisemblance de 1 se trouve au centre de l’axe médian, et la droite qui le traverse ressort horizontale — le résultat ne vous a rien appris. Plus le RV s’éloigne de 1, plus la droite s’incline, et plus la réponse voyage.">Le nomogramme rend visible ce qu’une formule dissimule : <b>de combien le test vous a réellement déplacé</b>. Un rapport de vraisemblance de 1 se trouve au centre de l’axe médian, et la droite qui le traverse ressort horizontale — le résultat ne vous a rien appris. Plus le RV s’éloigne de 1, plus la droite s’incline, et plus la réponse voyage.</p>
+<p data-en="It also makes the failure mode obvious. Start from a very low pre-test probability and even a spectacular likelihood ratio barely lifts the line off the floor. This is the same fact as a low PPV in screening, seen sideways: no test rescues a prior that was never there." data-fr="Il rend aussi le mode d’échec évident. Partez d’une probabilité pré-test très basse et même un rapport de vraisemblance spectaculaire décolle à peine la droite du plancher. C’est le même fait qu’une VPP basse en dépistage, vu de profil : aucun test ne rattrape un a priori qui n’existait pas.">Il rend aussi le mode d’échec évident. Partez d’une probabilité pré-test très basse et même un rapport de vraisemblance spectaculaire décolle à peine la droite du plancher. C’est le même fait qu’une VPP basse en dépistage, vu de profil : aucun test ne rattrape un a priori qui n’existait pas.</p>
+</section>
+
+<section>
+<h2 data-en="What the numbers mean" data-fr="Ce que valent les chiffres">Ce que valent les chiffres</h2>
+<p data-en="<b>LR+ above 10</b>, or <b>LR− below 0,1</b>: decisive in most settings. <b>5 to 10</b>, or <b>0,1 to 0,2</b>: moderate. <b>2 to 5</b>, or <b>0,2 to 0,5</b>: weak, and rarely enough to change a decision on its own. <b>An LR of 1 is worthless</b> — the result is equally common in the ill and the healthy, and the line comes out flat." data-fr="<b>RV+ supérieur à 10</b>, ou <b>RV− inférieur à 0,1</b> : décisif dans la plupart des contextes. <b>5 à 10</b>, ou <b>0,1 à 0,2</b> : modéré. <b>2 à 5</b>, ou <b>0,2 à 0,5</b> : faible, et rarement suffisant pour changer une décision à lui seul. <b>Un RV de 1 ne vaut rien</b> — le résultat est aussi fréquent chez les malades que chez les sains, et la droite ressort horizontale."><b>RV+ supérieur à 10</b>, ou <b>RV− inférieur à 0,1</b> : décisif dans la plupart des contextes. <b>5 à 10</b>, ou <b>0,1 à 0,2</b> : modéré. <b>2 à 5</b>, ou <b>0,2 à 0,5</b> : faible, et rarement suffisant pour changer une décision à lui seul. <b>Un RV de 1 ne vaut rien</b> — le résultat est aussi fréquent chez les malades que chez les sains, et la droite ressort horizontale.</p>
+</section>
+
+<section>
+<h2 data-en="A worked case: D-dimer, and why a bad PPV can be a good test" data-fr="Un cas traité : les D-dimères, et pourquoi une mauvaise VPP peut faire un bon test">Un cas traité : les D-dimères, et pourquoi une mauvaise VPP peut faire un bon test</h2>
+<p data-en="A patient has a Wells-based pre-test probability of pulmonary embolism of 15%. The D-dimer assay has a sensitivity of 97% and a specificity of only 40%, so its negative likelihood ratio is $(1 - 0.97) / 0.40 = 0.075$. The test comes back negative. Put 15% on the left axis and 0.075 in the middle, and the line lands on <b>1,3 %</b> — below the threshold at which imaging and anticoagulation are justified." data-fr="Un patient a une probabilité pré-test d’embolie pulmonaire de 15 % d’après le score de Wells. Le dosage des D-dimères a une sensibilité de 97 % et une spécificité de seulement 40 %, si bien que son rapport de vraisemblance négatif vaut $(1 - 0{,}97) / 0{,}40 = 0{,}075$. Le test revient négatif. Placez 15 % sur l’axe de gauche et 0,075 au milieu : la droite atterrit sur <b>1,3 %</b> — sous le seuil qui justifierait imagerie et anticoagulation.">Un patient a une probabilité pré-test d’embolie pulmonaire de 15 % d’après le score de Wells. Le dosage des D-dimères a une sensibilité de 97 % et une spécificité de seulement 40 %, si bien que son rapport de vraisemblance négatif vaut $(1 - 0{,}97) / 0{,}40 = 0{,}075$. Le test revient négatif. Placez 15 % sur l’axe de gauche et 0,075 au milieu : la droite atterrit sur <b>1,3 %</b> — sous le seuil qui justifierait imagerie et anticoagulation.</p>
+<p data-en="A specificity of 40% is indefensible in a test meant to confirm a diagnosis, and the PPV of a positive D-dimer is about 22%. None of that matters here, because ruling out is not what a PPV measures. Judge a test against the decision it is meant to support, and the instrument for a rule-out decision is the negative likelihood ratio." data-fr="Une spécificité de 40 % est indéfendable pour un test censé confirmer un diagnostic, et la VPP d’un D-dimère positif tourne autour de 22 %. Rien de tout cela ne compte ici, car ce n’est pas ce que mesure une VPP qui permet d’éliminer. Jugez un test à l’aune de la décision qu’il doit soutenir, et l’instrument d’une décision d’élimination est le rapport de vraisemblance négatif.">Une spécificité de 40 % est indéfendable pour un test censé confirmer un diagnostic, et la VPP d’un D-dimère positif tourne autour de 22 %. Rien de tout cela ne compte ici, car ce n’est pas ce que mesure une VPP qui permet d’éliminer. Jugez un test à l’aune de la décision qu’il doit soutenir, et l’instrument d’une décision d’élimination est le rapport de vraisemblance négatif.</p>
+</section>
+
+<div class="softbox">
+ <p style="margin:0 0 12px" data-en="Every formula behind this, with the derivations and the sources:" data-fr="Toutes les formules qui sont derrière, avec les démonstrations et les sources :">Toutes les formules qui sont derrière, avec les démonstrations et les sources :</p>
+ <a class="pill ghost" href="/fr/cheatsheets/ppv-npv/" data-en="PPV / NPV cheat sheet" data-fr="Fiche de référence VPP / VPN">Fiche de référence VPP / VPN</a>
+ <span style="display:block;margin:12px 0 8px" data-en="Or practise on ten worked problems:" data-fr="Ou entraînez-vous sur dix exercices corrigés :">Ou entraînez-vous sur dix exercices corrigés :</span>
+ <a class="pill ghost" href="/fr/exercises/ppv-npv/" data-en="PPV / NPV worked exercises" data-fr="Exercices corrigés VPP / VPN">Exercices corrigés VPP / VPN</a>
+</div>
+
+<div class="cta">
+ <p data-en="Stat Exam Pro drills exactly this: likelihood ratios, Bayes and the rest of medical statistics, as exam questions with worked answers, in English and French." data-fr="Stat Exam Pro entraîne exactement cela : rapports de vraisemblance, Bayes et le reste des statistiques médicales, en QCM corrigés et expliqués, en français et en anglais.">Stat Exam Pro entraîne exactement cela : rapports de vraisemblance, Bayes et le reste des statistiques médicales, en QCM corrigés et expliqués, en français et en anglais.</p>
+ <a href="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn"
+    onclick="sxpGo('app-store-click-fagan-bottom','App Store button (Fagan bottom)')">
+  <span class="apple-icon"></span>
+  <span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Télécharger sur iPhone</span>
+ </a>
+</div>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/fr/">Accueil</a><span style="opacity:.3">|</span><a href="/fr/calculators/">Calculateurs</a> : <a href="/fr/ppv-calculator/">VPP/VPN</a><span style="opacity:.3">|</span><a href="/fr/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/fr/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/fr/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/fr/screening-bias/">Biais du dépistage</a></p>
+ <p><a href="/fr/lessons/">Cours</a><span style="opacity:.3">|</span><a href="/fr/fails/">Stat Fails</a> : <a href="/fr/fails/hiv-false-positives/">Les conseillers sûrs à 100 %</a><span style="opacity:.3">|</span><a href="/fr/fails/the-1995-pill-scare/">La panique de la pilule de 1995</a><span style="opacity:.3">|</span><a href="/fr/fails/epic-sepsis-model/">L'IA de sepsis</a><span style="opacity:.3">|</span><a href="/fr/fails/giuliani-prostate-cancer/">Le mythe des 82 %</a></p>
+ <p><a href="/fr/fagan-nomogram/">Nomogramme de Fagan</a><span style="opacity:.3">|</span><a href="/fr/exercises/">Exercices corrigés</a><span style="opacity:.3">|</span><a href="/fr/cheatsheets/">Fiches de révision</a><span style="opacity:.3">|</span><a href="/fr/studies/">Études et jeux de données connus</a><span style="opacity:.3">|</span><a href="/fr/privacy.html">Politique de confidentialité</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../../site.js"></script>
+<script>
+var X_L = 96, X_M = 320, X_R = 544, CY = 241.0, K = 62.0;
+var mode = 'ss', res = 'neg';
+
+function odds(p) { return p / (1 - p); }
+function prob(o) { return o / (1 + o); }
+function yPre(p)  { return CY + K * Math.log(odds(p)) / Math.LN10; }
+function yPost(p) { return CY - K * Math.log(odds(p)) / Math.LN10; }
+function yLR(lr)  { return CY - (K / 2) * Math.log(lr) / Math.LN10; }
+
+function preFromSlider(v) { return prob(Math.pow(10, -3 + v / 100)); }   // log-odds -3 .. +2
+function lrFromSlider(v)  { return Math.pow(10, -3 + v / 100); }         // log10 LR -3 .. +3
+function sliderFromPre(p) { return Math.round((Math.log(odds(p)) / Math.LN10 + 3) * 100); }
+function sliderFromLR(lr) { return Math.round((Math.log(lr) / Math.LN10 + 3) * 100); }
+
+function fmtLR(x) {
+  var s = x >= 100 ? x.toFixed(0) : x >= 10 ? x.toFixed(1) : x >= 1 ? x.toFixed(2) : x.toFixed(3);
+  return (window.LANG === 'fr') ? s.replace('.', ',') : s;
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('mSS').classList.toggle('on', m === 'ss');
+  document.getElementById('mLR').classList.toggle('on', m === 'lr');
+  document.getElementById('gSS').classList.toggle('on', m === 'ss');
+  document.getElementById('gLR').classList.toggle('on', m === 'lr');
+  draw();
+}
+function setRes(r) {
+  res = r;
+  document.getElementById('rPos').classList.toggle('on', r === 'pos');
+  document.getElementById('rNeg').classList.toggle('on', r === 'neg');
+  draw();
+}
+
+function draw() {
+  var pre = preFromSlider(+document.getElementById('pre').value);
+  var se = +document.getElementById('se').value / 1000;
+  var sp = +document.getElementById('sp').value / 1000;
+  var lr;
+  if (mode === 'ss') {
+    lr = (res === 'pos') ? se / (1 - sp) : (1 - se) / sp;
+    document.getElementById('seV').textContent = sxpFmtPct(se, 1);
+    document.getElementById('spV').textContent = sxpFmtPct(sp, 1);
+  } else {
+    lr = lrFromSlider(+document.getElementById('lr').value);
+    document.getElementById('lrV').textContent = fmtLR(lr);
+  }
+  lr = Math.min(Math.max(lr, 0.001), 1000);
+  var post = prob(odds(pre) * lr);
+
+  document.getElementById('preV').textContent = sxpFmtPct(pre, pre < 0.01 ? 2 : 1);
+  document.getElementById('post').textContent = sxpFmtPct(post, post < 0.01 ? 2 : 1);
+  document.getElementById('lrUsed').textContent = fmtLR(lr);
+
+  var y1 = yPre(pre), y2 = yPost(post), ym = yLR(lr);
+  var beam = document.getElementById('beam');
+  beam.setAttribute('x1', X_L); beam.setAttribute('y1', y1);
+  beam.setAttribute('x2', X_R); beam.setAttribute('y2', y2);
+  var dP = document.getElementById('dPre');   dP.setAttribute('cx', X_L); dP.setAttribute('cy', y1);
+  var dL = document.getElementById('dLR');    dL.setAttribute('cx', X_M); dL.setAttribute('cy', ym);
+  var dQ = document.getElementById('dPost');  dQ.setAttribute('cx', X_R); dQ.setAttribute('cy', y2);
+}
+
+['pre', 'se', 'sp', 'lr'].forEach(function (id) {
+  document.getElementById(id).addEventListener('input', draw);
+});
+
+Array.prototype.forEach.call(document.querySelectorAll('.pz'), function (b) {
+  b.addEventListener('click', function () {
+    document.getElementById('pre').value = sliderFromPre(+b.dataset.pre / 100);
+    document.getElementById('se').value = Math.round(+b.dataset.se * 10);
+    document.getElementById('sp').value = Math.round(+b.dataset.sp * 10);
+    setMode('ss');
+    setRes(b.dataset.res);
+  });
+});
+
+draw();
+</script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>

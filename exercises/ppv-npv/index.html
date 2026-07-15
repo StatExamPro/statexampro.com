@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>PPV / NPV: 10 worked exercises with solutions</title>
+<meta name="description" content="Ten worked exercises on predictive values, with full solutions: 2x2 tables, Bayes, likelihood ratios, the case-control trap, and why screening runs in two stages.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<meta property="og:title" content="PPV / NPV: 10 worked exercises with solutions">
+<meta property="og:description" content="Build the table, split the cohort, read the answer. Ten problems from a first 2x2 to the traps that catch clinicians, each with a full solution.">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="icon" href="../../favicon.ico">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/exercises/ppv-npv/">
+<link rel="alternate" hreflang="en" href="https://statexampro.com/exercises/ppv-npv/">
+<link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/exercises/ppv-npv/">
+<link rel="alternate" hreflang="x-default" href="https://statexampro.com/exercises/ppv-npv/">
+<meta property="og:url" content="https://statexampro.com/exercises/ppv-npv/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../../site.css">
+<style>h1{font-size:2rem;margin:24px 0 10px}
+.exo{border-top:1px solid var(--hairline);padding:18px 0 4px}
+.exo h2{font-size:1.15rem;font-weight:800;letter-spacing:-.3px;margin:0 0 8px}
+.exo .stm{margin:0 0 12px;font-size:1.02rem}
+.sol{margin:0 0 8px}
+.sol>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:baseline;gap:7px;padding:2px 0;
+ font-size:.9rem;color:var(--accent);font-weight:700}
+.sol>summary::-webkit-details-marker{display:none}
+.sol>summary::before{content:"+";font-weight:700;font-size:1rem;line-height:1;flex:none}
+.sol[open]>summary::before{content:"\2212"}
+.sol>summary>span{border-bottom:1px dotted var(--accent)}
+.sol-body{margin-top:10px}
+.sol-body .calc{margin:0}
+.moral{margin:10px 0 0;font-size:.95rem;color:var(--text-sec);border-left:2px solid var(--hairline);padding-left:12px}
+.method{background:var(--card-bg);border-radius:var(--r-md);padding:16px 20px;margin:18px 0}
+.method h2{font-size:1rem;font-weight:700;margin:0 0 6px}
+.method p{margin:0;font-size:.95rem;color:var(--text-sec)}
+@media(max-width:600px){h1{font-size:1.6rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"PPV / NPV: 10 worked exercises with solutions","inLanguage":"en","about":"Worked exercises on positive and negative predictive value, sensitivity, specificity, prevalence and likelihood ratios","url":"https://statexampro.com/exercises/ppv-npv/","datePublished":"2026-07-14","dateModified":"2026-07-14","author":{"@type":"Organization","name":"Stat Exam Pro"},"publisher":{"@type":"Organization","name":"Stat Exam Pro","logo":{"@type":"ImageObject","url":"https://statexampro.com/web-app-manifest-512x512.png"}},"image":"https://statexampro.com/og-card.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://statexampro.com/exercises/ppv-npv/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://statexampro.com/"},{"@type":"ListItem","position":2,"name":"Exercises","item":"https://statexampro.com/exercises/"},{"@type":"ListItem","position":3,"name":"Predictive values: 10 worked exercises"}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Course menu">&#9776;</button>
+ <a class="logo" href="/"><img src="../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <div class="seg" role="group" aria-label="Language"><span class="active">EN</span><a href="/fr/exercises/ppv-npv/" hreflang="fr">FR</a></div>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Course">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Predictive values</span></h4><ul>
+<li><a href="/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">PPV &amp; NPV, explained</span></a></li>
+<li><a href="/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</span></a></li>
+<li><a class="cn-on" href="/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Worked exercises</span></a></li>
+<li><a href="/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Cheat sheet &amp; PDF</span></a></li>
+<li><a href="/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC &amp; AUC</span></h4><ul>
+<li><a href="/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC &amp; AUC, explained</span></a></li>
+<li><a href="/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</span></a></li>
+<li><a href="/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">The sepsis AI that missed two thirds</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Treatment effect</span></h4><ul>
+<li><a href="/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT &amp; absolute risk</span></a></li>
+<li><a href="/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Survival analysis</span></h4><ul>
+<li><a href="/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Kaplan&ndash;Meier curves</span></a></li>
+<li><a href="/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">The 82% survival myth</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Screening &amp; bias</span></h4><ul>
+<li><a href="/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Screening bias, live</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Lead-time &amp; overdiagnosis</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significance &amp; multiplicity</span></h4><ul>
+<li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
+<li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">By format</span></h4><ul>
+<li><a href="/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">All calculators</span></a></li>
+<li><a href="/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">All lessons</span></a></li>
+<li><a href="/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">All exercises</span></a></li>
+<li><a href="/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">All cheat sheets</span></a></li>
+<li><a href="/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">All stat questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<div class="chip-row">
+ <div class="crumb"><a href="/exercises/" data-en="Exercises" data-fr="Exercices corrigés">Exercises</a> <span data-en="/ Predictive values" data-fr="/ Valeurs prédictives">/ Predictive values</span></div>
+ <div class="train">
+  <a href="/" class="plainlink" data-en="Train stats with us - and never fail" data-fr="Entraînez vos stats avec nous - et n’échouez jamais">Train stats with us - and never fail</a>
+  <a class="btn-round" href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" aria-label="Stat Exam Pro on the App Store"
+     onclick="sxpGo('app-store-click-exercises-ppv-top','App Store round (PPV exercises top)')"><span class="apple-icon"></span></a>
+ </div>
+</div>
+
+<h1 data-en="PPV / NPV: 10 worked exercises" data-fr="VPP / VPN : 10 exercices corrigés">PPV / NPV: 10 worked exercises</h1>
+<p class="lead" data-en="Ten problems on predictive values, from a first 2×2 table to the traps that catch clinicians. Each one states the problem, then folds the full solution away: try it, then open it. The method throughout is the same — build a cohort, split it, read the answer off the table." data-fr="Dix exercices sur les valeurs prédictives, du premier tableau 2×2 jusqu’aux pièges qui attrapent les cliniciens. Chacun pose l’énoncé, puis replie la correction complète : cherchez d’abord, ouvrez ensuite. La méthode est toujours la même — construire une cohorte, la scinder, lire la réponse sur le tableau.">Ten problems on predictive values, from a first 2×2 table to the traps that catch clinicians. Each one states the problem, then folds the full solution away: try it, then open it. The method throughout is the same — build a cohort, split it, read the answer off the table.</p>
+
+<div class="method">
+ <h2 data-en="The method, once" data-fr="La méthode, une fois pour toutes">The method, once</h2>
+ <p data-en="Do not substitute into Bayes' theorem under time pressure. Take a round cohort, split it by prevalence, apply the sensitivity to the diseased half and one minus the specificity to the healthy half. You now have the four cells, and every quantity is a ratio of them. The arithmetic checks itself: the cells must sum to N." data-fr="Ne substituez pas dans le théorème de Bayes sous la pression du chrono. Prenez une cohorte ronde, scindez-la selon la prévalence, appliquez la sensibilité à la moitié malade et un moins la spécificité à la moitié saine. Vous avez les quatre cases, et chaque grandeur en est un rapport. Le calcul se vérifie lui-même : les cases doivent sommer à N.">Do not substitute into Bayes' theorem under time pressure. Take a round cohort, split it by prevalence, apply the sensitivity to the diseased half and one minus the specificity to the healthy half. You now have the four cells, and every quantity is a ratio of them. The arithmetic checks itself: the cells must sum to N.</p>
+</div>
+
+<section class="exo">
+ <h2 data-en="Exercise 1 — the first table" data-fr="Exercice 1 — le premier tableau">Exercise 1 — the first table</h2>
+ <p class="stm" data-en="A screening mammogram detects about 90% of cancers (sensitivity) and returns a false positive in about 9% of healthy women (specificity 91%). In the screened age group, about 1 woman in 100 has breast cancer. Take 1,000 women. Build the 2×2 table and compute the PPV and the NPV." data-fr="Une mammographie de dépistage détecte environ 90 % des cancers (sensibilité) et donne un faux positif chez environ 9 % des femmes saines (spécificité 91 %). Dans la tranche d’âge dépistée, environ 1 femme sur 100 a un cancer du sein. Prenez 1 000 femmes. Construisez le tableau 2×2 et calculez la VPP et la VPN.">A screening mammogram detects about 90% of cancers (sensitivity) and returns a false positive in about 9% of healthy women (specificity 91%). In the screened age group, about 1 woman in 100 has breast cancer. Take 1,000 women. Build the 2×2 table and compute the PPV and the NPV.</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; Split 1,000 by prevalence: <b>10</b> with cancer, <b>990</b> without.<br>&bull; Of the 10 with cancer, the test finds 90%: <b>TP = 9</b>, <b>FN = 1</b>.<br>&bull; Of the 990 without, 9% are falsely flagged: <b>FP = 89</b>, <b>TN = 901</b>.<br>&bull; Check: 9 + 1 + 89 + 901 = 1,000 &#10003;<br>&bull; Positives: 9 + 89 = 98, of whom 9 are ill.<br>&bull; <b>PPV = 9 / 98 = 9.2%</b> &nbsp; <b>NPV = 901 / 902 = 99.9%</b>" data-fr="&bull; Scindez 1 000 selon la prévalence : <b>10</b> avec cancer, <b>990</b> sans.<br>&bull; Sur les 10 malades, le test en trouve 90 % : <b>VP = 9</b>, <b>FN = 1</b>.<br>&bull; Sur les 990 saines, 9 % sont signalées à tort : <b>FP = 89</b>, <b>VN = 901</b>.<br>&bull; Vérification : 9 + 1 + 89 + 901 = 1 000 &#10003;<br>&bull; Positives : 9 + 89 = 98, dont 9 malades.<br>&bull; <b>VPP = 9 / 98 = 9.2 %</b> &nbsp; <b>VPN = 901 / 902 = 99.9 %</b>">&bull; Split 1,000 by prevalence: <b>10</b> with cancer, <b>990</b> without.<br>&bull; Of the 10 with cancer, the test finds 90%: <b>TP = 9</b>, <b>FN = 1</b>.<br>&bull; Of the 990 without, 9% are falsely flagged: <b>FP = 89</b>, <b>TN = 901</b>.<br>&bull; Check: 9 + 1 + 89 + 901 = 1,000 &#10003;<br>&bull; Positives: 9 + 89 = 98, of whom 9 are ill.<br>&bull; <b>PPV = 9 / 98 = 9.2%</b> &nbsp; <b>NPV = 901 / 902 = 99.9%</b></div>
+   <p class="moral" data-en="A positive screening mammogram is wrong nine times out of ten. This is not a broken test — it is why a positive screen leads to a biopsy and not to a diagnosis." data-fr="Une mammographie de dépistage positive se trompe neuf fois sur dix. Ce n’est pas un test défaillant — c’est précisément pourquoi un dépistage positif mène à une biopsie et non à un diagnostic.">A positive screening mammogram is wrong nine times out of ten. This is not a broken test — it is why a positive screen leads to a biopsy and not to a diagnosis.</p>
+  </div>
+ </details>
+</section>
+
+<section class="exo">
+ <h2 data-en="Exercise 2 — read the table backwards" data-fr="Exercice 2 — lire le tableau à l’envers">Exercise 2 — read the table backwards</h2>
+ <p class="stm" data-en="A study tests 500 patients. 80 have the disease; the test is positive in 72 of them. Of the 420 without the disease, the test is positive in 42. Compute the sensitivity, the specificity, the PPV and the NPV." data-fr="Une étude teste 500 patients. 80 ont la maladie ; le test est positif chez 72 d’entre eux. Sur les 420 sans la maladie, le test est positif chez 42. Calculez la sensibilité, la spécificité, la VPP et la VPN.">A study tests 500 patients. 80 have the disease; the test is positive in 72 of them. Of the 420 without the disease, the test is positive in 42. Compute the sensitivity, the specificity, the PPV and the NPV.</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; TP = 72, FN = 80 &minus; 72 = 8, FP = 42, TN = 420 &minus; 42 = 378.<br>&bull; <b>Se = 72 / 80 = 90%</b> &nbsp; (down the diseased column)<br>&bull; <b>Sp = 378 / 420 = 90%</b> &nbsp; (down the healthy column)<br>&bull; <b>PPV = 72 / (72 + 42) = 63.2%</b> &nbsp; (across the positive row)<br>&bull; <b>NPV = 378 / (378 + 8) = 97.9%</b> &nbsp; (across the negative row)" data-fr="&bull; VP = 72, FN = 80 &minus; 72 = 8, FP = 42, VN = 420 &minus; 42 = 378.<br>&bull; <b>Se = 72 / 80 = 90 %</b> &nbsp; (en descendant la colonne des malades)<br>&bull; <b>Sp = 378 / 420 = 90 %</b> &nbsp; (en descendant la colonne des sains)<br>&bull; <b>VPP = 72 / (72 + 42) = 63,2 %</b> &nbsp; (en parcourant la ligne des positifs)<br>&bull; <b>VPN = 378 / (378 + 8) = 97,9 %</b> &nbsp; (en parcourant la ligne des négatifs)">&bull; TP = 72, FN = 80 &minus; 72 = 8, FP = 42, TN = 420 &minus; 42 = 378.<br>&bull; <b>Se = 72 / 80 = 90%</b> &nbsp; (down the diseased column)<br>&bull; <b>Sp = 378 / 420 = 90%</b> &nbsp; (down the healthy column)<br>&bull; <b>PPV = 72 / (72 + 42) = 63.2%</b> &nbsp; (across the positive row)<br>&bull; <b>NPV = 378 / (378 + 8) = 97.9%</b> &nbsp; (across the negative row)</div>
+   <p class="moral" data-en="Sensitivity and specificity divide by the <i>columns</i>. Predictive values divide by the <i>rows</i>. Same four cells, different denominator — that is the whole distinction." data-fr="La sensibilité et la spécificité divisent par les <i>colonnes</i>. Les valeurs prédictives divisent par les <i>lignes</i>. Les mêmes quatre cases, un dénominateur différent — c’est là toute la distinction.">Sensitivity and specificity divide by the <i>columns</i>. Predictive values divide by the <i>rows</i>. Same four cells, different denominator — that is the whole distinction.</p>
+  </div>
+ </details>
+</section>
+
+<section class="exo">
+ <h2 data-en="Exercise 3 — the same test, two clinics" data-fr="Exercice 3 — le même test, deux services">Exercise 3 — the same test, two clinics</h2>
+ <p class="stm" data-en="A test has sensitivity 90% and specificity 95%. Compute the PPV (a) when screening a population where the disease affects 1 in 1,000, and (b) in a specialist clinic where 30% of referred patients turn out to have it." data-fr="Un test a une sensibilité de 90 % et une spécificité de 95 %. Calculez la VPP (a) en dépistage d’une population où la maladie touche 1 personne sur 1 000, et (b) dans un service spécialisé où 30 % des patients adressés se révèlent atteints.">A test has sensitivity 90% and specificity 95%. Compute the PPV (a) when screening a population where the disease affects 1 in 1,000, and (b) in a specialist clinic where 30% of referred patients turn out to have it.</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; (a) &pi; = 0.1% : <b>PPV = 1.8%</b><br>&bull; (b) &pi; = 30% : <b>PPV = 88.5%</b><br>&bull; Sensitivity and specificity are identical in both. Only the population changed." data-fr="&bull; (a) &pi; = 0,1 % : <b>VPP = 1.8 %</b><br>&bull; (b) &pi; = 30 % : <b>VPP = 88.5 %</b><br>&bull; La sensibilité et la spécificité sont identiques dans les deux cas. Seule la population a changé.">&bull; (a) &pi; = 0.1% : <b>PPV = 1.8%</b><br>&bull; (b) &pi; = 30% : <b>PPV = 88.5%</b><br>&bull; Sensitivity and specificity are identical in both. Only the population changed.</div>
+   <p class="moral" data-en="This is the single most consequential fact in the topic. A positive result does not have one meaning. It has a meaning per population, and the referral filter is what changes it." data-fr="C’est le fait le plus lourd de conséquences de tout le chapitre. Un résultat positif n’a pas un sens unique. Il a un sens par population, et c’est le filtre d’adressage qui le change.">This is the single most consequential fact in the topic. A positive result does not have one meaning. It has a meaning per population, and the referral filter is what changes it.</p>
+  </div>
+ </details>
+</section>
+
+<section class="exo">
+ <h2 data-en="Exercise 4 — likelihood ratios and odds" data-fr="Exercice 4 — rapports de vraisemblance et cotes">Exercise 4 — likelihood ratios and odds</h2>
+ <p class="stm" data-en="A test has sensitivity 80% and specificity 90%. (a) Compute LR+ and LR−. (b) A patient has a pre-test probability of 20%. The test comes back positive. Use the odds form to find the post-test probability." data-fr="Un test a une sensibilité de 80 % et une spécificité de 90 %. (a) Calculez le RV+ et le RV−. (b) Un patient a une probabilité pré-test de 20 %. Le test revient positif. Utilisez la forme en cotes pour trouver la probabilité post-test.">A test has sensitivity 80% and specificity 90%. (a) Compute LR+ and LR−. (b) A patient has a pre-test probability of 20%. The test comes back positive. Use the odds form to find the post-test probability.</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; LR+ = Se / (1 &minus; Sp) = 0.80 / 0.10 = <b>8</b><br>&bull; LR&minus; = (1 &minus; Se) / Sp = 0.20 / 0.90 = <b>0.22</b><br>&bull; Pre-test odds = 0.20 / 0.80 = <b>0.25</b><br>&bull; Post-test odds = 0.25 &times; 8 = <b>2.00</b><br>&bull; Back to a probability: 2.00 / (1 + 2.00) = <b>66.7%</b>" data-fr="&bull; RV+ = Se / (1 &minus; Sp) = 0,80 / 0,10 = <b>8</b><br>&bull; RV&minus; = (1 &minus; Se) / Sp = 0,20 / 0,90 = <b>0,22</b><br>&bull; Cote pré-test = 0,20 / 0,80 = <b>0.25</b><br>&bull; Cote post-test = 0.25 &times; 8 = <b>2.00</b><br>&bull; Retour à la probabilité : 2.00 / (1 + 2.00) = <b>66.7 %</b>">&bull; LR+ = Se / (1 &minus; Sp) = 0.80 / 0.10 = <b>8</b><br>&bull; LR&minus; = (1 &minus; Se) / Sp = 0.20 / 0.90 = <b>0.22</b><br>&bull; Pre-test odds = 0.20 / 0.80 = <b>0.25</b><br>&bull; Post-test odds = 0.25 &times; 8 = <b>2.00</b><br>&bull; Back to a probability: 2.00 / (1 + 2.00) = <b>66.7%</b></div>
+   <p class="moral" data-en="The likelihood ratio contains no prevalence, which is why it is the part you may take from a published study and apply to the patient in front of you." data-fr="Le rapport de vraisemblance ne contient aucune prévalence : c’est pourquoi c’est la part que vous pouvez reprendre d’une étude publiée et appliquer au patient devant vous.">The likelihood ratio contains no prevalence, which is why it is the part you may take from a published study and apply to the patient in front of you.</p>
+  </div>
+ </details>
+</section>
+
+<section class="exo">
+ <h2 data-en="Exercise 5 — work backwards to the prevalence" data-fr="Exercice 5 — remonter à la prévalence">Exercise 5 — work backwards to the prevalence</h2>
+ <p class="stm" data-en="A laboratory reports that, in its own patient population, a test with sensitivity 95% and specificity 90% has a PPV of 32%. What is the prevalence of the disease among the patients it tests?" data-fr="Un laboratoire rapporte que, dans sa propre population de patients, un test de sensibilité 95 % et de spécificité 90 % a une VPP de 32 %. Quelle est la prévalence de la maladie chez les patients qu’il teste ?">A laboratory reports that, in its own patient population, a test with sensitivity 95% and specificity 90% has a PPV of 32%. What is the prevalence of the disease among the patients it tests?</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; Use the odds form in reverse. LR+ = 0.95 / 0.10 = 9.5.<br>&bull; PPV 32% : post-test odds = 0.32 / 0.68 = 0.47.<br>&bull; Pre-test odds = post-test odds / LR+ = 0.47 / 9.5 = 0.0495.<br>&bull; &pi; = odds / (1 + odds) = <b>4.7%</b><br>&bull; Check by substitution: PPV(Se 95%, Sp 90%, &pi; 4.7%) = 32.0% &#10003;" data-fr="&bull; Utilisez la forme en cotes à l’envers. RV+ = 0,95 / 0,10 = 9,5.<br>&bull; VPP 32 % : cote post-test = 0,32 / 0,68 = 0,47.<br>&bull; Cote pré-test = cote post-test / RV+ = 0,47 / 9,5 = 0,0495.<br>&bull; &pi; = cote / (1 + cote) = <b>4.7 %</b><br>&bull; Vérification par substitution : VPP(Se 95 %, Sp 90 %, &pi; 4.7 %) = 32,0 % &#10003;">&bull; Use the odds form in reverse. LR+ = 0.95 / 0.10 = 9.5.<br>&bull; PPV 32% : post-test odds = 0.32 / 0.68 = 0.47.<br>&bull; Pre-test odds = post-test odds / LR+ = 0.47 / 9.5 = 0.0495.<br>&bull; &pi; = odds / (1 + odds) = <b>4.7%</b><br>&bull; Check by substitution: PPV(Se 95%, Sp 90%, &pi; 4.7%) = 32.0% &#10003;</div>
+   <p class="moral" data-en="The odds form runs in both directions. This is the calculation that tells you what population a published PPV was actually measured in." data-fr="La forme en cotes fonctionne dans les deux sens. C’est ce calcul qui vous dit dans quelle population une VPP publiée a réellement été mesurée.">The odds form runs in both directions. This is the calculation that tells you what population a published PPV was actually measured in.</p>
+  </div>
+ </details>
+</section>
+
+<section class="exo">
+ <h2 data-en="Exercise 6 — the 99% test" data-fr="Exercice 6 — le test à 99 %">Exercise 6 — the 99% test</h2>
+ <p class="stm" data-en="A disease affects 1 person in 1,000. A test is 99% sensitive and 99% specific. A patient tests positive. What is the probability that they have the disease? Answer before computing, then compute." data-fr="Une maladie touche 1 personne sur 1 000. Un test est sensible à 99 % et spécifique à 99 %. Un patient est positif. Quelle est la probabilité qu’il ait la maladie ? Répondez avant de calculer, puis calculez.">A disease affects 1 person in 1,000. A test is 99% sensitive and 99% specific. A patient tests positive. What is the probability that they have the disease? Answer before computing, then compute.</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; Cohort of 100,000: <b>100</b> ill, <b>99,900</b> healthy.<br>&bull; TP = 99, FN = 1, FP = <b>999</b>, TN = 98,901.<br>&bull; Positives: 99 + 999 = 1,098.<br>&bull; <b>PPV = 99 / 1,098 = 9.0%</b>" data-fr="&bull; Cohorte de 100 000 : <b>100</b> malades, <b>99 900</b> sains.<br>&bull; VP = 99, FN = 1, FP = <b>999</b>, VN = 98 901.<br>&bull; Positifs : 99 + 999 = 1 098.<br>&bull; <b>VPP = 99 / 1 098 = 9.0 %</b>">&bull; Cohort of 100,000: <b>100</b> ill, <b>99,900</b> healthy.<br>&bull; TP = 99, FN = 1, FP = <b>999</b>, TN = 98,901.<br>&bull; Positives: 99 + 999 = 1,098.<br>&bull; <b>PPV = 99 / 1,098 = 9.0%</b></div>
+   <p class="moral" data-en="Nine times out of ten the positive is wrong, from a test that is correct 99% of the time in both directions. The 1% of 99,900 healthy people it mislabels outnumber the 100 ill people who exist." data-fr="Neuf fois sur dix le positif est faux, pour un test juste 99 % du temps dans les deux sens. Le 1 % des 99 900 sains qu’il étiquette à tort dépasse en nombre les 100 malades qui existent.">Nine times out of ten the positive is wrong, from a test that is correct 99% of the time in both directions. The 1% of 99,900 healthy people it mislabels outnumber the 100 ill people who exist.</p>
+  </div>
+ </details>
+</section>
+
+<section class="exo">
+ <h2 data-en="Exercise 7 — the NPV illusion" data-fr="Exercice 7 — l’illusion de la VPN">Exercise 7 — the NPV illusion</h2>
+ <p class="stm" data-en="A test has sensitivity 50% and specificity 90%. It is used to screen a population where the disease affects 0.2%. (a) Compute the NPV. (b) Compute the NPV of a “test” that simply reports “negative” for everyone. Compare." data-fr="Un test a une sensibilité de 50 % et une spécificité de 90 %. Il est utilisé pour dépister une population où la maladie touche 0,2 %. (a) Calculez la VPN. (b) Calculez la VPN d’un « test » qui répond simplement « négatif » à tout le monde. Comparez.">A test has sensitivity 50% and specificity 90%. It is used to screen a population where the disease affects 0.2%. (a) Compute the NPV. (b) Compute the NPV of a “test” that simply reports “negative” for everyone. Compare.</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; (a) <b>NPV = 99.89%</b><br>&bull; (b) The always-negative rule is right about everyone who is healthy, so its NPV = 1 &minus; &pi; = <b>99.80%</b><br>&bull; The real test, which misses half of all cases, beats the rock by 0.09 points." data-fr="&bull; (a) <b>VPN = 99.89 %</b><br>&bull; (b) La règle du tout-négatif a raison sur tous les sains, donc sa VPN = 1 &minus; &pi; = <b>99.80 %</b><br>&bull; Le vrai test, qui manque la moitié des cas, ne bat le caillou que de 0.09 points.">&bull; (a) <b>NPV = 99.89%</b><br>&bull; (b) The always-negative rule is right about everyone who is healthy, so its NPV = 1 &minus; &pi; = <b>99.80%</b><br>&bull; The real test, which misses half of all cases, beats the rock by 0.09 points.</div>
+   <p class="moral" data-en="A high NPV in a low-prevalence setting means almost nothing: it is a fact about the rarity of the disease, not about the test. Judge rule-out performance by LR− or by sensitivity, neither of which contains the prevalence." data-fr="Une VPN élevée en contexte de faible prévalence ne veut presque rien dire : c’est un fait sur la rareté de la maladie, pas sur le test. Jugez la performance d’élimination sur le RV− ou sur la sensibilité, dont aucune ne contient la prévalence.">A high NPV in a low-prevalence setting means almost nothing: it is a fact about the rarity of the disease, not about the test. Judge rule-out performance by LR− or by sensitivity, neither of which contains the prevalence.</p>
+  </div>
+ </details>
+</section>
+
+<section class="exo">
+ <h2 data-en="Exercise 8 — the case&ndash;control trap" data-fr="Exercice 8 — le piège cas-témoins">Exercise 8 — the case&ndash;control trap</h2>
+ <p class="stm" data-en="A manufacturer validates a test on 700 known-positive archived specimens and 10,000 blood-donor specimens. The test is reactive on 699 of the positives and on 20 of the donors. The insert reports a PPV of 97%. (a) Verify that figure from the table. (b) Explain why it is meaningless. (c) Compute the PPV that applies to screening a population with a prevalence of 0.1%." data-fr="Un fabricant valide un test sur 700 échantillons archivés connus comme positifs et 10 000 échantillons de donneurs de sang. Le test est réactif sur 699 des positifs et sur 20 des donneurs. La notice annonce une VPP de 97 %. (a) Vérifiez ce chiffre sur le tableau. (b) Expliquez pourquoi il est dépourvu de sens. (c) Calculez la VPP qui s’applique au dépistage d’une population de prévalence 0,1 %.">A manufacturer validates a test on 700 known-positive archived specimens and 10,000 blood-donor specimens. The test is reactive on 699 of the positives and on 20 of the donors. The insert reports a PPV of 97%. (a) Verify that figure from the table. (b) Explain why it is meaningless. (c) Compute the PPV that applies to screening a population with a prevalence of 0.1%.</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; (a) PPV = 699 / (699 + 20) = 699 / 719 = <b>97.2%</b>. The insert is arithmetically correct.<br>&bull; (b) The study's own prevalence is 700 / 10,700 = <b>6.5%</b>. Nobody measured that. Somebody <i>chose</i> to buy 700 positive specimens rather than 300 or 2,000. The row totals encode a purchasing decision, not a population.<br>&bull; (c) Extract what <i>is</i> transportable: Se = 699/700 = 99.86%, Sp = 9,980/10,000 = 99.80%. Substitute with &pi; = 0.1%: <b>PPV = 33.3%</b>.<br>&bull; Two thirds of positives in real screening are false — from a test whose insert is entirely truthful." data-fr="&bull; (a) VPP = 699 / (699 + 20) = 699 / 719 = <b>97,2 %</b>. La notice est arithmétiquement juste.<br>&bull; (b) La prévalence propre à l’étude vaut 700 / 10 700 = <b>6,5 %</b>. Personne ne l’a mesurée. Quelqu’un a <i>choisi</i> d’acheter 700 échantillons positifs plutôt que 300 ou 2000. Les totaux de ligne encodent une décision d’achat, pas une population.<br>&bull; (c) Extrayez ce qui <i>est</i> transportable : Se = 699/700 = 99,86 %, Sp = 9 980/10 000 = 99,80 %. Substituez avec &pi; = 0,1 % : <b>VPP = 33,3 %</b>.<br>&bull; Deux tiers des positifs en dépistage réel sont faux — pour un test dont la notice est parfaitement véridique.">&bull; (a) PPV = 699 / (699 + 20) = 699 / 719 = <b>97.2%</b>. The insert is arithmetically correct.<br>&bull; (b) The study's own prevalence is 700 / 10,700 = <b>6.5%</b>. Nobody measured that. Somebody <i>chose</i> to buy 700 positive specimens rather than 300 or 2,000. The row totals encode a purchasing decision, not a population.<br>&bull; (c) Extract what <i>is</i> transportable: Se = 699/700 = 99.86%, Sp = 9,980/10,000 = 99.80%. Substitute with &pi; = 0.1%: <b>PPV = 33.3%</b>.<br>&bull; Two thirds of positives in real screening are false — from a test whose insert is entirely truthful.</div>
+   <p class="moral" data-en="You may never read a predictive value off a case&ndash;control table. Extract the sensitivity and the specificity, then compute the PPV yourself with the prevalence of the population you actually intend to test." data-fr="Vous ne devez jamais lire une valeur prédictive sur un tableau cas-témoins. Extrayez la sensibilité et la spécificité, puis calculez vous-même la VPP avec la prévalence de la population que vous comptez réellement tester.">You may never read a predictive value off a case&ndash;control table. Extract the sensitivity and the specificity, then compute the PPV yourself with the prevalence of the population you actually intend to test.</p>
+  </div>
+ </details>
+</section>
+
+<section class="exo">
+ <h2 data-en="Exercise 9 — a bad PPV on a good test" data-fr="Exercice 9 — une mauvaise VPP sur un bon test">Exercise 9 — a bad PPV on a good test</h2>
+ <p class="stm" data-en="D-dimer for suspected pulmonary embolism: sensitivity 97%, specificity 40%. A patient has a Wells-based pre-test probability of 15%. (a) Compute the PPV if the test is positive. (b) Compute the residual probability of PE if the test is negative. (c) Is this a bad test?" data-fr="D-dimères pour suspicion d’embolie pulmonaire : sensibilité 97 %, spécificité 40 %. Un patient a une probabilité pré-test de 15 % d’après le score de Wells. (a) Calculez la VPP si le test est positif. (b) Calculez la probabilité résiduelle d’EP si le test est négatif. (c) Est-ce un mauvais test ?">D-dimer for suspected pulmonary embolism: sensitivity 97%, specificity 40%. A patient has a Wells-based pre-test probability of 15%. (a) Compute the PPV if the test is positive. (b) Compute the residual probability of PE if the test is negative. (c) Is this a bad test?</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; (a) <b>PPV = 22.2%</b> — which looks indefensible.<br>&bull; (b) LR&minus; = 0.03 / 0.40 = <b>0.075</b>. Pre-test odds = 0.15/0.85 = 0.176. Post-test odds = 0.176 &times; 0.075 = 0.013. Residual probability = <b>1.3%</b>.<br>&bull; (c) <b>No — it is an excellent test, used correctly.</b> Its job is not to rule PE in. Its job is to rule PE out, and it drops a 15% probability below the threshold at which imaging and anticoagulation are justified." data-fr="&bull; (a) <b>VPP = 22.2 %</b> — ce qui paraît indéfendable.<br>&bull; (b) RV&minus; = 0,03 / 0,40 = <b>0.075</b>. Cote pré-test = 0,15/0,85 = 0,176. Cote post-test = 0,176 &times; 0.075 = 0,013. Probabilité résiduelle = <b>1.3 %</b>.<br>&bull; (c) <b>Non — c’est un excellent test, bien employé.</b> Son rôle n’est pas de confirmer l’EP, mais de l’éliminer, et il fait passer une probabilité de 15 % sous le seuil qui justifierait imagerie et anticoagulation.">&bull; (a) <b>PPV = 22.2%</b> — which looks indefensible.<br>&bull; (b) LR&minus; = 0.03 / 0.40 = <b>0.075</b>. Pre-test odds = 0.15/0.85 = 0.176. Post-test odds = 0.176 &times; 0.075 = 0.013. Residual probability = <b>1.3%</b>.<br>&bull; (c) <b>No — it is an excellent test, used correctly.</b> Its job is not to rule PE in. Its job is to rule PE out, and it drops a 15% probability below the threshold at which imaging and anticoagulation are justified.</div>
+   <p class="moral" data-en="Judge a test against the decision it is meant to support, not against its PPV. A test built to rule out is judged on LR−." data-fr="Jugez un test à l’aune de la décision qu’il doit soutenir, pas de sa VPP. Un test conçu pour éliminer se juge sur son RV−.">Judge a test against the decision it is meant to support, not against its PPV. A test built to rule out is judged on LR−.</p>
+  </div>
+ </details>
+</section>
+
+<section class="exo">
+ <h2 data-en="Exercise 10 — why screening runs in two stages" data-fr="Exercice 10 — pourquoi le dépistage se fait en deux temps">Exercise 10 — why screening runs in two stages</h2>
+ <p class="stm" data-en="A screening programme uses a sensitive first test (Se 99%, Sp 80%) followed, on positives only, by a specific confirmatory test (Se 95%, Sp 99.5%). The disease affects 0.5% of the screened population. Take 100,000 people. (a) What is the PPV after the first test? (b) What is the PPV after the second?" data-fr="Un programme de dépistage utilise un premier test sensible (Se 99 %, Sp 80 %) suivi, chez les seuls positifs, d’un test de confirmation spécifique (Se 95 %, Sp 99,5 %). La maladie touche 0,5 % de la population dépistée. Prenez 100 000 personnes. (a) Quelle est la VPP après le premier test ? (b) Après le second ?">A screening programme uses a sensitive first test (Se 99%, Sp 80%) followed, on positives only, by a specific confirmatory test (Se 95%, Sp 99.5%). The disease affects 0.5% of the screened population. Take 100,000 people. (a) What is the PPV after the first test? (b) What is the PPV after the second?</p>
+ <details class="sol"><summary><span data-en="Show the solution" data-fr="Voir la correction">Show the solution</span></summary>
+  <div class="sol-body">
+   <div class="calc" data-en="&bull; Stage 1: 500 ill, 99,500 healthy : TP = 495, FP = 19,900.<br>&bull; (a) <b>PPV after stage 1 = 495 / 20,395 = 2.4%</b> — poor, as expected of a deliberately over-sensitive screen.<br>&bull; But look what it did: among the 20,395 people sent to stage 2, the prevalence is now <b>2.4%</b>, not 0.5%. The first stage <i>enriched</i> the population forty-fold.<br>&bull; (b) Apply the confirmatory test at &pi; = 2.4%: <b>PPV = 83%</b>." data-fr="&bull; Étape 1 : 500 malades, 99 500 sains : VP = 495, FP = 19 900.<br>&bull; (a) <b>VPP après l’étape 1 = 495 / 20 395 = 2.4 %</b> — mauvaise, comme attendu d’un dépistage volontairement sur-sensible.<br>&bull; Mais voyez ce qu’il a fait : parmi les 20 395 personnes envoyées à l’étape 2, la prévalence vaut désormais <b>2.4 %</b>, et non 0,5 %. Le premier temps a <i>enrichi</i> la population d’un facteur quarante.<br>&bull; (b) Appliquez le test de confirmation à &pi; = 2.4 % : <b>VPP = 83 %</b>.">&bull; Stage 1: 500 ill, 99,500 healthy : TP = 495, FP = 19,900.<br>&bull; (a) <b>PPV after stage 1 = 495 / 20,395 = 2.4%</b> — poor, as expected of a deliberately over-sensitive screen.<br>&bull; But look what it did: among the 20,395 people sent to stage 2, the prevalence is now <b>2.4%</b>, not 0.5%. The first stage <i>enriched</i> the population forty-fold.<br>&bull; (b) Apply the confirmatory test at &pi; = 2.4%: <b>PPV = 83%</b>.</div>
+   <p class="moral" data-en="This is the whole architecture of screening, and it is a consequence of the arithmetic rather than a policy choice. The first stage exists to raise the prevalence for the second." data-fr="C’est toute l’architecture du dépistage, et elle découle de l’arithmétique plutôt que d’un choix de politique. Le premier temps existe pour élever la prévalence du second.">This is the whole architecture of screening, and it is a consequence of the arithmetic rather than a policy choice. The first stage exists to raise the prevalence for the second.</p>
+  </div>
+ </details>
+</section>
+
+<div class="softbox" style="margin-top:26px">
+ <p style="margin:0 0 12px" data-en="Every formula used here, with the derivations and the sources:" data-fr="Toutes les formules employées ici, avec les démonstrations et les sources :">Every formula used here, with the derivations and the sources:</p>
+ <a class="pill ghost" href="/cheatsheets/ppv-npv/" data-en="PPV / NPV cheat sheet" data-fr="Fiche de référence VPP / VPN">PPV / NPV cheat sheet</a>
+ <span style="display:block;margin:12px 0 8px" data-en="Or move the sliders yourself:" data-fr="Ou déplacez les curseurs vous-même :">Or move the sliders yourself:</span>
+ <a class="pill ghost" href="/ppv-calculator/" data-en="PPV / NPV playground" data-fr="Simulateur VPP / VPN">PPV / NPV playground</a>
+</div>
+
+<div class="cta">
+ <p data-en="Stat Exam Pro drills exactly these problems as timed exam questions with worked answers, in English and French." data-fr="Stat Exam Pro entraîne exactement ces exercices en QCM chronométrés, corrigés et expliqués, en français et en anglais.">Stat Exam Pro drills exactly these problems as timed exam questions with worked answers, in English and French.</p>
+ <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" class="btn"
+    onclick="sxpGo('app-store-click-exercises-ppv-bottom','App Store button (PPV exercises bottom)')">
+  <span class="apple-icon"></span>
+  <span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Get it on iPhone</span>
+ </a>
+</div>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../../site.js"></script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>

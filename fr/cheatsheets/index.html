@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Fiches de révision de biostatistique : VPP, VPN, PDF</title>
+<meta name="description" content="Fiches de référence d'une page en biostatistique médicale : définitions, formules écrites de plusieurs façons, pièges. À lire en ligne ou en PDF.">
+<meta property="og:title" content="Fiches de révision de biostatistiques - à imprimer">
+<meta property="og:description" content="Des fiches de référence pour la biostatistique médicale : valeurs prédictives, sensibilité et spécificité, Bayes et les pièges. Une page web indexable et un PDF imprimable.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="icon" href="../../favicon.ico">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/fr/cheatsheets/">
+<link rel="alternate" hreflang="en" href="https://statexampro.com/cheatsheets/">
+<link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/cheatsheets/">
+<link rel="alternate" hreflang="x-default" href="https://statexampro.com/cheatsheets/">
+<meta property="og:url" content="https://statexampro.com/fr/cheatsheets/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../../site.css">
+<style>h1{font-size:2rem;margin:22px 0 8px}
+.sheet-card{display:grid;grid-template-columns:1fr minmax(240px,300px);gap:28px;align-items:start;
+ background:var(--card-bg);border-radius:var(--r-lg);padding:26px;margin:26px 0}
+.sc-body h2{font-size:1.35rem;font-weight:800;letter-spacing:-.4px;margin:0 0 4px}
+.sc-body h2 a{color:var(--text-main);text-decoration:none}
+.sc-body h2 a:hover{color:var(--accent)}
+.sc-tag{font-size:.82rem;color:var(--text-sec);font-weight:600;margin:0 0 12px}
+.sc-body p.desc{color:var(--text-sec);font-size:.97rem;margin:0 0 16px;max-width:56ch}
+.sc-links{display:flex;flex-wrap:wrap;gap:10px}
+.sc-fig{margin:0}
+.sc-fig .shots{display:flex;gap:10px}
+.sc-fig .shots a{display:block;line-height:0;border:1px solid var(--hairline);border-radius:var(--r-sm);
+ overflow:hidden;flex:1;transition:border-color .15s}
+.sc-fig .shots a:hover{border-color:var(--accent)}
+.sc-fig img{width:100%;height:auto;display:block}
+.sc-fig figcaption{font-size:.8rem;color:var(--text-sec);margin-top:8px;line-height:1.35}
+@media(max-width:720px){.sheet-card{grid-template-columns:1fr}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Fiches de révision de biostatistiques","inLanguage":"fr","url":"https://statexampro.com/fr/cheatsheets/","description":"Des fiches de référence d'une page pour la biostatistique médicale.","publisher":{"@type":"Organization","name":"Stat Exam Pro","logo":{"@type":"ImageObject","url":"https://statexampro.com/web-app-manifest-512x512.png"}}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ImageObject","contentUrl":"https://statexampro.com/cheatsheets/ppv-npv/vpp-vpn-fiche-1.webp","license":"https://statexampro.com/fr/cheatsheets/ppv-npv/","acquireLicensePage":"https://statexampro.com/fr/cheatsheets/ppv-npv/","creator":{"@type":"Organization","name":"Stat Exam Pro"},"caption":"Fiche VPP / VPN, page 1 : définitions, le tableau de contingence 2x2, et le théorème de Bayes en quatre formes.","width":1600,"height":2264}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://statexampro.com/fr/"},{"@type":"ListItem","position":2,"name":"Fiches de révision"}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Menu du cours">&#9776;</button>
+ <a class="logo" href="/fr/"><img src="../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <div class="seg" role="group" aria-label="Langue"><a href="/cheatsheets/" hreflang="en">EN</a><span class="active">FR</span></div>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Basculer en mode sombre">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Cours">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Valeurs prédictives</span></h4><ul>
+<li><a href="/fr/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">VPP et VPN, expliqués</span></a></li>
+<li><a href="/fr/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Nomogramme de Fagan</span></a></li>
+<li><a href="/fr/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Exercices corrigés</span></a></li>
+<li><a href="/fr/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Fiche &amp; PDF</span></a></li>
+<li><a href="/fr/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">Les conseillers sûrs à 100 %</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC et AUC</span></h4><ul>
+<li><a href="/fr/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC et AUC, expliqués</span></a></li>
+<li><a href="/fr/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">Simulateur ROC</span></a></li>
+<li><a href="/fr/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">L'IA de sepsis qui en a manqué deux tiers</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Effet du traitement</span></h4><ul>
+<li><a href="/fr/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT et risque absolu</span></a></li>
+<li><a href="/fr/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">La panique de la pilule de 1995</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Analyse de survie</span></h4><ul>
+<li><a href="/fr/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Courbes de Kaplan&ndash;Meier</span></a></li>
+<li><a href="/fr/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">Le mythe des 82 % de survie</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Dépistage et biais</span></h4><ul>
+<li><a href="/fr/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Biais du dépistage, en direct</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Avance au diagnostic et surdiagnostic</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significativité et multiplicité</span></h4><ul>
+<li><a href="/fr/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Une série est-elle réelle ?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">Les valeurs p, bien faites</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Référence</span></h4><ul>
+<li><a href="/fr/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Études et jeux de données connus</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">Par format</span></h4><ul>
+<li><a href="/fr/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">Tous les calculateurs</span></a></li>
+<li><a href="/fr/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">Tous les cours</span></a></li>
+<li><a href="/fr/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">Tous les exercices</span></a></li>
+<li><a class="cn-on" href="/fr/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">Toutes les fiches</span></a></li>
+<li><a href="/fr/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">Toutes les Stat Questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<h1 data-en="Biostatistics cheat sheets" data-fr="Fiches de révision de biostatistiques">Fiches de révision de biostatistiques</h1>
+<p class="lead" data-en="One-page reference sheets for the biostatistics a medical exam asks about: strict definitions first, then the formulas written several ways, where the numbers actually come from, and the errors that survive into practice. Read each one as a searchable web page, or download it as a printable PDF." data-fr="Des fiches de référence pour la biostatistique d'examen : d'abord les définitions strictes, puis les formules écrites de plusieurs façons, d'où viennent réellement les chiffres, et les erreurs qui survivent jusqu'à la pratique. Chaque fiche se lit en page web indexable, ou se télécharge en PDF imprimable.">Des fiches de référence pour la biostatistique d'examen : d'abord les définitions strictes, puis les formules écrites de plusieurs façons, d'où viennent réellement les chiffres, et les erreurs qui survivent jusqu'à la pratique. Chaque fiche se lit en page web indexable, ou se télécharge en PDF imprimable.</p>
+
+<article>
+
+<div class="sheet-card">
+ <div class="sc-body">
+  <h2><a href="/fr/cheatsheets/ppv-npv/" data-en="Predictive values: PPV and NPV" data-fr="Valeurs prédictives : VPP et VPN">Valeurs prédictives : VPP et VPN</a></h2>
+  <p class="sc-tag" data-en="Sensitivity &middot; specificity &middot; prevalence &middot; likelihood ratios &middot; Bayes" data-fr="Sensibilité &middot; spécificité &middot; prévalence &middot; rapports de vraisemblance &middot; Bayes">Sensibilité &middot; spécificité &middot; prévalence &middot; rapports de vraisemblance &middot; Bayes</p>
+  <p class="desc" data-en="Why a 99%-accurate test can be wrong most of the time, and how to compute the answer. Strict definitions of sensitivity, specificity, prevalence and the predictive values; the 2&times;2 table; Bayes' theorem in four equivalent forms; where the inputs come from; typical values for real tests; and the classic traps, including the inverse fallacy and the case&ndash;control table." data-fr="Pourquoi un test fiable à 99 % peut se tromper la plupart du temps, et comment calculer la réponse. Les définitions strictes de la sensibilité, de la spécificité, de la prévalence et des valeurs prédictives ; le tableau 2&times;2 ; le théorème de Bayes en quatre formes équivalentes ; d'où viennent les entrées ; les valeurs usuelles des vrais tests ; et les pièges classiques, dont le sophisme de l'inversion et le tableau cas-témoins.">Pourquoi un test fiable à 99 % peut se tromper la plupart du temps, et comment calculer la réponse. Les définitions strictes de la sensibilité, de la spécificité, de la prévalence et des valeurs prédictives ; le tableau 2&times;2 ; le théorème de Bayes en quatre formes équivalentes ; d'où viennent les entrées ; les valeurs usuelles des vrais tests ; et les pièges classiques, dont le sophisme de l'inversion et le tableau cas-témoins.</p>
+  <div class="sc-links">
+   <a class="pill" href="/fr/cheatsheets/ppv-npv/" data-en="Read the cheat sheet" data-fr="Lire la fiche">Lire la fiche</a>
+   <a class="pill ghost" href="../../cheatsheets/ppv-npv/vpp-vpn-fiche.pdf" data-href-fr="ppv-npv/vpp-vpn-fiche.pdf" download data-en="Download the PDF" data-fr="Télécharger le PDF">Télécharger le PDF</a>
+  </div>
+ </div>
+ <figure class="sc-fig">
+  <div class="shots">
+   <a href="/fr/cheatsheets/ppv-npv/" aria-label="Fiche VPP / VPN, page 1" data-aria-fr="Fiche VPP / VPN, page 1"><img src="../../cheatsheets/ppv-npv/vpp-vpn-fiche-1.webp" data-src-fr="ppv-npv/vpp-vpn-fiche-1.webp" width="1600" height="2264" loading="lazy" alt="Fiche VPP et VPN, page 1 : définitions de la sensibilité, de la spécificité, de la prévalence et des valeurs prédictives, le tableau de contingence 2x2, et le théorème de Bayes en quatre formes." data-alt-fr="Fiche VPP et VPN, page 1 : définitions de la sensibilité, de la spécificité, de la prévalence et des valeurs prédictives, le tableau de contingence 2x2, et le théorème de Bayes en quatre formes."></a>
+   <a href="/fr/cheatsheets/ppv-npv/" aria-label="Fiche VPP / VPN, page 2" data-aria-fr="Fiche VPP / VPN, page 2"><img src="../../cheatsheets/ppv-npv/vpp-vpn-fiche-2.webp" data-src-fr="ppv-npv/vpp-vpn-fiche-2.webp" width="1600" height="2264" loading="lazy" alt="Fiche VPP et VPN, page 2 : d'où viennent la sensibilité, la spécificité et la prévalence, les valeurs usuelles des vrais tests diagnostiques, et les erreurs courantes d'interprétation." data-alt-fr="Fiche VPP et VPN, page 2 : d'où viennent la sensibilité, la spécificité et la prévalence, les valeurs usuelles des vrais tests diagnostiques, et les erreurs courantes d'interprétation."></a>
+  </div>
+  <figcaption data-en="The two-page PPV / NPV reference card. Page one: definitions, the 2&times;2 table and Bayes. Page two: where the inputs come from, typical values and the classic errors." data-fr="La fiche de référence VPP / VPN en deux pages. Page un : définitions, tableau 2&times;2 et Bayes. Page deux : d'où viennent les entrées, valeurs usuelles et erreurs classiques.">La fiche de référence VPP / VPN en deux pages. Page un : définitions, tableau 2&times;2 et Bayes. Page deux : d'où viennent les entrées, valeurs usuelles et erreurs classiques.</figcaption>
+ </figure>
+</div>
+
+</article>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/fr/">Accueil</a><span style="opacity:.3">|</span><a href="/fr/calculators/">Calculateurs</a> : <a href="/fr/ppv-calculator/">VPP/VPN</a><span style="opacity:.3">|</span><a href="/fr/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/fr/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/fr/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/fr/screening-bias/">Biais du dépistage</a></p>
+ <p><a href="/fr/lessons/">Cours</a><span style="opacity:.3">|</span><a href="/fr/fails/">Stat Fails</a> : <a href="/fr/fails/hiv-false-positives/">Les conseillers sûrs à 100 %</a><span style="opacity:.3">|</span><a href="/fr/fails/the-1995-pill-scare/">La panique de la pilule de 1995</a><span style="opacity:.3">|</span><a href="/fr/fails/epic-sepsis-model/">L'IA de sepsis</a><span style="opacity:.3">|</span><a href="/fr/fails/giuliani-prostate-cancer/">Le mythe des 82 %</a></p>
+ <p><a href="/fr/fagan-nomogram/">Nomogramme de Fagan</a><span style="opacity:.3">|</span><a href="/fr/exercises/">Exercices corrigés</a><span style="opacity:.3">|</span><a href="/fr/cheatsheets/">Fiches de révision</a><span style="opacity:.3">|</span><a href="/fr/studies/">Études et jeux de données connus</a><span style="opacity:.3">|</span><a href="/fr/privacy.html">Politique de confidentialité</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../../site.js"></script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>

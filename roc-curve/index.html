@@ -3,14 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ROC curve &amp; threshold: the sensitivity vs specificity tradeoff | Stat Exam Pro</title>
-<meta name="description" content="Interactive ROC playground: drag the decision threshold and watch sensitivity and specificity trade off, the point trace the ROC curve, and AUC measure the test itself.">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>ROC curve: sensitivity vs specificity tradeoff | Stat Exam Pro</title>
+<meta name="description" content="Interactive ROC playground: drag the decision threshold and watch sensitivity and specificity trade off as the point traces the curve and AUC scores the test.">
 <meta property="og:title" content="ROC curve: the sensitivity vs specificity tradeoff">
 <meta property="og:description" content="Move one threshold and watch a test trade catching disease for false alarms, with the ROC curve and AUC live on screen.">
 <meta name="apple-itunes-app" content="app-id=6755912771">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="icon" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <link rel="canonical" href="https://statexampro.com/roc-curve/">
 <link rel="alternate" hreflang="en" href="https://statexampro.com/roc-curve/">
 <link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/roc-curve/">
@@ -19,14 +21,19 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Stat Exam Pro">
 <meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<script defer src="../vendor/katex/katex.min.js"></script>
+<script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
 <link rel="stylesheet" href="../site.css">
 <style>.ctl-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:30px 0;align-items:start}
 .roc-charts{display:grid;grid-template-columns:2.2fr 1fr;gap:16px;margin:18px 0;align-items:start}
@@ -42,31 +49,66 @@
 .mini-train{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--text-sec);font-weight:600}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"ROC curve & threshold playground","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"en","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does AUC mean?","acceptedAnswer":{"@type":"Answer","text":"AUC is the probability that the test gives a randomly chosen sick patient a higher score than a randomly chosen healthy one. 0.5 is a coin flip and 1.0 is perfect separation."}},{"@type":"Question","name":"What is a good AUC value?","acceptedAnswer":{"@type":"Answer","text":"0.5 is useless, no better than chance, and most useful clinical tests land between about 0.75 and 0.95. Higher is better, but the right threshold to use still depends on the clinical cost of missed cases versus false alarms."}},{"@type":"Question","name":"What is the difference between sensitivity and specificity?","acceptedAnswer":{"@type":"Answer","text":"Sensitivity is the share of diseased people the test flags positive; specificity is the share of healthy people it correctly clears. Moving the decision threshold trades one for the other, which is exactly what the ROC curve traces."}}]}</script>
 </head>
 <body>
 <div class="blur-orb orb-1"></div>
-<div class="container">
+<div class="blur-orb orb-2"></div>
 
-<header>
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Course menu">&#9776;</button>
  <a class="logo" href="/"><img src="../logo.svg" alt=""><span>Stat Exam Pro</span></a>
- <div class="header-right">
+ <span class="spacer"></span><div class="header-right">
   <div class="seg" role="group" aria-label="Language"><span class="active">EN</span><a href="/fr/roc-curve/" hreflang="fr">FR</a></div>
-  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
  </div>
-</header>
-
-<nav class="sitenav">
- <a href="/ppv-calculator/">PPV/NPV</a>
- <a href="/nnt-calculator/">NNT</a>
- <a href="/roc-curve/" class="active">ROC</a>
- <a href="/lessons/roc-auc/">Lesson</a>
- <a href="/fails/">Stat Fails</a>
- <a href="/studies/">Studies</a>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Course">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Predictive values</span></h4><ul>
+<li><a href="/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">PPV &amp; NPV, explained</span></a></li>
+<li><a href="/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</span></a></li>
+<li><a href="/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Worked exercises</span></a></li>
+<li><a href="/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Cheat sheet &amp; PDF</span></a></li>
+<li><a href="/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC &amp; AUC</span></h4><ul>
+<li><a href="/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC &amp; AUC, explained</span></a></li>
+<li><a class="cn-on" href="/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</span></a></li>
+<li><a href="/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">The sepsis AI that missed two thirds</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Treatment effect</span></h4><ul>
+<li><a href="/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT &amp; absolute risk</span></a></li>
+<li><a href="/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Survival analysis</span></h4><ul>
+<li><a href="/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Kaplan&ndash;Meier curves</span></a></li>
+<li><a href="/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">The 82% survival myth</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Screening &amp; bias</span></h4><ul>
+<li><a href="/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Screening bias, live</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Lead-time &amp; overdiagnosis</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significance &amp; multiplicity</span></h4><ul>
+<li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
+<li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">By format</span></h4><ul>
+<li><a href="/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">All calculators</span></a></li>
+<li><a href="/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">All lessons</span></a></li>
+<li><a href="/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">All exercises</span></a></li>
+<li><a href="/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">All cheat sheets</span></a></li>
+<li><a href="/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">All stat questions</span></a></li>
+</ul></div>
 </nav>
+<main class="main">
 
 <h1 data-en="ROC curve: the sensitivity vs specificity tradeoff" data-fr="Courbe ROC : le compromis sensibilité / spécificité">ROC curve: the sensitivity vs specificity tradeoff</h1>
-<p class="lead" data-en="A simulator: move one threshold and watch a test trade catching the sick for raising false alarms." data-fr="Un simulateur : déplacez un seuil et regardez un test troquer la détection des malades contre les fausses alertes.">A simulator: move one threshold and watch a test trade catching the sick for raising false alarms.</p>
-<div class="lead-cta"><a class="pill ghost" href="/lessons/roc-auc/" data-en="New to ROC and AUC? Read the illustrated lesson" data-fr="Nouveau sur ROC et AUC ? Lisez le cours illustré">New to ROC and AUC? Read the illustrated lesson</a><span class="mini-train"><a href="/" class="plainlink" data-en="Train with us" data-fr="Entraînez-vous avec nous">Train with us</a><a class="btn-round" href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" aria-label="Stat Exam Pro on the App Store" onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click-roc-lead',title:'App Store (roc lead)',event:true})"><span class="apple-icon"></span></a></span></div>
+<p class="lead" data-en="A playground: move one threshold and watch a test trade catching the sick for raising false alarms." data-fr="Un simulateur : déplacez un seuil et regardez un test troquer la détection des malades contre les fausses alertes.">A playground: move one threshold and watch a test trade catching the sick for raising false alarms.</p>
+<div class="lead-cta"><a class="pill ghost" href="/lessons/roc-auc/" data-en="New to ROC and AUC? Read the illustrated lesson" data-fr="Nouveau sur ROC et AUC ? Lisez le cours illustré">New to ROC and AUC? Read the illustrated lesson</a><span class="mini-train"><a href="/" class="plainlink" data-en="Train with us" data-fr="Entraînez-vous avec nous">Train with us</a><a class="btn-round" href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" aria-label="Stat Exam Pro on the App Store" onclick="sxpGo('app-store-click-roc-top','App Store round (ROC top)')"><span class="apple-icon"></span></a></span></div>
 
 <section style="margin:26px 0 10px">
  <div class="terms">
@@ -97,19 +139,19 @@
 
 <div class="ctl-row">
  <div class="panel"><div class="presets">
-   <button class="preset" onclick="preset(0,0)" data-en="Coin-flip test" data-fr="Test pile ou face">Coin-flip test</button>
-   <button class="preset" onclick="preset(1.5,0)" data-en="Typical test" data-fr="Test typique">Typical test</button>
-   <button class="preset" onclick="preset(2,-0.65)" data-en="Screening: catch everything" data-fr="Dépistage : tout attraper">Screening: catch everything</button>
-   <button class="preset" onclick="preset(2,1.05)" data-en="Confirmation: be sure" data-fr="Confirmation : être sûr">Confirmation: be sure</button>
-   <button class="preset" onclick="preset(3,0)" data-en="Excellent test" data-fr="Test excellent">Excellent test</button>
+   <button type="button" class="preset" onclick="preset(0,0)" data-en="Coin-flip test" data-fr="Test pile ou face">Coin-flip test</button>
+   <button type="button" class="preset" onclick="preset(1.5,0)" data-en="Typical test" data-fr="Test typique">Typical test</button>
+   <button type="button" class="preset" onclick="preset(2,-0.65)" data-en="Screening: catch everything" data-fr="Dépistage : tout attraper">Screening: catch everything</button>
+   <button type="button" class="preset" onclick="preset(2,1.05)" data-en="Confirmation: be sure" data-fr="Confirmation : être sûr">Confirmation: be sure</button>
+   <button type="button" class="preset" onclick="preset(3,0)" data-en="Excellent test" data-fr="Test excellent">Excellent test</button>
   </div><div class="ctrl">
-   <label><span data-en="Test quality (separation)" data-fr="Qualité du test (séparation)">Test quality (separation)</span><span class="val" id="dVal"></span></label>
+   <label for="dSlider"><span data-en="Test quality (separation)" data-fr="Qualité du test (séparation)">Test quality (separation)</span><span class="val" id="dVal"></span></label>
    <input type="range" id="dSlider" min="0" max="400" value="200" oninput="update()">
   </div><div class="ctrl">
-   <label><span data-en="Decision threshold" data-fr="Seuil de décision">Decision threshold</span><span class="val" id="tVal"></span></label>
+   <label for="tSlider"><span data-en="Decision threshold" data-fr="Seuil de décision">Decision threshold</span><span class="val" id="tVal"></span></label>
    <input type="range" id="tSlider" min="-400" max="400" value="0" oninput="update()">
   </div></div>
- <div class="panel"><div class="bignum" id="aucNum"></div><div class="bignum-label" id="aucLabel"></div><div class="metrics2">
+ <div class="panel" aria-live="polite"><div class="bignum" id="aucNum"></div><div class="bignum-label" id="aucLabel"></div><div class="metrics2">
    <div><b id="seNum"></b><span data-en="Sensitivity" data-fr="Sensibilité">Sensitivity</span></div>
    <div><b id="spNum"></b><span data-en="Specificity" data-fr="Spécificité">Specificity</span></div>
   </div></div>
@@ -117,13 +159,13 @@
 
 <div class="roc-charts"><div class="chart">
    <h4 data-en="The two populations and your cutoff" data-fr="Les deux populations et votre seuil">The two populations and your cutoff</h4>
-   <div id="distsvg"></div>
+   <div id="distsvg" role="img" aria-label="The healthy and diseased score distributions as two overlapping bell curves, with the current decision threshold marked." data-aria-fr="Les distributions de scores des sains et des malades en deux courbes en cloche qui se chevauchent, avec le seuil de décision actuel."></div>
   </div><div class="chart">
    <h4 data-en="ROC curve" data-fr="Courbe ROC">ROC curve</h4>
-   <div id="rocsvg"></div>
+   <div id="rocsvg" role="img" aria-label="The ROC curve for the current test quality, with a dot marking the operating point of the chosen threshold." data-aria-fr="La courbe ROC pour la qualité de test actuelle, avec un point marquant le point de fonctionnement du seuil choisi."></div>
   </div></div>
 
-<div class="sentence" id="sentence"></div>
+<div class="sentence" id="sentence" aria-live="polite"></div>
 <div class="softbox interpret" id="interpret"></div>
 
 <div class="callout">
@@ -148,29 +190,36 @@
 
 <section class="worked">
  <h2 data-en="One test, two jobs" data-fr="Un test, deux usages">One test, two jobs</h2>
- <div class="callout problem"><h3 class="eyebrow" data-en="Problem" data-fr="Énoncé">Problem</h3><p data-en="A lab reports that a blood test for a cancer has an AUC of 0.92. A colleague says the test is 95% sensitive; another says it is 98% specific. Both quote the same test. How can both be right?" data-fr="Un laboratoire indique qu'un test sanguin pour un cancer a une AUC de 0,92. Un collègue dit que le test est sensible à 95 % ; un autre qu'il est spécifique à 98 %. Les deux parlent du même test. Comment peuvent-ils avoir raison tous les deux ?">A lab reports that a blood test for a cancer has an AUC of 0.92. A colleague says the test is 95% sensitive; another says it is 98% specific. Both quote the same test. How can both be right?</p></div>
- <p data-en="This one is best solved on the simulator, not on paper. Set the test-quality slider until it reads AUC 0.92, then move the threshold: at one position the panel shows 95% sensitivity, and further along it shows 98% specificity. One curve, two operating points." data-fr="Celui-ci se résout mieux sur le simulateur que sur le papier. Réglez le curseur de qualité jusqu’à lire AUC 0,92, puis déplacez le seuil : à une position, le panneau affiche 95 % de sensibilité ; plus loin, 98 % de spécificité. Une seule courbe, deux points de fonctionnement.">This one is best solved on the simulator, not on paper. Set the test-quality slider until it reads AUC 0.92, then move the threshold: at one position the panel shows 95% sensitivity, and further along it shows 98% specificity. One curve, two operating points.</p>
+ <div class="callout problem"><h3 class="eyebrow" data-en="Problem" data-fr="Énoncé">Problem</h3><p data-en="A lab reports that a blood test for a cancer has an AUC of 0.92. A colleague says the test is 95% sensitive; another says it is 98% specific. Both quote the same test. How can both be right?" data-fr="Un laboratoire indique qu'un test sanguin pour un cancer a une AUC de 0,92. Un collègue dit que le test est sensible à 95 % ; un autre qu'il est spécifique à 98 %. Les deux parlent du même test. Comment peuvent-ils avoir raison tous les deux ?">A lab reports that a blood test for a cancer has an AUC of 0.92. A colleague says the test is 95% sensitive; another says it is 98% specific. Both quote the same test. How can both be right?</p></div>
+ <p data-en="This one is best solved on the playground, not on paper. Set the test-quality slider until it reads AUC 0.92, then move the threshold: at one position the panel shows 95% sensitivity, and further along it shows 98% specificity. One curve, two operating points." data-fr="Celui-ci se résout mieux sur le simulateur que sur le papier. Réglez le curseur de qualité jusqu’à lire AUC 0,92, puis déplacez le seuil : à une position, le panneau affiche 95 % de sensibilité ; plus loin, 98 % de spécificité. Une seule courbe, deux points de fonctionnement.">This one is best solved on the playground, not on paper. Set the test-quality slider until it reads AUC 0.92, then move the threshold: at one position the panel shows 95% sensitivity, and further along it shows 98% specificity. One curve, two operating points.</p>
  <p data-en="Because sensitivity and specificity are not fixed properties of the test. They are a single point you chose on the ROC curve, and the AUC of 0.92 fixes the whole curve, not the point." data-fr="Parce que la sensibilité et la spécificité ne sont pas des propriétés figées du test. Ce sont un point que vous avez choisi sur la courbe ROC, et l'AUC de 0,92 fixe la courbe entière, pas le point.">Because sensitivity and specificity are not fixed properties of the test. They are a single point you chose on the ROC curve, and the AUC of 0.92 fixes the whole curve, not the point.</p>
- <div class="calc" data-en="&bull; For a screening program that must not miss cancers, set a low cutoff: sensitivity <b>95%</b>, specificity <b>64%</b>. About a third of healthy people are called back, and that is accepted because a positive screen leads to a confirmatory test, not a diagnosis.<br>&bull; To confirm the cancer before major surgery, set a high cutoff: specificity <b>98%</b>, sensitivity <b>48%</b>. A positive now means something, at the price of missing more than half the cancers.<br>&bull; Same test, same AUC of 0.92. Two operating points, chosen for two different costs of being wrong." data-fr="&bull; Pour un dépistage qui ne doit pas manquer de cancers, choisissez un seuil bas : sensibilité <b>95 %</b>, spécificité <b>64 %</b>. Environ un tiers des sains sont rappelés, et c'est accepté car un dépistage positif mène à un test de confirmation, pas à un diagnostic.<br>&bull; Pour confirmer le cancer avant une chirurgie lourde, choisissez un seuil haut : spécificité <b>98 %</b>, sensibilité <b>48 %</b>. Un positif veut alors dire quelque chose, au prix d'en manquer plus de la moitié.<br>&bull; Même test, même AUC de 0,92. Deux points de fonctionnement, choisis pour deux coûts d'erreur différents.">&bull; For a screening program that must not miss cancers, set a low cutoff: sensitivity <b>95%</b>, specificity <b>64%</b>. About a third of healthy people are called back, and that is accepted because a positive screen leads to a confirmatory test, not a diagnosis.<br>&bull; To confirm the cancer before major surgery, set a high cutoff: specificity <b>98%</b>, sensitivity <b>48%</b>. A positive now means something, at the price of missing more than half the cancers.<br>&bull; Same test, same AUC of 0.92. Two operating points, chosen for two different costs of being wrong.</div>
+ <div class="calc" data-en="&bull; For a screening program that must not miss cancers, set a low cutoff: sensitivity <b>95%</b>, specificity <b>64%</b>. About a third of healthy people are called back, and that is accepted because a positive screen leads to a confirmatory test, not a diagnosis.<br>&bull; To confirm the cancer before major surgery, set a high cutoff: specificity <b>98%</b>, sensitivity <b>48%</b>. A positive now means something, at the price of missing more than half the cancers.<br>&bull; Same test, same AUC of 0.92. Two operating points, chosen for two different costs of being wrong." data-fr="&bull; Pour un dépistage qui ne doit pas manquer de cancers, choisissez un seuil bas : sensibilité <b>95 %</b>, spécificité <b>64 %</b>. Environ un tiers des sains sont rappelés, et c'est accepté car un dépistage positif mène à un test de confirmation, pas à un diagnostic.<br>&bull; Pour confirmer le cancer avant une chirurgie lourde, choisissez un seuil haut : spécificité <b>98 %</b>, sensibilité <b>48 %</b>. Un positif veut alors dire quelque chose, au prix d'en manquer plus de la moitié.<br>&bull; Même test, même AUC de 0,92. Deux points de fonctionnement, choisis pour deux coûts d'erreur différents.">&bull; For a screening program that must not miss cancers, set a low cutoff: sensitivity <b>95%</b>, specificity <b>64%</b>. About a third of healthy people are called back, and that is accepted because a positive screen leads to a confirmatory test, not a diagnosis.<br>&bull; To confirm the cancer before major surgery, set a high cutoff: specificity <b>98%</b>, sensitivity <b>48%</b>. A positive now means something, at the price of missing more than half the cancers.<br>&bull; Same test, same AUC of 0.92. Two operating points, chosen for two different costs of being wrong.</div>
  <div class="softbox answer" data-en="So the right question is never just how good is this test, but where should its threshold sit for this job. Press the two presets above, Screening and Confirmation, to watch the same curve read out as two very different tests." data-fr="La bonne question n'est donc jamais seulement « ce test est-il bon », mais « où placer son seuil pour cet usage ». Appuyez sur les deux préréglages ci-dessus, Dépistage et Confirmation, pour voir la même courbe se lire comme deux tests très différents.">So the right question is never just how good is this test, but where should its threshold sit for this job. Press the two presets above, Screening and Confirmation, to watch the same curve read out as two very different tests.</div>
+</section>
+
+<section class="faq">
+<h2 data-en="Common questions" data-fr="Questions fréquentes">Common questions</h2>
+<details><summary data-en="What does AUC mean?" data-fr="Que signifie l'AUC ?">What does AUC mean?</summary><p data-en="AUC is the probability that the test gives a randomly chosen sick patient a higher score than a randomly chosen healthy one. 0.5 is a coin flip and 1.0 is perfect separation." data-fr="L'AUC est la probabilité que le test attribue à un malade tiré au hasard un score plus élevé qu'à un sain tiré au hasard. 0,5 c'est pile ou face et 1,0 une séparation parfaite.">AUC is the probability that the test gives a randomly chosen sick patient a higher score than a randomly chosen healthy one. 0.5 is a coin flip and 1.0 is perfect separation.</p></details>
+<details><summary data-en="What is a good AUC value?" data-fr="Qu'est-ce qu'une bonne valeur d'AUC ?">What is a good AUC value?</summary><p data-en="0.5 is useless, no better than chance, and most useful clinical tests land between about 0.75 and 0.95. Higher is better, but the right threshold to use still depends on the clinical cost of missed cases versus false alarms." data-fr="0,5 est inutile, pas mieux que le hasard, et la plupart des tests cliniques utiles se situent entre environ 0,75 et 0,95. Plus c'est haut, mieux c'est, mais le bon seuil à utiliser dépend encore du coût clinique des cas manqués face aux fausses alertes.">0.5 is useless, no better than chance, and most useful clinical tests land between about 0.75 and 0.95. Higher is better, but the right threshold to use still depends on the clinical cost of missed cases versus false alarms.</p></details>
+<details><summary data-en="What is the difference between sensitivity and specificity?" data-fr="Quelle est la différence entre sensibilité et spécificité ?">What is the difference between sensitivity and specificity?</summary><p data-en="Sensitivity is the share of diseased people the test flags positive; specificity is the share of healthy people it correctly clears. Moving the decision threshold trades one for the other, which is exactly what the ROC curve traces." data-fr="La sensibilité est la part des malades que le test signale positifs ; la spécificité est la part des sains qu'il classe correctement négatifs. Déplacer le seuil de décision échange l'une contre l'autre, et c'est exactement ce que trace la courbe ROC.">Sensitivity is the share of diseased people the test flags positive; specificity is the share of healthy people it correctly clears. Moving the decision threshold trades one for the other, which is exactly what the ROC curve traces.</p></details>
 </section>
 
 <div class="cta">
  <p data-en="This is one intuition trap. The Paradoxes &amp; Intuition Traps section of Stat Exam Pro is a whole set of them - exam-style questions with worked answers, in English and French." data-fr="Ceci est un seul piège de l'intuition. La section Paradoxes &amp; Intuition Traps de Stat Exam Pro en contient toute une série : des QCM type examen, corrigés et expliqués, en français et en anglais.">This is one intuition trap. The Paradoxes &amp; Intuition Traps section of Stat Exam Pro is a whole set of them - exam-style questions with worked answers, in English and French.</p>
- <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn" onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click-roc-bottom',title:'App Store button (roc bottom)',event:true})">
+ <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-roc-bottom','App Store button (ROC bottom)')">
   <span class="apple-icon"></span>
   <span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Get it on iPhone</span>
  </a>
 </div>
 
+</main>
+</div>
 <footer>
  <p>&copy; 2026 Stat Exam Pro</p>
- <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/ppv-calculator/">PPV/NPV playground</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT playground</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC playground</a><span style="opacity:.3">|</span><a href="/lessons/roc-auc/">ROC &amp; AUC lesson</a></p>
- <p><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a></p>
- <p><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
 </footer>
-
-</div>
 <script src="../site.js"></script>
 <script src="calc.js"></script>
 <script>
@@ -199,7 +248,7 @@ var STR = {
    return e+"Un seuil équilibré : sensibilité et spécificité sont proches. Un bon réglage par défaut, mais un vrai test est ajusté à son usage, pas à la symétrie.</span>"; }
  }
 };
-function pct(x){ var s=(100*x).toFixed(0); return LANG==='fr' ? s+" %" : s+"%"; }
+function pct(x){ return sxpFmtPct(x, 0); }
 
 // ---- distributions chart ----
 function DX(v){ return 40 + (v+4.5)/9*400; }
@@ -251,9 +300,9 @@ function drawRoc(d,t){
 function update(){
   var d=+document.getElementById('dSlider').value/100, t=+document.getElementById('tSlider').value/100;
   var S=STR[LANG], m=SXProc.metrics(d,t);
-  document.getElementById('dVal').textContent = "AUC " + (LANG==='fr'? m.auc.toFixed(2).replace('.',',') : m.auc.toFixed(2));
+  document.getElementById('dVal').textContent = "AUC " + sxpNum(m.auc.toFixed(2));
   document.getElementById('tVal').textContent = t<-0.3? S.thSe : (t>0.3? S.thSp : S.thBal);
-  document.getElementById('aucNum').textContent = LANG==='fr'? m.auc.toFixed(2).replace('.',',') : m.auc.toFixed(2);
+  document.getElementById('aucNum').textContent = sxpNum(m.auc.toFixed(2));
   document.getElementById('aucLabel').textContent = S.aucLabel;
   document.getElementById('seNum').textContent = pct(m.se);
   document.getElementById('spNum').textContent = pct(m.sp);
@@ -263,8 +312,13 @@ function update(){
 }
 function preset(d,t){ document.getElementById('dSlider').value=Math.round(d*100); document.getElementById('tSlider').value=Math.round(t*100); update(); }
 preset(2,0);
-window.sxpOnTheme = update;
-window.addEventListener('load',function(){if(window.renderMathInElement)renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});});
+</script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
 </script>
 </body>
 </html>

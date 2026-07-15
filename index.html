@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <title>Stat Exam Pro - Biostatistics prep for medical students</title>
-<meta name="description" content="Question-based prep for medical statistics: Se, Sp, PPV/NPV, p-values, risk ratios, diagnostic test paradoxes. Bilingual English/French. Timed mock exams like the real thing.">
+<meta name="description" content="Question-based prep for medical statistics: Se, Sp, PPV/NPV, p-values, risk ratios and test paradoxes. Bilingual EN/FR, with timed mock exams.">
 <meta name="apple-itunes-app" content="app-id=6755912771">
 <meta property="og:title" content="Stat Exam Pro - Biostatistics prep for medical students">
 <meta property="og:description" content="Study by topic or sit a timed mock exam. Bilingual EN/FR. Se, Sp, VPP/VPN, paradoxes and intuition traps.">
@@ -21,16 +22,21 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Stat Exam Pro">
 <meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="stylesheet" href="site.css">
 <style>.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding:50px 0 0}
 h1{font-size:2.9rem;font-weight:800;letter-spacing:-1.2px;margin:0 0 20px;
- background:-webkit-linear-gradient(45deg,var(--text-main),var(--text-sec));
- -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+ background:linear-gradient(45deg,var(--text-main),var(--text-sec));
+ -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .subtitle{font-size:1.3rem;color:var(--text-sec);margin-bottom:8px}
 .tagline-fr{display:block;font-size:1.05rem;color:var(--accent);margin-top:10px;font-weight:500}
 .store-buttons{display:flex;gap:15px;flex-wrap:wrap;margin-top:30px}
@@ -38,11 +44,6 @@ h1{font-size:2.9rem;font-weight:800;letter-spacing:-1.2px;margin:0 0 20px;
 section{margin:70px 0}
 h2{font-size:1.9rem;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
 .h2-fr{color:var(--accent);font-size:1rem;font-weight:500;margin-bottom:24px}
-.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.lcard{background:var(--card-bg);padding:26px;border-radius:var(--r-lg)}
-.lcard h3{font-size:1.15rem;margin-bottom:8px;font-weight:700}
-.lcard p{color:var(--text-sec);font-size:.95rem}
-.lcard .fr{color:var(--accent);font-size:.85rem;margin-top:8px}
 .topic-num{color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;margin-right:10px}
 .topics-grid{display:grid;gap:14px}
 .more-line{color:var(--text-sec);font-size:.95rem;margin-top:18px;text-align:center}
@@ -54,20 +55,64 @@ h2{font-size:1.9rem;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
  h1{font-size:2.1rem} .subtitle{font-size:1.1rem}
 }
 </style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Stat Exam Pro","url":"https://statexampro.com/","inLanguage":"en"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Stat Exam Pro","operatingSystem":"iOS","applicationCategory":"EducationalApplication","inLanguage":"en","url":"https://apps.apple.com/us/app/stat-exam-pro/id6755912771","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Biostatistics exam prep for medical students: Se, Sp, PPV/NPV, paradoxes."}</script>
 </head>
-<body>
+<body class="nav-collapsed home">
 <div class="blur-orb orb-1"></div>
 <div class="blur-orb orb-2"></div>
-<div class="container">
 
-<header>
+
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Course menu">&#9776;</button>
  <div class="logo"><img src="logo.svg" alt=""><span>Stat Exam Pro</span></div>
- <div class="header-right">
+ <span class="spacer"></span><div class="header-right">
   <div class="seg" role="group" aria-label="Language"><span class="active">EN</span><a href="/fr/" hreflang="fr">FR</a></div>
-  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
  </div>
-</header>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Course">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Predictive values</span></h4><ul>
+<li><a href="/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">PPV &amp; NPV, explained</span></a></li>
+<li><a href="/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</span></a></li>
+<li><a href="/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Worked exercises</span></a></li>
+<li><a href="/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Cheat sheet &amp; PDF</span></a></li>
+<li><a href="/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC &amp; AUC</span></h4><ul>
+<li><a href="/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC &amp; AUC, explained</span></a></li>
+<li><a href="/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</span></a></li>
+<li><a href="/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">The sepsis AI that missed two thirds</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Treatment effect</span></h4><ul>
+<li><a href="/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT &amp; absolute risk</span></a></li>
+<li><a href="/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Survival analysis</span></h4><ul>
+<li><a href="/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Kaplan&ndash;Meier curves</span></a></li>
+<li><a href="/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">The 82% survival myth</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Screening &amp; bias</span></h4><ul>
+<li><a href="/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Screening bias, live</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Lead-time &amp; overdiagnosis</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significance &amp; multiplicity</span></h4><ul>
+<li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
+<li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">By format</span></h4><ul>
+<li><a href="/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">All calculators</span></a></li>
+<li><a href="/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">All lessons</span></a></li>
+<li><a href="/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">All exercises</span></a></li>
+<li><a href="/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">All cheat sheets</span></a></li>
+<li><a href="/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">All stat questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
 
 <section class="hero">
  <div>
@@ -76,11 +121,11 @@ h2{font-size:1.9rem;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
   <div class="subtitle" data-en="Question-based biostatistics prep for medical students." data-fr="Des QCM de biostatistiques pour les étudiants en médecine.">Question-based biostatistics prep for medical students.</div>
   <span class="tagline-fr" data-en="Biostatistiques PASS/LAS - aussi disponible entièrement en français." data-fr="The whole app is also fully available in English.">Biostatistiques PASS/LAS - aussi disponible entièrement en français.</span>
   <div class="store-buttons">
-   <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn" onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click',title:'App Store button',event:true})"><span class="apple-icon"></span><span data-en="Download on the App Store" data-fr="Télécharger sur l'App Store">Download on the App Store</span></a>
+   <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-home-top','App Store button (home top)')"><span class="apple-icon"></span><span data-en="Download on the App Store" data-fr="Télécharger sur l'App Store">Download on the App Store</span></a>
    <span class="btn disabled"><svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>Google Play<span class="soon" data-en="coming soon" data-fr="bientôt">coming soon</span></span>
   </div>
  </div>
- <img class="phone" src="assets/shot5.png" data-src-en="assets/shot5.png" data-src-fr="assets/shot5-fr.png" data-alt-en="Exam simulation with timer - Stat Exam Pro" data-alt-fr="Simulation d'examen avec minuteur - Stat Exam Pro" alt="Exam simulation with timer - Stat Exam Pro">
+ <img class="phone" src="assets/shot5.png" width="640" height="1390" data-src-en="assets/shot5.png" data-src-fr="assets/shot5-fr.png" data-alt-en="Exam simulation with timer - Stat Exam Pro" data-alt-fr="Simulation d'examen avec minuteur - Stat Exam Pro" alt="Exam simulation with timer - Stat Exam Pro">
 </section>
 
 <section>
@@ -128,13 +173,13 @@ h2{font-size:1.9rem;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
  <div class="grid-2">
   <div class="lcard">
    <h3>🎛️ <span data-en="Interactive playgrounds" data-fr="Simulateurs interactifs">Interactive playgrounds</span></h3>
-   <p data-en="Drag a slider and watch PPV, NNT or the ROC curve react. The fastest way to feel why a 99% accurate test can still be wrong." data-fr="Déplacez un curseur et regardez la VPP, le NNT ou la courbe ROC réagir. Le moyen le plus rapide de sentir pourquoi un test fiable à 99 % peut se tromper.">Drag a slider and watch PPV, NNT or the ROC curve react. The fastest way to feel why a 99% accurate test can still be wrong.</p>
-   <div class="linkrow"><a class="pill ghost" href="/ppv-calculator/" data-en="PPV/NPV playground" data-fr="Simulateur VPP/VPN">PPV/NPV playground</a><a class="pill ghost" href="/nnt-calculator/" data-en="NNT playground" data-fr="Simulateur NNT">NNT playground</a><a class="pill ghost" href="/roc-curve/" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</a></div>
+   <p data-en="Drag a slider - or a patient - and watch PPV, NNT, the ROC curve or a survival curve react. The fastest way to feel why the numbers behave the way they do." data-fr="Déplacez un curseur - ou un patient - et regardez la VPP, le NNT, la courbe ROC ou une courbe de survie réagir. Le moyen le plus rapide de sentir pourquoi les chiffres se comportent ainsi.">Drag a slider - or a patient - and watch PPV, NNT, the ROC curve or a survival curve react. The fastest way to feel why the numbers behave the way they do.</p>
+   <div class="linkrow"><a class="pill ghost" href="/ppv-calculator/" data-en="PPV/NPV playground" data-fr="Simulateur VPP/VPN">PPV/NPV playground</a><a class="pill ghost" href="/nnt-calculator/" data-en="NNT playground" data-fr="Simulateur NNT">NNT playground</a><a class="pill ghost" href="/roc-curve/" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</a><a class="pill ghost" href="/kaplan-meier/" data-en="Kaplan-Meier playground" data-fr="Simulateur Kaplan-Meier">Kaplan-Meier playground</a><a class="pill ghost" href="/screening-bias/" data-en="Screening bias" data-fr="Biais du dépistage">Screening bias</a></div>
   </div>
   <div class="lcard">
    <h3>💥 Stat Fails</h3>
    <p data-en="Documented cases where a statistical error had real consequences, with sources and the reasoning worked through." data-fr="Des cas documentés où une erreur statistique a eu des conséquences réelles, avec les sources et le raisonnement détaillé.">Documented cases where a statistical error had real consequences, with sources and the reasoning worked through.</p>
-   <div class="linkrow"><a class="pill ghost" href="/fails/hiv-false-positives/" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</a><a class="pill ghost" href="/fails/the-1995-pill-scare/" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</a><a class="pill ghost" href="/fails/epic-sepsis-model/" data-en="The sepsis AI" data-fr="L'IA de sepsis">The sepsis AI</a></div>
+   <div class="linkrow"><a class="pill ghost" href="/fails/hiv-false-positives/" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</a><a class="pill ghost" href="/fails/the-1995-pill-scare/" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</a><a class="pill ghost" href="/fails/epic-sepsis-model/" data-en="The sepsis AI" data-fr="L'IA de sepsis">The sepsis AI</a></div>
   </div>
   <div class="lcard">
    <h3>📖 <span data-en="Lessons &amp; sources" data-fr="Cours et sources">Lessons &amp; sources</span></h3>
@@ -145,22 +190,29 @@ h2{font-size:1.9rem;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
 </section>
 
 <div class="cta">
- <p data-en="Five topics, two exam modes, English and French - in your pocket before the next revision session." data-fr="Cinq thèmes, deux modes d'examen, français et anglais - dans votre poche avant la prochaine révision.">Five topics, two exam modes, English and French - in your pocket before the next revision session.</p>
- <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-en="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" data-href-fr="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn"
-    onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click-home-bottom',title:'App Store button (app-store-click-home-bottom)',event:true})">
+ <p data-en="Every core topic, two exam modes, English and French - in your pocket before the next revision session." data-fr="Chaque thème clé, deux modes d'examen, français et anglais - dans votre poche avant la prochaine révision.">Every core topic, two exam modes, English and French - in your pocket before the next revision session.</p>
+ <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" class="btn"
+    onclick="sxpGo('app-store-click-home-bottom','App Store button (home bottom)')">
   <span class="apple-icon"></span>
   <span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Get it on iPhone</span>
  </a>
 </div>
 
+</main>
+</div>
 <footer>
  <p>&copy; 2026 Stat Exam Pro</p>
- <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/ppv-calculator/">PPV/NPV playground</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT playground</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC playground</a><span style="opacity:.3">|</span><a href="/lessons/roc-auc/">ROC &amp; AUC lesson</a></p>
- <p><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a></p>
- <p><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
 </footer>
-
-</div>
 <script src="site.js"></script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
 </body>
 </html>

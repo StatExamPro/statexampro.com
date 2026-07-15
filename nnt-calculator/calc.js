@@ -12,16 +12,18 @@
       ? (eer / (1 - eer)) / (cer / (1 - cer)) : NaN;
     return { rr: rr, arr: arr, rrr: rrr, nnt: nnt, or: or_, benefit: arr >= 0 };
   }
-  // 100-person (or n) counterfactual breakdown, cells always sum to n
+  // 100-person (or n) counterfactual breakdown, cells always sum to n and stay >= 0.
+  // The changed group is rounded from the risk difference itself, so it can never come
+  // out negative when the two risks are equal (rounding both ends independently could).
   function groups(cer, eer, n) {
     if (cer >= eer) {                          // benefit (or neutral)
-      var ev = Math.round(eer * n);            // event despite treatment
-      var un = Math.round((1 - cer) * n);      // no event either way
-      return { mode: 'benefit', event: ev, helped: n - ev - un, unaffected: un };
+      var helped = Math.round((cer - eer) * n);// event prevented by treatment
+      var ev = Math.min(Math.round(eer * n), n - helped); // event despite treatment
+      return { mode: 'benefit', event: ev, helped: helped, unaffected: n - ev - helped };
     }
-    var evH = Math.round(cer * n);             // event either way
-    var unH = Math.round((1 - eer) * n);       // no event either way
-    return { mode: 'harm', event: evH, harmed: n - evH - unH, unaffected: unH };
+    var harmed = Math.round((eer - cer) * n);  // event caused by treatment
+    var evH = Math.min(Math.round(cer * n), n - harmed);  // event either way
+    return { mode: 'harm', event: evH, harmed: harmed, unaffected: n - evH - harmed };
   }
   var api = { metrics: metrics, groups: groups };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

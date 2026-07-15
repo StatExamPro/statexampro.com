@@ -3,14 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stat Fails - erreurs statistiques documentées aux conséquences réelles | Stat Exam Pro</title>
-<meta name="description" content="Des cas documentés où une erreur statistique a eu des conséquences réelles : des conseillers VIH sûrs d'un pile ou face, la panique de la pilule de 1995, une IA de sepsis notée 0,63. Sources et raisonnement pour chacun.">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Stat Fails - erreurs statistiques aux conséquences réelles</title>
+<meta name="description" content="Des cas documentés où une erreur statistique a eu des conséquences réelles : conseillers VIH sûrs d'un pile ou face, panique de la pilule de 1995, IA de sepsis.">
 <meta name="apple-itunes-app" content="app-id=6755912771">
 <meta property="og:title" content="Stat Fails - erreurs statistiques documentées aux conséquences réelles">
 <meta property="og:description" content="Des conseillers VIH sûrs d'un pile ou face, la panique de la pilule de 1995, une IA de sepsis notée 0,63 et vendue 0,83. Des cas réels, des sources réelles, le raisonnement détaillé.">
 <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="icon" href="../../favicon.ico">
+<link rel="manifest" href="../../site.webmanifest">
 <link rel="canonical" href="https://statexampro.com/fr/fails/">
 <link rel="alternate" hreflang="en" href="https://statexampro.com/fails/">
 <link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/fails/">
@@ -19,10 +21,15 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Stat Exam Pro">
 <meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="stylesheet" href="../../site.css">
 <style>h1{font-size:2rem;margin:24px 0 10px}
@@ -31,66 +38,115 @@
 .fail-card p{color:var(--text-sec);font-size:.97rem;margin-bottom:14px}
 @media(max-width:600px){h1{font-size:1.6rem}}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Stat Fails","inLanguage":"fr","about":"Cas documentés d'erreurs statistiques aux conséquences réelles","isPartOf":{"@type":"WebSite","name":"Stat Exam Pro","url":"https://statexampro.com"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Stat Fails","inLanguage":"fr","about":"Cas documentés d'erreurs statistiques aux conséquences réelles","isPartOf":{"@type":"WebSite","name":"Stat Exam Pro","url":"https://statexampro.com/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://statexampro.com/fr/"},{"@type":"ListItem","position":2,"name":"Stat Fails"}]}</script>
 </head>
 <body>
 <div class="blur-orb orb-1"></div>
-<div class="container">
+<div class="blur-orb orb-2"></div>
 
-<header>
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Menu du cours">&#9776;</button>
  <a class="logo" href="/fr/"><img src="../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
- <div class="header-right">
-  <div class="seg" role="group" aria-label="Language"><a href="/fails/" hreflang="en">EN</a><span class="active">FR</span></div>
-  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ <span class="spacer"></span><div class="header-right">
+  <div class="seg" role="group" aria-label="Langue"><a href="/fails/" hreflang="en">EN</a><span class="active">FR</span></div>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Basculer en mode sombre">&#9789;</button>
  </div>
-</header>
-
-<nav class="sitenav">
- <a href="/fr/ppv-calculator/">VPP/VPN</a>
- <a href="/fr/nnt-calculator/">NNT</a>
- <a href="/fr/roc-curve/">ROC</a>
- <a href="/fr/lessons/roc-auc/">Cours</a>
- <a href="/fr/fails/" class="active">Stat Fails</a>
- <a href="/fr/studies/">Études</a>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Cours">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Valeurs prédictives</span></h4><ul>
+<li><a href="/fr/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">VPP et VPN, expliqués</span></a></li>
+<li><a href="/fr/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Nomogramme de Fagan</span></a></li>
+<li><a href="/fr/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Exercices corrigés</span></a></li>
+<li><a href="/fr/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Fiche &amp; PDF</span></a></li>
+<li><a href="/fr/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">Les conseillers sûrs à 100 %</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC et AUC</span></h4><ul>
+<li><a href="/fr/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC et AUC, expliqués</span></a></li>
+<li><a href="/fr/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">Simulateur ROC</span></a></li>
+<li><a href="/fr/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">L'IA de sepsis qui en a manqué deux tiers</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Effet du traitement</span></h4><ul>
+<li><a href="/fr/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT et risque absolu</span></a></li>
+<li><a href="/fr/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">La panique de la pilule de 1995</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Analyse de survie</span></h4><ul>
+<li><a href="/fr/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Courbes de Kaplan&ndash;Meier</span></a></li>
+<li><a href="/fr/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">Le mythe des 82 % de survie</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Dépistage et biais</span></h4><ul>
+<li><a href="/fr/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Biais du dépistage, en direct</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Avance au diagnostic et surdiagnostic</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significativité et multiplicité</span></h4><ul>
+<li><a href="/fr/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Une série est-elle réelle ?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">Les valeurs p, bien faites</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Référence</span></h4><ul>
+<li><a href="/fr/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Études et jeux de données connus</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">Par format</span></h4><ul>
+<li><a href="/fr/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">Tous les calculateurs</span></a></li>
+<li><a href="/fr/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">Tous les cours</span></a></li>
+<li><a href="/fr/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">Tous les exercices</span></a></li>
+<li><a href="/fr/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">Toutes les fiches</span></a></li>
+<li><a href="/fr/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">Toutes les Stat Questions</span></a></li>
+</ul></div>
 </nav>
+<main class="main">
 
 <h1>Stat Fails</h1>
 <p class="lead" data-en="Documented cases where a statistical error had real consequences, with the reasoning worked through and a source behind every number." data-fr="Des cas documentés où une erreur statistique a eu des conséquences réelles, avec le raisonnement détaillé et une source derrière chaque chiffre.">Des cas documentés où une erreur statistique a eu des conséquences réelles, avec le raisonnement détaillé et une source derrière chaque chiffre.</p>
 
 <div class="card fail-card">
  <span class="chip">STAT FAILS #1</span>
- <h3 data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">Les conseillers sûrs à 100 %</h3>
- <p data-en="In 1998 a researcher posing as a low-risk client asked 20 German AIDS counselling centres whether a positive screening test could be a false alarm. Most said no, several quoted 100% certainty; the honest answer was about 50%. Base-rate neglect, documented on the professionals who ran the test every day." data-fr="En 1998, un chercheur se faisant passer pour un client à faible risque a demandé à 20 centres allemands de conseil VIH si un dépistage positif pouvait être une fausse alerte. La plupart ont dit non, plusieurs avançaient une certitude de 100 % ; la réponse honnête était d’environ 50 %. La négligence de la fréquence de base, documentée chez les professionnels qui pratiquaient ce test chaque jour.">En 1998, un chercheur se faisant passer pour un client à faible risque a demandé à 20 centres allemands de conseil VIH si un dépistage positif pouvait être une fausse alerte. La plupart ont dit non, plusieurs avançaient une certitude de 100 % ; la réponse honnête était d’environ 50 %. La négligence de la fréquence de base, documentée chez les professionnels qui pratiquaient ce test chaque jour.</p>
+ <h3 data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">Les conseillers sûrs à 100 %</h3>
+ <p data-en="In 1998 a researcher posing as a low-risk client asked 20 German AIDS counselling centres whether a positive screening test could be a false alarm. Most said no, several quoted 100% certainty; the honest answer was about 50%. Base-rate neglect, documented on the professionals who ran the test every day." data-fr="En 1998, un chercheur se faisant passer pour un client à faible risque a demandé à 20 centres allemands de conseil VIH si un dépistage positif pouvait être une fausse alerte. La plupart ont dit non, plusieurs avançaient une certitude de 100 % ; la réponse honnête était d’environ 50 %. La négligence de la fréquence de base, documentée chez les professionnels qui pratiquaient ce test chaque jour.">En 1998, un chercheur se faisant passer pour un client à faible risque a demandé à 20 centres allemands de conseil VIH si un dépistage positif pouvait être une fausse alerte. La plupart ont dit non, plusieurs avançaient une certitude de 100 % ; la réponse honnête était d’environ 50 %. La négligence de la fréquence de base, documentée chez les professionnels qui pratiquaient ce test chaque jour.</p>
  <a class="pill" href="/fr/fails/hiv-false-positives/" data-en="Read the full story" data-fr="Lire l’histoire complète">Lire l’histoire complète</a>
 </div>
 
 <div class="card fail-card">
  <span class="chip">STAT FAILS #2</span>
- <h3 data-en="The pill scare that caused 13,000 abortions" data-fr="La panique de la pilule et ses 13 000 avortements">La panique de la pilule et ses 13 000 avortements</h3>
- <p data-en="In 1995 UK doctors were warned that third-generation pills doubled the risk of a blood clot. The absolute increase was one clot per 7,000 women, smaller than the clot risk of the pregnancies that followed. The scare is estimated to have caused about 13,000 extra abortions in England and Wales." data-fr="En 1995, les médecins britanniques ont été avertis que les pilules de troisième génération doublaient le risque de caillot. L’augmentation absolue était d’un caillot pour 7 000 femmes, moindre que le risque de caillot des grossesses qui ont suivi. On estime que la peur a causé environ 13 000 avortements supplémentaires en Angleterre et au pays de Galles.">En 1995, les médecins britanniques ont été avertis que les pilules de troisième génération doublaient le risque de caillot. L’augmentation absolue était d’un caillot pour 7 000 femmes, moindre que le risque de caillot des grossesses qui ont suivi. On estime que la peur a causé environ 13 000 avortements supplémentaires en Angleterre et au pays de Galles.</p>
+ <h3 data-en="The pill scare that caused 13,000 abortions" data-fr="La panique de la pilule et ses 13 000 avortements">La panique de la pilule et ses 13 000 avortements</h3>
+ <p data-en="In 1995 UK doctors were warned that third-generation pills doubled the risk of a blood clot. The absolute increase was one clot per 7,000 women, smaller than the clot risk of the pregnancies that followed. The scare is estimated to have caused about 13,000 extra abortions in England and Wales." data-fr="En 1995, les médecins britanniques ont été avertis que les pilules de troisième génération doublaient le risque de caillot. L’augmentation absolue était d’un caillot pour 7 000 femmes, moindre que le risque de caillot des grossesses qui ont suivi. On estime que la peur a causé environ 13 000 avortements supplémentaires en Angleterre et au pays de Galles.">En 1995, les médecins britanniques ont été avertis que les pilules de troisième génération doublaient le risque de caillot. L’augmentation absolue était d’un caillot pour 7 000 femmes, moindre que le risque de caillot des grossesses qui ont suivi. On estime que la peur a causé environ 13 000 avortements supplémentaires en Angleterre et au pays de Galles.</p>
  <a class="pill" href="/fr/fails/the-1995-pill-scare/" data-en="Read the full story" data-fr="Lire l’histoire complète">Lire l’histoire complète</a>
 </div>
 
 <div class="card fail-card">
  <span class="chip">STAT FAILS #3</span>
- <h3 data-en="The sepsis AI that missed two thirds of the sepsis" data-fr="L'IA de sepsis qui manquait deux cas sur trois">L'IA de sepsis qui manquait deux cas sur trois</h3>
- <p data-en="A sepsis model built into Epic ran in hundreds of US hospitals, sold with an AUC of 0.76 to 0.83. An independent validation on 38,000 hospitalizations measured 0.63: two thirds of sepsis cases missed, alerts fired on 18% of all patients, most of them false." data-fr="Un modèle de sepsis intégré à Epic tournait dans des centaines d’hôpitaux américains, vendu avec une AUC de 0,76 à 0,83. Une validation indépendante sur 38 000 séjours a mesuré 0,63 : deux cas de sepsis sur trois manqués, des alertes sur 18 % de tous les patients, la plupart fausses.">Un modèle de sepsis intégré à Epic tournait dans des centaines d’hôpitaux américains, vendu avec une AUC de 0,76 à 0,83. Une validation indépendante sur 38 000 séjours a mesuré 0,63 : deux cas de sepsis sur trois manqués, des alertes sur 18 % de tous les patients, la plupart fausses.</p>
+ <h3 data-en="The sepsis AI that missed two thirds of cases" data-fr="L'IA de sepsis qui manquait deux cas sur trois">L'IA de sepsis qui manquait deux cas sur trois</h3>
+ <p data-en="A sepsis model built into Epic ran in hundreds of US hospitals, sold with an AUC of 0.76 to 0.83. An independent validation on 38,000 hospitalizations measured 0.63: two thirds of sepsis cases missed, alerts fired on 18% of all patients, most of them false." data-fr="Un modèle de sepsis intégré à Epic tournait dans des centaines d’hôpitaux américains, vendu avec une AUC de 0,76 à 0,83. Une validation indépendante sur 38 000 séjours a mesuré 0,63 : deux cas de sepsis sur trois manqués, des alertes sur 18 % de tous les patients, la plupart fausses.">Un modèle de sepsis intégré à Epic tournait dans des centaines d’hôpitaux américains, vendu avec une AUC de 0,76 à 0,83. Une validation indépendante sur 38 000 séjours a mesuré 0,63 : deux cas de sepsis sur trois manqués, des alertes sur 18 % de tous les patients, la plupart fausses.</p>
  <a class="pill" href="/fr/fails/epic-sepsis-model/" data-en="Read the full story" data-fr="Lire l’histoire complète">Lire l’histoire complète</a>
+</div>
+
+<div class="card fail-card">
+ <span class="chip">STAT FAILS #4</span>
+ <h3 data-en="The 82% vs 44% that meant nothing" data-fr="Le 82 % contre 44 % qui ne voulait rien dire">Le 82 % contre 44 % qui ne voulait rien dire</h3>
+ <p data-en="In a 2007 campaign ad, Rudy Giuliani claimed US prostate-cancer survival was 82% against Britain's 44%, proof, he said, that American care was better. But the death rates were nearly identical - about 26 versus 27 per 100,000 men. The survival gap was lead-time bias and overdiagnosis, not medicine." data-fr="Dans un spot de campagne de 2007, Rudy Giuliani affirmait que la survie au cancer de la prostate était de 82 % aux États-Unis contre 44 % en Grande-Bretagne - preuve, disait-il, de la supériorité des soins américains. Mais les taux de décès étaient presque identiques - environ 26 contre 27 pour 100 000 hommes. L'écart de survie était du biais du temps d'avance et du surdiagnostic, pas de la médecine.">Dans un spot de campagne de 2007, Rudy Giuliani affirmait que la survie au cancer de la prostate était de 82 % aux États-Unis contre 44 % en Grande-Bretagne - preuve, disait-il, de la supériorité des soins américains. Mais les taux de décès étaient presque identiques - environ 26 contre 27 pour 100 000 hommes. L'écart de survie était du biais du temps d'avance et du surdiagnostic, pas de la médecine.</p>
+ <a class="pill" href="/fr/fails/giuliani-prostate-cancer/" data-en="Read the full story" data-fr="Lire l'histoire complète">Lire l'histoire complète</a>
 </div>
 
 <div class="cta">
  <p data-en="Stat Exam Pro drills the statistics behind these stories as exam-style questions with worked answers, in English and French." data-fr="Stat Exam Pro entraîne les statistiques derrière ces histoires en QCM type examen, corrigés et expliqués, en français et en anglais.">Stat Exam Pro entraîne les statistiques derrière ces histoires en QCM type examen, corrigés et expliqués, en français et en anglais.</p>
- <a href="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn" onclick="if(window.goatcounter)goatcounter.count({path:'app-store-click-fails-hub',title:'App Store button (fails hub)',event:true})"><span class="apple-icon"></span><span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Télécharger sur iPhone</span></a>
+ <a href="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-fails-hub-bottom','App Store button (Fails hub bottom)')"><span class="apple-icon"></span><span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Télécharger sur iPhone</span></a>
 </div>
 
+</main>
+</div>
 <footer>
  <p>&copy; 2026 Stat Exam Pro</p>
- <p><a href="/fr/">Accueil</a><span style="opacity:.3">|</span><a href="/fr/ppv-calculator/">Simulateur VPP/VPN</a><span style="opacity:.3">|</span><a href="/fr/nnt-calculator/">Simulateur NNT</a><span style="opacity:.3">|</span><a href="/fr/roc-curve/">Simulateur ROC</a><span style="opacity:.3">|</span><a href="/fr/lessons/roc-auc/">Cours ROC et AUC</a></p>
- <p><a href="/fr/fails/">Stat Fails</a> : <a href="/fr/fails/hiv-false-positives/">Les conseillers sûrs à 100 %</a><span style="opacity:.3">|</span><a href="/fr/fails/the-1995-pill-scare/">La panique de la pilule de 1995</a><span style="opacity:.3">|</span><a href="/fr/fails/epic-sepsis-model/">L'IA de sepsis</a></p>
- <p><a href="/fr/studies/">Études et jeux de données connus</a><span style="opacity:.3">|</span><a href="/privacy.html">Politique de confidentialité</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+ <p><a href="/fr/">Accueil</a><span style="opacity:.3">|</span><a href="/fr/calculators/">Calculateurs</a> : <a href="/fr/ppv-calculator/">VPP/VPN</a><span style="opacity:.3">|</span><a href="/fr/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/fr/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/fr/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/fr/screening-bias/">Biais du dépistage</a></p>
+ <p><a href="/fr/lessons/">Cours</a><span style="opacity:.3">|</span><a href="/fr/fails/">Stat Fails</a> : <a href="/fr/fails/hiv-false-positives/">Les conseillers sûrs à 100 %</a><span style="opacity:.3">|</span><a href="/fr/fails/the-1995-pill-scare/">La panique de la pilule de 1995</a><span style="opacity:.3">|</span><a href="/fr/fails/epic-sepsis-model/">L'IA de sepsis</a><span style="opacity:.3">|</span><a href="/fr/fails/giuliani-prostate-cancer/">Le mythe des 82 %</a></p>
+ <p><a href="/fr/fagan-nomogram/">Nomogramme de Fagan</a><span style="opacity:.3">|</span><a href="/fr/exercises/">Exercices corrigés</a><span style="opacity:.3">|</span><a href="/fr/cheatsheets/">Fiches de révision</a><span style="opacity:.3">|</span><a href="/fr/studies/">Études et jeux de données connus</a><span style="opacity:.3">|</span><a href="/fr/privacy.html">Politique de confidentialité</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
 </footer>
-
-</div>
 <script src="../../site.js"></script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
 </body>
 </html>

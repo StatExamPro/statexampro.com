@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>La courbe de Kaplan-Meier : survie, censure, médiane</title>
+<meta name="description" content="La courbe de survie de Kaplan-Meier depuis zéro : construisez-la à la main, comprenez la censure, lisez la médiane sur la courbe. Avec un simulateur.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<meta property="og:title" content="La courbe de Kaplan-Meier, expliquée pour les cliniciens">
+<meta property="og:description" content="Chaque marche est un événement, chaque encoche un patient censuré. Construisez la courbe à la main, puis déplacez dix patients et regardez-la se redessiner.">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="icon" href="../../favicon.ico">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/fr/kaplan-meier/">
+<link rel="alternate" hreflang="en" href="https://statexampro.com/kaplan-meier/">
+<link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/kaplan-meier/">
+<link rel="alternate" hreflang="x-default" href="https://statexampro.com/kaplan-meier/">
+<meta property="og:url" content="https://statexampro.com/fr/kaplan-meier/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../../vendor/katex/katex.min.css">
+<script defer src="../../vendor/katex/katex.min.js"></script>
+<script defer src="../../vendor/katex/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../../site.css">
+<style>.kmlist{display:flex;flex-direction:column;gap:5px}
+.kmrow{display:flex;align-items:center;gap:8px}
+.kmtog{width:30px;height:26px;border-radius:var(--r-sm);border:none;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit;flex:none}
+.kmtog.e{background:var(--danger-soft);color:var(--fn)}
+.kmtog.c{background:var(--bg-color);color:var(--text-sec)}
+.kmtrack{position:relative;height:26px;flex:1;cursor:ew-resize;touch-action:none}
+.kmtrack .rail{position:absolute;left:0;right:0;top:12px;height:2px;background:var(--hairline)}
+.kmtrack .bar{position:absolute;left:0;top:12px;height:2px;background:var(--accent)}
+.kmtrack .dot{position:absolute;top:6px;width:14px;height:14px;border-radius:50%;background:var(--fn)}
+.kmtrack .tick{position:absolute;top:5px;width:3px;height:16px;background:var(--text-main)}
+.kmaxis{display:flex;justify-content:space-between;font-size:.72rem;color:var(--text-sec);margin-top:4px}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"La courbe de Kaplan-Meier, expliquée pour les cliniciens","inLanguage":"fr","about":"Courbe de survie de Kaplan-Meier, censure et médiane de survie","url":"https://statexampro.com/fr/kaplan-meier/","datePublished":"2026-07-11","dateModified":"2026-07-11","author":{"@type":"Organization","name":"Stat Exam Pro"},"publisher":{"@type":"Organization","name":"Stat Exam Pro","logo":{"@type":"ImageObject","url":"https://statexampro.com/web-app-manifest-512x512.png"}},"image":"https://statexampro.com/og-card.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://statexampro.com/fr/kaplan-meier/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Qu'est-ce que la censure dans une courbe de survie ?","acceptedAnswer":{"@type":"Answer","text":"La censure marque un patient dont l'événement n'a jamais été observé : il a quitté l'étude, ou celle-ci s'est terminée, alors qu'il était encore indemne. Il compte comme à risque jusqu'à ce moment, puis sort du dénominateur sans faire descendre la courbe. C'est pourquoi les données de survie ne se résument pas à qui a eu l'événement à la fin."}},{"@type":"Question","name":"Comment lit-on la médiane de survie sur une courbe de Kaplan-Meier ?","acceptedAnswer":{"@type":"Answer","text":"Repérez l'endroit où la courbe descend pour la première fois à 0,5 (50 %) ou en dessous, et lisez le temps sur l'axe horizontal. Ce temps est la médiane de survie : la moitié des patients ont eu l'événement à ce moment-là. Si la courbe n'atteint jamais 0,5, la médiane n'est pas atteinte."}},{"@type":"Question","name":"Pourquoi la courbe de Kaplan-Meier descend-elle en marches ?","acceptedAnswer":{"@type":"Answer","text":"Chaque marche correspond à un instant où survient un événement, et sa hauteur dépend du nombre de patients encore à risque à ce moment. Entre les événements, la courbe est plate. C'est un produit de fractions de survie, un facteur par temps d'événement, d'où le nom d'estimateur produit-limite."}}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Menu du cours">&#9776;</button>
+ <a class="logo" href="/fr/"><img src="../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <div class="seg" role="group" aria-label="Langue"><a href="/kaplan-meier/" hreflang="en">EN</a><span class="active">FR</span></div>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Basculer en mode sombre">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Cours">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Valeurs prédictives</span></h4><ul>
+<li><a href="/fr/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">VPP et VPN, expliqués</span></a></li>
+<li><a href="/fr/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Nomogramme de Fagan</span></a></li>
+<li><a href="/fr/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Exercices corrigés</span></a></li>
+<li><a href="/fr/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Fiche &amp; PDF</span></a></li>
+<li><a href="/fr/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">Les conseillers sûrs à 100 %</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC et AUC</span></h4><ul>
+<li><a href="/fr/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC et AUC, expliqués</span></a></li>
+<li><a href="/fr/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">Simulateur ROC</span></a></li>
+<li><a href="/fr/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">L'IA de sepsis qui en a manqué deux tiers</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Effet du traitement</span></h4><ul>
+<li><a href="/fr/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT et risque absolu</span></a></li>
+<li><a href="/fr/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">La panique de la pilule de 1995</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Analyse de survie</span></h4><ul>
+<li><a class="cn-on" href="/fr/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Courbes de Kaplan&ndash;Meier</span></a></li>
+<li><a href="/fr/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">Le mythe des 82 % de survie</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Dépistage et biais</span></h4><ul>
+<li><a href="/fr/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Biais du dépistage, en direct</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Avance au diagnostic et surdiagnostic</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significativité et multiplicité</span></h4><ul>
+<li><a href="/fr/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Une série est-elle réelle ?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">Les valeurs p, bien faites</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Référence</span></h4><ul>
+<li><a href="/fr/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Études et jeux de données connus</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">Par format</span></h4><ul>
+<li><a href="/fr/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">Tous les calculateurs</span></a></li>
+<li><a href="/fr/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">Tous les cours</span></a></li>
+<li><a href="/fr/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">Tous les exercices</span></a></li>
+<li><a href="/fr/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">Toutes les fiches</span></a></li>
+<li><a href="/fr/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">Toutes les Stat Questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<h1 data-en="The Kaplan-Meier curve, explained for clinicians" data-fr="La courbe de Kaplan-Meier, expliquée pour les cliniciens">La courbe de Kaplan-Meier, expliquée pour les cliniciens</h1>
+
+<p class="lead" data-en="What each step means, why a censored patient is neither a survivor nor a death, and how to read median survival straight off the curve." data-fr="Ce que signifie chaque marche, pourquoi un patient censuré n’est ni un survivant ni un décès, et comment lire la médiane de survie directement sur la courbe.">Ce que signifie chaque marche, pourquoi un patient censuré n’est ni un survivant ni un décès, et comment lire la médiane de survie directement sur la courbe.</p>
+
+<div class="softbox"><h2 class="eyebrow" data-en="In a hurry" data-fr="Pressé">Pressé</h2><p data-en="Follow a group of patients from a starting point - surgery, diagnosis, the first dose - and record when the event of interest happens: a relapse, a death, a device failure. The Kaplan-Meier curve is the estimated probability of still being event-free as time passes. It starts at 100%, drops a step at every event, and puts a small tick where a patient was censored: observation ended while they were still event-free, and the curve does not drop for them. The time where the curve crosses 50% is the median survival; if the curve never gets that low, the median is not reached. Below are ten patients you can drag around and watch the curve rebuild." data-fr="Suivez un groupe de patients à partir d’un point de départ - chirurgie, diagnostic, première dose - et notez quand survient l’événement d’intérêt : une rechute, un décès, une panne de prothèse. La courbe de Kaplan-Meier est la probabilité estimée d’être encore indemne de l’événement au fil du temps. Elle part de 100 %, descend d’une marche à chaque événement, et porte une petite encoche là où un patient a été censuré : l’observation s’est arrêtée alors qu’il était encore indemne, et la courbe ne descend pas pour lui. Le temps où la courbe croise 50 % est la médiane de survie ; si la courbe ne descend jamais aussi bas, la médiane n’est pas atteinte. Ci-dessous, dix patients que vous pouvez déplacer en regardant la courbe se reconstruire.">Suivez un groupe de patients à partir d’un point de départ - chirurgie, diagnostic, première dose - et notez quand survient l’événement d’intérêt : une rechute, un décès, une panne de prothèse. La courbe de Kaplan-Meier est la probabilité estimée d’être encore indemne de l’événement au fil du temps. Elle part de 100 %, descend d’une marche à chaque événement, et porte une petite encoche là où un patient a été censuré : l’observation s’est arrêtée alors qu’il était encore indemne, et la courbe ne descend pas pour lui. Le temps où la courbe croise 50 % est la médiane de survie ; si la courbe ne descend jamais aussi bas, la médiane n’est pas atteinte. Ci-dessous, dix patients que vous pouvez déplacer en regardant la courbe se reconstruire.</p></div>
+
+<article>
+
+<h2 data-en="Ten patients, two kinds of exits" data-fr="Dix patients, deux façons de sortir">Dix patients, deux façons de sortir</h2>
+
+<p data-en="Say ten patients finish a cancer treatment and we watch for relapse over the next two years. Each patient's story is a line through time, and only two things can end it: the event itself, or the end of observation - the study closes, the patient moves to another city, the follow-up visit never happens. That second ending is called censoring, and it is the reason this curve exists. A censored patient told you something real: no relapse for as long as you watched. Throwing them out of the analysis wastes that information; counting them as relapse-free forever invents information you never had. The Kaplan-Meier estimator is the standard way to keep exactly what they gave you and nothing more." data-fr="Disons que dix patients terminent un traitement contre un cancer et que nous guettons la rechute pendant deux ans. L’histoire de chaque patient est une ligne dans le temps, et seules deux choses peuvent y mettre fin : l’événement lui-même, ou la fin de l’observation - l’étude se termine, le patient déménage, la visite de suivi n’a jamais lieu. Cette seconde fin s’appelle la censure, et c’est la raison d’être de cette courbe. Un patient censuré vous a dit quelque chose de réel : pas de rechute aussi longtemps que vous l’avez observé. L’exclure de l’analyse gaspille cette information ; le compter comme indemne pour toujours invente une information que vous n’avez jamais eue. L’estimateur de Kaplan-Meier est la façon standard de garder exactement ce qu’il vous a donné, et rien de plus.">Disons que dix patients terminent un traitement contre un cancer et que nous guettons la rechute pendant deux ans. L’histoire de chaque patient est une ligne dans le temps, et seules deux choses peuvent y mettre fin : l’événement lui-même, ou la fin de l’observation - l’étude se termine, le patient déménage, la visite de suivi n’a jamais lieu. Cette seconde fin s’appelle la censure, et c’est la raison d’être de cette courbe. Un patient censuré vous a dit quelque chose de réel : pas de rechute aussi longtemps que vous l’avez observé. L’exclure de l’analyse gaspille cette information ; le compter comme indemne pour toujours invente une information que vous n’avez jamais eue. L’estimateur de Kaplan-Meier est la façon standard de garder exactement ce qu’il vous a donné, et rien de plus.</p>
+
+<h2 data-en="Build it by hand" data-fr="Construisez-la à la main">Construisez-la à la main</h2>
+
+<p data-en="The trick is to update the curve only when an event happens, and to use only the patients still under observation at that moment - the patients at risk. Ten are at risk when the first relapse comes at month 3, so survival falls to 9/10 = 90%. At month 5 one patient moves away: a tick on the curve, no drop, but only eight remain at risk. That makes the relapse at month 8 cost more: 90% times 7/8, about 79%. Every event multiplies the current survival by one minus events over at-risk, and censored patients quietly shrink the at-risk count between the drops. The full ladder for our ten patients:" data-fr="L’astuce est de ne mettre la courbe à jour que lorsqu’un événement survient, et de n’utiliser que les patients encore sous observation à ce moment-là - les sujets à risque. Ils sont dix à risque quand la première rechute arrive au mois 3 : la survie tombe à 9/10 = 90 %. Au mois 5, un patient déménage : une encoche sur la courbe, pas de marche, mais il ne reste que huit sujets à risque. La rechute du mois 8 coûte donc plus cher : 90 % fois 7/8, environ 79 %. Chaque événement multiplie la survie courante par un moins le rapport événements sur sujets à risque, et les censurés réduisent silencieusement ce compte entre les marches. L’échelle complète pour nos dix patients :">L’astuce est de ne mettre la courbe à jour que lorsqu’un événement survient, et de n’utiliser que les patients encore sous observation à ce moment-là - les sujets à risque. Ils sont dix à risque quand la première rechute arrive au mois 3 : la survie tombe à 9/10 = 90 %. Au mois 5, un patient déménage : une encoche sur la courbe, pas de marche, mais il ne reste que huit sujets à risque. La rechute du mois 8 coûte donc plus cher : 90 % fois 7/8, environ 79 %. Chaque événement multiplie la survie courante par un moins le rapport événements sur sujets à risque, et les censurés réduisent silencieusement ce compte entre les marches. L’échelle complète pour nos dix patients :</p>
+
+<table>
+<thead><tr><th data-en="Month" data-fr="Mois">Mois</th><th data-en="At risk" data-fr="À risque">À risque</th><th data-en="Events" data-fr="Événements">Événements</th><th data-en="Factor" data-fr="Facteur">Facteur</th><th data-en="Survival" data-fr="Survie">Survie</th></tr></thead>
+<tbody>
+<tr><td>3</td><td>10</td><td>1</td><td>9/10</td><td>90 %</td></tr>
+<tr><td>8</td><td>8</td><td>1</td><td>7/8</td><td>79 %</td></tr>
+<tr><td>10</td><td>7</td><td>1</td><td>6/7</td><td>68 %</td></tr>
+<tr><td>15</td><td>5</td><td>1</td><td>4/5</td><td>54 %</td></tr>
+<tr><td>18</td><td>4</td><td>1</td><td>3/4</td><td>41 %</td></tr>
+<tr><td>22</td><td>2</td><td>1</td><td>1/2</td><td>20 %</td></tr>
+</tbody>
+</table>
+<p class="note" data-en="Patients censored at months 5, 12, 20 and 24 never get a row of their own: they only thin the at-risk column. The curve crosses 50% at month 18, so the median survival is 18 months." data-fr="Les patients censurés aux mois 5, 12, 20 et 24 n’ont jamais de ligne à eux : ils ne font qu’amincir la colonne des sujets à risque. La courbe croise 50 % au mois 18 : la médiane de survie est donc de 18 mois.">Les patients censurés aux mois 5, 12, 20 et 24 n’ont jamais de ligne à eux : ils ne font qu’amincir la colonne des sujets à risque. La courbe croise 50 % au mois 18 : la médiane de survie est donc de 18 mois.</p>
+
+<div class="formula-box">$$\hat S(t) = \prod_{t_i \le t} \left(1 - \frac{d_i}{n_i}\right)$$</div>
+<p class="note" data-en="d&#8321; events at time t&#8321;, among n&#8321; patients still at risk. Multiply the factors for every event time up to t." data-fr="d&#8321; événements au temps t&#8321;, parmi n&#8321; sujets encore à risque. Multipliez les facteurs de tous les temps d’événement jusqu’à t.">d&#8321; événements au temps t&#8321;, parmi n&#8321; sujets encore à risque. Multipliez les facteurs de tous les temps d’événement jusqu’à t.</p>
+
+<h2 data-en="Try it: drag their timelines" data-fr="Essayez : déplacez leurs parcours">Essayez : déplacez leurs parcours</h2>
+
+<p data-en="Each line below is one patient. Drag along a line to change when their story ends; tap the letter to switch that ending between E, the event, and C, censored. The steps, the ticks and the median respond as you go. Push the events late or censor enough patients and the median disappears: if the curve never reaches 50%, the median is simply not reached - a phrase you will meet in every oncology paper, and it is good news wearing dry language." data-fr="Chaque ligne ci-dessous est un patient. Faites glisser le long d’une ligne pour changer le moment où son histoire s’arrête ; touchez la lettre pour basculer cette fin entre E, l’événement, et C, censuré. Les marches, les encoches et la médiane réagissent au fur et à mesure. Repoussez les événements assez loin ou censurez assez de patients et la médiane disparaît : si la courbe n’atteint jamais 50 %, la médiane n’est tout simplement pas atteinte - une expression que vous croiserez dans tous les articles d’oncologie, et c’est une bonne nouvelle en langage sec.">Chaque ligne ci-dessous est un patient. Faites glisser le long d’une ligne pour changer le moment où son histoire s’arrête ; touchez la lettre pour basculer cette fin entre E, l’événement, et C, censuré. Les marches, les encoches et la médiane réagissent au fur et à mesure. Repoussez les événements assez loin ou censurez assez de patients et la médiane disparaît : si la courbe n’atteint jamais 50 %, la médiane n’est tout simplement pas atteinte - une expression que vous croiserez dans tous les articles d’oncologie, et c’est une bonne nouvelle en langage sec.</p>
+
+<div class="figrow wrow"><div class="figure"><div class="presets">
+<button type="button" class="preset" onclick="kSet(KM_TYPICAL)" data-en="Typical trial" data-fr="Essai typique">Essai typique</button>
+<button type="button" class="preset" onclick="kSet(KM_NOCENS)" data-en="No censoring" data-fr="Sans censure">Sans censure</button>
+<button type="button" class="preset" onclick="kSet(KM_PLATEAU)" data-en="Median not reached" data-fr="Médiane non atteinte">Médiane non atteinte</button>
+</div>
+<div class="kmlist" id="kmlist"></div>
+<div class="kmaxis"><span>0</span><span data-en="12 months" data-fr="12 mois">12 mois</span><span>24</span></div>
+</div><div class="figure"><div id="kmsvg" role="img" aria-label="La courbe de survie de Kaplan-Meier des dix patients ci-dessus : une marche à chaque événement, une encoche à chaque censure, et la médiane lue sur la ligne des 50 %." data-aria-fr="La courbe de survie de Kaplan-Meier des dix patients ci-dessus : une marche à chaque événement, une encoche à chaque censure, et la médiane lue sur la ligne des 50 %."></div></div></div>
+
+<div class="figcap wnote" data-en="A tick is not a step: a censored patient never drops the curve, but they leave fewer at risk, so every later step gets taller. That is also why the right-hand end of any survival curve is its least reliable stretch - by then, only a handful of patients remain to carry it." data-fr="Une encoche n’est pas une marche : un patient censuré ne fait jamais descendre la courbe, mais il laisse moins de sujets à risque, et chaque marche suivante devient donc plus haute. C’est aussi pourquoi l’extrémité droite de toute courbe de survie est sa partie la moins fiable - à ce stade, il ne reste qu’une poignée de patients pour la porter.">Une encoche n’est pas une marche : un patient censuré ne fait jamais descendre la courbe, mais il laisse moins de sujets à risque, et chaque marche suivante devient donc plus haute. C’est aussi pourquoi l’extrémité droite de toute courbe de survie est sa partie la moins fiable - à ce stade, il ne reste qu’une poignée de patients pour la porter.</div>
+
+<h2 data-en="What surprises people about Kaplan-Meier" data-fr="Ce qui surprend au sujet de Kaplan-Meier">Ce qui surprend au sujet de Kaplan-Meier</h2>
+
+<div class="list"><div data-en="The curve is an estimate for a patient, not a headcount of your sample. After censoring, a survival of 41% does not mean that 41% of the ten are event-free; it is the estimated chance for a patient like them to reach that time without the event." data-fr="La courbe est une estimation pour un patient, pas un décompte de votre échantillon. Après censure, une survie de 41 % ne signifie pas que 41 % des dix sont indemnes ; c’est la probabilité estimée qu’un patient comme eux atteigne ce temps sans l’événement.">La courbe est une estimation pour un patient, pas un décompte de votre échantillon. Après censure, une survie de 41 % ne signifie pas que 41 % des dix sont indemnes ; c’est la probabilité estimée qu’un patient comme eux atteigne ce temps sans l’événement.</div><div data-en="Median, not mean. With censored patients the mean is unknowable until the very last one has had the event, so survival is quoted as the median - the time the curve crosses 50%." data-fr="La médiane, pas la moyenne. Avec des patients censurés, la moyenne est inconnaissable tant que le tout dernier n’a pas eu l’événement ; la survie se cite donc en médiane - le temps où la courbe croise 50 %.">La médiane, pas la moyenne. Avec des patients censurés, la moyenne est inconnaissable tant que le tout dernier n’a pas eu l’événement ; la survie se cite donc en médiane - le temps où la courbe croise 50 %.</div><div data-en="Censoring must be unrelated to the outcome. If patients leave the study because they are getting worse, the curve quietly flatters the treatment. No formula can detect that; only the design of the follow-up can prevent it." data-fr="La censure doit être sans lien avec le pronostic. Si les patients quittent l’étude parce que leur état se dégrade, la courbe flatte silencieusement le traitement. Aucune formule ne peut le détecter ; seule la conception du suivi peut l’empêcher.">La censure doit être sans lien avec le pronostic. Si les patients quittent l’étude parce que leur état se dégrade, la courbe flatte silencieusement le traitement. Aucune formule ne peut le détecter ; seule la conception du suivi peut l’empêcher.</div><div data-en="Two curves are compared over their whole length, not at one flattering time point - that is the job of the log-rank test. Reading the gap at a single month is how marketing reads a survival plot." data-fr="Deux courbes se comparent sur toute leur longueur, pas en un point flatteur - c’est le travail du test du log-rank. Lire l’écart à un seul mois, c’est la lecture marketing d’une courbe de survie.">Deux courbes se comparent sur toute leur longueur, pas en un point flatteur - c’est le travail du test du log-rank. Lire l’écart à un seul mois, c’est la lecture marketing d’une courbe de survie.</div><div data-en="Five-year survival can improve while nobody lives a day longer: screen earlier and you start every clock earlier. That is lead-time bias, and it deserves a page of its own." data-fr="La survie à cinq ans peut s’améliorer sans que personne ne vive un jour de plus : dépistez plus tôt et vous démarrez tous les chronomètres plus tôt. C’est le biais du temps d’avance, et il mérite sa propre page.">La survie à cinq ans peut s’améliorer sans que personne ne vive un jour de plus : dépistez plus tôt et vous démarrez tous les chronomètres plus tôt. C’est le biais du temps d’avance, et il mérite sa propre page.</div></div>
+
+</article>
+
+<div class="softbox"><p style="margin:0 0 12px" data-en="This is the second curve on this site that you can build by hand from raw patients - the first was the ROC curve, drawn cell by cell from a ranking. And once you start watching the clock every survival number runs on, the next stop is what screening does to that clock:" data-fr="C’est la deuxième courbe de ce site que vous pouvez construire à la main à partir de patients bruts - la première était la courbe ROC, tracée case par case à partir d’un classement. Et une fois que vous surveillez le chronomètre sur lequel tourne chaque chiffre de survie, l’étape suivante est ce que le dépistage fait à ce chronomètre :">C’est la deuxième courbe de ce site que vous pouvez construire à la main à partir de patients bruts - la première était la courbe ROC, tracée case par case à partir d’un classement. Et une fois que vous surveillez le chronomètre sur lequel tourne chaque chiffre de survie, l’étape suivante est ce que le dépistage fait à ce chronomètre :</p><a class="pill ghost" href="/fr/lessons/roc-auc/" data-en="ROC &amp; AUC lesson" data-fr="Cours ROC et AUC">Cours ROC et AUC</a> <a class="pill ghost" href="/fr/screening-bias/" data-en="Why survival misleads" data-fr="Pourquoi la survie trompe">Pourquoi la survie trompe</a></div>
+
+<section class="faq">
+<h2 data-en="Common questions" data-fr="Questions fréquentes">Questions fréquentes</h2>
+<details><summary data-en="What is censoring in a survival curve?" data-fr="Qu'est-ce que la censure dans une courbe de survie ?">Qu'est-ce que la censure dans une courbe de survie ?</summary><p data-en="Censoring marks a patient whose event was never observed: they left the study, or it ended, while still event-free. They count as at-risk up to that moment, then drop out of the denominator without making the curve step down. It is why survival data is not simply who had the event by the end." data-fr="La censure marque un patient dont l'événement n'a jamais été observé : il a quitté l'étude, ou celle-ci s'est terminée, alors qu'il était encore indemne. Il compte comme à risque jusqu'à ce moment, puis sort du dénominateur sans faire descendre la courbe. C'est pourquoi les données de survie ne se résument pas à qui a eu l'événement à la fin.">La censure marque un patient dont l'événement n'a jamais été observé : il a quitté l'étude, ou celle-ci s'est terminée, alors qu'il était encore indemne. Il compte comme à risque jusqu'à ce moment, puis sort du dénominateur sans faire descendre la courbe. C'est pourquoi les données de survie ne se résument pas à qui a eu l'événement à la fin.</p></details>
+<details><summary data-en="How do you read the median survival off a Kaplan-Meier curve?" data-fr="Comment lit-on la médiane de survie sur une courbe de Kaplan-Meier ?">Comment lit-on la médiane de survie sur une courbe de Kaplan-Meier ?</summary><p data-en="Find where the curve first drops to or below 0.5 (50%) and read the time on the horizontal axis. That time is the median survival: half the patients have had the event by then. If the curve never reaches 0.5, the median is not reached." data-fr="Repérez l'endroit où la courbe descend pour la première fois à 0,5 (50 %) ou en dessous, et lisez le temps sur l'axe horizontal. Ce temps est la médiane de survie : la moitié des patients ont eu l'événement à ce moment-là. Si la courbe n'atteint jamais 0,5, la médiane n'est pas atteinte.">Repérez l'endroit où la courbe descend pour la première fois à 0,5 (50 %) ou en dessous, et lisez le temps sur l'axe horizontal. Ce temps est la médiane de survie : la moitié des patients ont eu l'événement à ce moment-là. Si la courbe n'atteint jamais 0,5, la médiane n'est pas atteinte.</p></details>
+<details><summary data-en="Why does the Kaplan-Meier curve fall in steps?" data-fr="Pourquoi la courbe de Kaplan-Meier descend-elle en marches ?">Pourquoi la courbe de Kaplan-Meier descend-elle en marches ?</summary><p data-en="Each step down happens at a time when an event occurs, and its size depends on how many patients are still at risk then. Between events the curve is flat. It is a product of survival fractions, one factor per event time, which is why it is called the product-limit estimator." data-fr="Chaque marche correspond à un instant où survient un événement, et sa hauteur dépend du nombre de patients encore à risque à ce moment. Entre les événements, la courbe est plate. C'est un produit de fractions de survie, un facteur par temps d'événement, d'où le nom d'estimateur produit-limite.">Chaque marche correspond à un instant où survient un événement, et sa hauteur dépend du nombre de patients encore à risque à ce moment. Entre les événements, la courbe est plate. C'est un produit de fractions de survie, un facteur par temps d'événement, d'où le nom d'estimateur produit-limite.</p></details>
+</section>
+
+<div class="cta"><p data-en="Stat Exam Pro turns medical statistics into exam-style questions with worked answers, in English and French." data-fr="Stat Exam Pro transforme les statistiques médicales en QCM type examen, corrigés et expliqués, en français et en anglais.">Stat Exam Pro transforme les statistiques médicales en QCM type examen, corrigés et expliqués, en français et en anglais.</p><a href="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-km-bottom','App Store button (Kaplan-Meier bottom)')"><span class="apple-icon"></span><span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Télécharger sur iPhone</span></a></div>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/fr/">Accueil</a><span style="opacity:.3">|</span><a href="/fr/calculators/">Calculateurs</a> : <a href="/fr/ppv-calculator/">VPP/VPN</a><span style="opacity:.3">|</span><a href="/fr/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/fr/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/fr/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/fr/screening-bias/">Biais du dépistage</a></p>
+ <p><a href="/fr/lessons/">Cours</a><span style="opacity:.3">|</span><a href="/fr/fails/">Stat Fails</a> : <a href="/fr/fails/hiv-false-positives/">Les conseillers sûrs à 100 %</a><span style="opacity:.3">|</span><a href="/fr/fails/the-1995-pill-scare/">La panique de la pilule de 1995</a><span style="opacity:.3">|</span><a href="/fr/fails/epic-sepsis-model/">L'IA de sepsis</a><span style="opacity:.3">|</span><a href="/fr/fails/giuliani-prostate-cancer/">Le mythe des 82 %</a></p>
+ <p><a href="/fr/fagan-nomogram/">Nomogramme de Fagan</a><span style="opacity:.3">|</span><a href="/fr/exercises/">Exercices corrigés</a><span style="opacity:.3">|</span><a href="/fr/cheatsheets/">Fiches de révision</a><span style="opacity:.3">|</span><a href="/fr/studies/">Études et jeux de données connus</a><span style="opacity:.3">|</span><a href="/fr/privacy.html">Politique de confidentialité</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../../site.js"></script>
+<script>
+
+// --- Kaplan-Meier builder: 10 draggable patients ---
+var LANG='fr';
+var STR={
+ en:{months:'months', med:function(m){return 'Median survival = '+m+' months';}, none:'Median not reached',
+     pct100:'100%', pct50:'50%',
+     tog:function(i,ev){return 'Patient '+(i+1)+': '+(ev?'event':'censored');}},
+ fr:{months:'mois', med:function(m){return 'Médiane de survie = '+m+' mois';}, none:'Médiane non atteinte',
+     pct100:'100 %', pct50:'50 %',
+     tog:function(i,ev){return 'Patient '+(i+1)+' : '+(ev?'événement':'censuré');}}
+};
+var KM_TYPICAL=[[3,1],[5,0],[8,1],[10,1],[12,0],[15,1],[18,1],[20,0],[22,1],[24,0]];
+var KM_NOCENS=[[2,1],[4,1],[7,1],[9,1],[11,1],[14,1],[16,1],[19,1],[21,1],[23,1]];
+var KM_PLATEAU=[[4,1],[6,0],[9,1],[10,0],[13,0],[15,0],[18,0],[20,0],[22,0],[24,0]];
+var pat=KM_TYPICAL.map(function(p){return{t:p[0],ev:!!p[1]};});
+function kSet(a){pat=a.map(function(p){return{t:p[0],ev:!!p[1]};});kUpdate();}
+function kCalc(){
+ var sorted=pat.slice().sort(function(a,b){return a.t-b.t||((b.ev?1:0)-(a.ev?1:0));});
+ var n=pat.length,S=1,steps=[],ticks=[],i=0;
+ while(i<sorted.length){
+  var t=sorted[i].t,d=0,c=0;
+  while(i<sorted.length&&sorted[i].t===t){if(sorted[i].ev)d++;else c++;i++;}
+  if(d>0){S*=1-d/n;steps.push([t,S]);}
+  if(c>0)ticks.push([t,S]);
+  n-=d+c;
+ }
+ var med=null;
+ for(i=0;i<steps.length;i++){if(steps[i][1]<=0.5){med=steps[i][0];break;}}
+ return{steps:steps,ticks:ticks,med:med};
+}
+function kx(t){return 40+t/24*240;}
+function ky(v){return 15+(1-v)*215;}
+function kDraw(){
+ var r=kCalc(),S=STR[LANG];
+ var s='<svg viewBox="0 0 300 292" xmlns="http://www.w3.org/2000/svg">';
+ s+='<line x1="40" y1="'+ky(0.5).toFixed(1)+'" x2="280" y2="'+ky(0.5).toFixed(1)+'" stroke="var(--hairline)" stroke-width="1"/>';
+ s+='<line x1="40" y1="15" x2="40" y2="230" stroke="var(--text-sec)" stroke-width="1"/>';
+ s+='<line x1="40" y1="230" x2="280" y2="230" stroke="var(--text-sec)" stroke-width="1"/>';
+ s+='<text x="34" y="19" font-size="9" fill="var(--text-sec)" text-anchor="end">'+S.pct100+'</text>';
+ s+='<text x="34" y="'+(ky(0.5)+3).toFixed(1)+'" font-size="9" fill="var(--text-sec)" text-anchor="end">'+S.pct50+'</text>';
+ s+='<text x="34" y="233" font-size="9" fill="var(--text-sec)" text-anchor="end">0</text>';
+ for(var m=0;m<=24;m+=6){
+  s+='<line x1="'+kx(m).toFixed(1)+'" y1="230" x2="'+kx(m).toFixed(1)+'" y2="234" stroke="var(--text-sec)" stroke-width="1"/>';
+  s+='<text x="'+kx(m).toFixed(1)+'" y="246" font-size="9" fill="var(--text-sec)" text-anchor="middle">'+m+'</text>';
+ }
+ s+='<text x="160" y="260" font-size="10" fill="var(--text-sec)" text-anchor="middle">'+S.months+'</text>';
+ if(r.med!==null){
+  var mx=kx(r.med).toFixed(1),my=ky(0.5).toFixed(1);
+  s+='<line x1="40" y1="'+my+'" x2="'+mx+'" y2="'+my+'" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>';
+  s+='<line x1="'+mx+'" y1="'+my+'" x2="'+mx+'" y2="230" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>';
+ }
+ var d='M40,15',py=15;
+ for(var i=0;i<r.steps.length;i++){
+  var x=kx(r.steps[i][0]).toFixed(1),y=ky(r.steps[i][1]).toFixed(1);
+  d+=' L'+x+','+py+' L'+x+','+y; py=y;
+ }
+ d+=' L280,'+py;
+ s+='<path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2.5"/>';
+ for(i=0;i<r.ticks.length;i++){
+  var tx=kx(r.ticks[i][0]).toFixed(1),ty=ky(r.ticks[i][1]);
+  s+='<line x1="'+tx+'" y1="'+(ty-5).toFixed(1)+'" x2="'+tx+'" y2="'+(ty+5).toFixed(1)+'" stroke="var(--text-main)" stroke-width="2"/>';
+ }
+ s+='<text x="160" y="284" font-size="15" font-weight="800" fill="var(--accent)" text-anchor="middle">'+(r.med!==null?S.med(r.med):S.none)+'</text>';
+ s+='</svg>';
+ document.getElementById('kmsvg').innerHTML=s;
+}
+function kRenderList(){
+ var el=document.getElementById('kmlist'),h='',S=STR[LANG];
+ for(var i=0;i<pat.length;i++){
+  var p=pat[i],pct=(p.t/24*100).toFixed(1);
+  h+='<div class="kmrow"><button type="button" class="kmtog '+(p.ev?'e':'c')+'" data-i="'+i+'" aria-pressed="'+(p.ev?'true':'false')+'" aria-label="'+S.tog(i,p.ev)+'">'+(p.ev?'E':'C')+'</button>'
+   +'<div class="kmtrack" data-i="'+i+'"><div class="rail"></div><div class="bar" style="width:'+pct+'%"></div>'
+   +(p.ev?'<div class="dot" style="left:calc('+pct+'% - 7px)"></div>':'<div class="tick" style="left:calc('+pct+'% - 1.5px)"></div>')
+   +'</div></div>';
+ }
+ el.innerHTML=h;
+}
+var kDrag=null;
+function kMove(e){
+ if(kDrag===null)return;
+ var tr=document.querySelector('.kmtrack[data-i="'+kDrag+'"]');
+ if(!tr)return;
+ var r=tr.getBoundingClientRect();
+ var t=Math.round((e.clientX-r.left)/r.width*24);
+ t=Math.max(1,Math.min(24,t));
+ if(t!==pat[kDrag].t){pat[kDrag].t=t;kUpdate();}
+}
+document.getElementById('kmlist').addEventListener('pointerdown',function(e){
+ var tg=e.target.closest('.kmtog');
+ if(tg){var i=+tg.getAttribute('data-i');pat[i].ev=!pat[i].ev;kUpdate();return;}
+ var tr=e.target.closest('.kmtrack');
+ if(tr){e.preventDefault();kDrag=+tr.getAttribute('data-i');kMove(e);}
+});
+document.addEventListener('pointermove',kMove);
+document.addEventListener('pointerup',function(){kDrag=null;});
+document.addEventListener('pointercancel',function(){kDrag=null;});
+function kUpdate(){kDraw();kRenderList();}
+kUpdate();
+</script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>

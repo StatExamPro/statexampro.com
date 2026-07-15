@@ -1,0 +1,15 @@
+# Build tooling — runs locally, never web content, nothing for visitors to read.
+# (generators, FR translation sources, the QA gate)
+tools/
+
+# Print-source HTML the cheat-sheet PDFs are exported from.
+# The deliverables themselves live in cheatsheets/<topic>/ and stay published.
+render/
+
+# Python + OS cruft
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+*.swp
+*~

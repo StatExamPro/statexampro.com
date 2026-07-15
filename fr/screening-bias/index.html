@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Pourquoi la survie trompe : temps d'avance et surdiagnostic</title>
+<meta name="description" content="Biais du temps d'avance et surdiagnostic dans une cohorte interactive : la survie à cinq ans s'envole alors que les décès par cancer bougent à peine.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<meta property="og:title" content="Pourquoi la survie trompe : biais du temps d'avance et surdiagnostic">
+<meta property="og:description" content="Dépistez toute une cohorte et regardez la survie à cinq ans s'envoler alors que les décès par cancer bougent à peine. L'écart, c'est le biais du temps d'avance et le surdiagnostic, montrés patient par patient.">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="icon" href="../../favicon.ico">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/fr/screening-bias/">
+<link rel="alternate" hreflang="en" href="https://statexampro.com/screening-bias/">
+<link rel="alternate" hreflang="fr" href="https://statexampro.com/fr/screening-bias/">
+<link rel="alternate" hreflang="x-default" href="https://statexampro.com/screening-bias/">
+<meta property="og:url" content="https://statexampro.com/fr/screening-bias/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../../site.css">
+<style>.animals{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:18px 0}
+.animal{background:var(--card-bg);border-radius:var(--r-md);padding:16px 18px}
+.animal h3{font-size:.98rem;font-weight:800;margin-bottom:6px}
+.animal p{font-size:.9rem;color:var(--text-sec);margin:0}
+.animal.turtle h3{color:var(--text-sec)}
+.animal.rabbit h3{color:var(--accent)}
+.animal.bird h3{color:var(--fp)}
+.slabel{display:flex;justify-content:space-between;font-size:.9rem;font-weight:600;margin-bottom:6px}
+.slabel .val{color:var(--accent)}
+.smetrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin:16px 0}
+.m-surv b{color:var(--accent)} .m-death b{color:var(--fn)} .m-over b{color:var(--fp)} .m-save b{color:var(--accent)}
+#sbsvg{width:100%;height:auto;display:block}
+.sblegend{display:flex;flex-wrap:wrap;gap:14px 18px;margin:2px 2px 12px;font-size:.8rem;color:var(--text-sec)}
+.sblegend span{display:flex;align-items:center;gap:6px}
+.sbg{width:16px;height:12px;flex:none}
+@media(max-width:600px){h1{font-size:1.7rem}}</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Pourquoi la survie trompe : biais du temps d'avance et surdiagnostic","inLanguage":"fr","about":"Biais du temps d'avance, surdiagnostic et différence entre survie et mortalité dans le dépistage du cancer","url":"https://statexampro.com/fr/screening-bias/","datePublished":"2026-07-12","dateModified":"2026-07-12","author":{"@type":"Organization","name":"Stat Exam Pro"},"publisher":{"@type":"Organization","name":"Stat Exam Pro","logo":{"@type":"ImageObject","url":"https://statexampro.com/web-app-manifest-512x512.png"}},"image":"https://statexampro.com/og-card.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://statexampro.com/fr/screening-bias/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Qu'est-ce que le biais du temps d'avance ?","acceptedAnswer":{"@type":"Answer","text":"Le dépistage avance le moment du diagnostic sans changer la date du décès. La survie à cinq ans se compte à partir du diagnostic, donc démarrer ce chronomètre plus tôt gonfle la survie même si personne ne vit un jour de plus. Le gain est dans la mesure, pas dans le résultat."}},{"@type":"Question","name":"Qu'est-ce que le surdiagnostic ?","acceptedAnswer":{"@type":"Answer","text":"Le surdiagnostic, c'est détecter un cancer qui n'aurait jamais causé de symptômes ni de décès du vivant de la personne. Le dépistage excelle à attraper ces tumeurs lentes et inoffensives, et chacune trouvée est comptée comme un survivant, ce qui fait monter la survie sans aider personne."}},{"@type":"Question","name":"Pourquoi la mortalité mesure-t-elle mieux le dépistage que la survie ?","acceptedAnswer":{"@type":"Answer","text":"La survie se mesure à partir du diagnostic et est gonflée à la fois par le biais du temps d'avance et par le surdiagnostic. La mortalité, les décès rapportés à la population au fil du temps, est ancrée sur tout le groupe et n'est pas déplacée par le moment ou le fait d'étiqueter quelqu'un ; elle reflète donc si le dépistage garde vraiment les gens en vie."}}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Menu du cours">&#9776;</button>
+ <a class="logo" href="/fr/"><img src="../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <div class="seg" role="group" aria-label="Langue"><a href="/screening-bias/" hreflang="en">EN</a><span class="active">FR</span></div>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Basculer en mode sombre">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Cours">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Valeurs prédictives</span></h4><ul>
+<li><a href="/fr/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">VPP et VPN, expliqués</span></a></li>
+<li><a href="/fr/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Nomogramme de Fagan</span></a></li>
+<li><a href="/fr/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Exercices corrigés</span></a></li>
+<li><a href="/fr/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Fiche &amp; PDF</span></a></li>
+<li><a href="/fr/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">Les conseillers sûrs à 100 %</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC et AUC</span></h4><ul>
+<li><a href="/fr/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC et AUC, expliqués</span></a></li>
+<li><a href="/fr/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">Simulateur ROC</span></a></li>
+<li><a href="/fr/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">L'IA de sepsis qui en a manqué deux tiers</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Effet du traitement</span></h4><ul>
+<li><a href="/fr/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT et risque absolu</span></a></li>
+<li><a href="/fr/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">La panique de la pilule de 1995</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Analyse de survie</span></h4><ul>
+<li><a href="/fr/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Courbes de Kaplan&ndash;Meier</span></a></li>
+<li><a href="/fr/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">Le mythe des 82 % de survie</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Dépistage et biais</span></h4><ul>
+<li><a class="cn-on" href="/fr/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Biais du dépistage, en direct</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Avance au diagnostic et surdiagnostic</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significativité et multiplicité</span></h4><ul>
+<li><a href="/fr/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Une série est-elle réelle ?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">Les valeurs p, bien faites</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">bientôt</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Référence</span></h4><ul>
+<li><a href="/fr/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Études et jeux de données connus</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">Par format</span></h4><ul>
+<li><a href="/fr/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">Tous les calculateurs</span></a></li>
+<li><a href="/fr/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">Tous les cours</span></a></li>
+<li><a href="/fr/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">Tous les exercices</span></a></li>
+<li><a href="/fr/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">Toutes les fiches</span></a></li>
+<li><a href="/fr/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">Toutes les Stat Questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<h1 data-en="Why survival misleads: lead-time bias and overdiagnosis" data-fr="Pourquoi la survie trompe : biais du temps d'avance et surdiagnostic">Pourquoi la survie trompe : biais du temps d'avance et surdiagnostic</h1>
+
+<p class="lead" data-en="Screening moves diagnosis earlier and finds cancers that would never have mattered. Both push five-year survival up. Only one of them, sometimes, keeps anyone alive." data-fr="Le dépistage avance le diagnostic et trouve des cancers qui n'auraient jamais compté. Les deux font monter la survie à cinq ans. Un seul, parfois, garde quelqu'un en vie.">Le dépistage avance le diagnostic et trouve des cancers qui n'auraient jamais compté. Les deux font monter la survie à cinq ans. Un seul, parfois, garde quelqu'un en vie.</p>
+
+<div class="softbox"><h2 class="eyebrow" data-en="In a hurry" data-fr="Pressé">Pressé</h2><p data-en="Five-year survival is measured from the day of diagnosis. Screening changes that day, and who gets a diagnosis at all, so it inflates survival in two ways that have nothing to do with anyone living longer: it starts the clock earlier (lead-time bias), and it labels people with slow cancers that would never have surfaced (overdiagnosis). Screening does sometimes save a life - when it catches a dangerous-but-treatable cancer in time - but that real benefit shows up in mortality, not in survival. Below you can screen a whole cohort and watch the two numbers come apart: survival soaring, deaths barely moving." data-fr="La survie à cinq ans se mesure à partir du jour du diagnostic. Le dépistage change ce jour, et qui reçoit un diagnostic tout court, il gonfle donc la survie de deux façons qui n'ont rien à voir avec le fait de vivre plus longtemps : il démarre le chronomètre plus tôt (biais du temps d'avance) et il étiquette des gens porteurs de cancers lents qui ne seraient jamais apparus (surdiagnostic). Le dépistage sauve parfois une vie - quand il attrape à temps un cancer dangereux mais traitable - mais ce bénéfice réel se voit dans la mortalité, pas dans la survie. Ci-dessous, dépistez toute une cohorte et regardez les deux chiffres diverger : la survie s'envole, les décès bougent à peine.">La survie à cinq ans se mesure à partir du jour du diagnostic. Le dépistage change ce jour, et qui reçoit un diagnostic tout court, il gonfle donc la survie de deux façons qui n'ont rien à voir avec le fait de vivre plus longtemps : il démarre le chronomètre plus tôt (biais du temps d'avance) et il étiquette des gens porteurs de cancers lents qui ne seraient jamais apparus (surdiagnostic). Le dépistage sauve parfois une vie - quand il attrape à temps un cancer dangereux mais traitable - mais ce bénéfice réel se voit dans la mortalité, pas dans la survie. Ci-dessous, dépistez toute une cohorte et regardez les deux chiffres diverger : la survie s'envole, les décès bougent à peine.</p></div>
+
+<article>
+
+<h2 data-en="Three kinds of cancer in the barnyard" data-fr="Trois sortes de cancers dans la basse-cour">Trois sortes de cancers dans la basse-cour</h2>
+
+<p data-en="Screening is like trying to fence in animals of very different speeds, and the outcome depends entirely on which animal you caught. This picture, borrowed from H. Gilbert Welch, is the key to the whole page." data-fr="Le dépistage, c'est comme vouloir enclore des animaux de vitesses très différentes, et le résultat dépend entièrement de l'animal attrapé. Cette image, empruntée à H. Gilbert Welch, est la clé de toute la page.">Le dépistage, c'est comme vouloir enclore des animaux de vitesses très différentes, et le résultat dépend entièrement de l'animal attrapé. Cette image, empruntée à H. Gilbert Welch, est la clé de toute la page.</p>
+
+<div class="animals">
+<div class="animal turtle"><h3 data-en="Turtles - going nowhere" data-fr="Tortues - qui ne vont nulle part">Tortues - qui ne vont nulle part</h3><p data-en="So slow they would never cause symptoms or death. Screening finds them easily, because they sit still the longest. Every turtle caught is overdiagnosis: a diagnosis, a treatment, and its harms, with no death to prevent." data-fr="Si lentes qu'elles ne causeraient jamais de symptômes ni de décès. Le dépistage les trouve facilement, car elles restent immobiles le plus longtemps. Chaque tortue attrapée est un surdiagnostic : un diagnostic, un traitement et ses dommages, sans aucun décès à éviter.">Si lentes qu'elles ne causeraient jamais de symptômes ni de décès. Le dépistage les trouve facilement, car elles restent immobiles le plus longtemps. Chaque tortue attrapée est un surdiagnostic : un diagnostic, un traitement et ses dommages, sans aucun décès à éviter.</p></div>
+<div class="animal rabbit"><h3 data-en="Rabbits - catchable" data-fr="Lapins - rattrapables">Lapins - rattrapables</h3><p data-en="Dangerous, but slow enough that catching them before symptoms and treating actually prevents the death. This is the whole point of screening - and it is the only group where a life is genuinely saved." data-fr="Dangereux, mais assez lents pour que les attraper avant les symptômes et les traiter empêche réellement le décès. C'est tout l'intérêt du dépistage - et c'est le seul groupe où une vie est vraiment sauvée.">Dangereux, mais assez lents pour que les attraper avant les symptômes et les traiter empêche réellement le décès. C'est tout l'intérêt du dépistage - et c'est le seul groupe où une vie est vraiment sauvée.</p></div>
+<div class="animal bird"><h3 data-en="Birds - already flown" data-fr="Oiseaux - déjà envolés">Oiseaux - déjà envolés</h3><p data-en="So fast they have spread before any screen could catch them. Finding one early changes the date on the chart but not the date of death. Pure lead time: survival looks better, the patient does not live a day longer." data-fr="Si rapides qu'ils se sont propagés avant qu'un dépistage ne les attrape. En trouver un tôt change la date sur le dossier, pas la date du décès. Temps d'avance pur : la survie paraît meilleure, le patient ne vit pas un jour de plus.">Si rapides qu'ils se sont propagés avant qu'un dépistage ne les attrape. En trouver un tôt change la date sur le dossier, pas la date du décès. Temps d'avance pur : la survie paraît meilleure, le patient ne vit pas un jour de plus.</p></div>
+</div>
+
+<h2 data-en="Try it: screen a whole cohort" data-fr="Essayez : dépistez toute une cohorte">Essayez : dépistez toute une cohorte</h2>
+
+<p data-en="Twelve patients, each with a tumour that appears at time zero. Every lifeline runs left to right over fifteen years and ends at a cross: red for a cancer death, grey for death from another cause. The small dot is when the tumour becomes detectable, the hollow circle when it would cause symptoms on its own, and the triangle is the day of diagnosis. Turn screening up and watch the diagnosis triangles jump left, the turtles light up as overdiagnosed, and a few rabbits have their red cross turned grey - a death prevented. Read the numbers above the chart as you go." data-fr="Douze patients, chacun avec une tumeur apparaissant au temps zéro. Chaque ligne de vie va de gauche à droite sur quinze ans et se termine par une croix : rouge pour un décès par cancer, grise pour un décès d'autre cause. Le petit point est le moment où la tumeur devient détectable, le cercle vide quand elle causerait des symptômes d'elle-même, et le triangle est le jour du diagnostic. Montez le dépistage et regardez les triangles de diagnostic sauter à gauche, les tortues s'allumer comme surdiagnostiquées, et quelques lapins voir leur croix rouge devenir grise - un décès évité. Lisez les chiffres au-dessus du graphique au fur et à mesure.">Douze patients, chacun avec une tumeur apparaissant au temps zéro. Chaque ligne de vie va de gauche à droite sur quinze ans et se termine par une croix : rouge pour un décès par cancer, grise pour un décès d'autre cause. Le petit point est le moment où la tumeur devient détectable, le cercle vide quand elle causerait des symptômes d'elle-même, et le triangle est le jour du diagnostic. Montez le dépistage et regardez les triangles de diagnostic sauter à gauche, les tortues s'allumer comme surdiagnostiquées, et quelques lapins voir leur croix rouge devenir grise - un décès évité. Lisez les chiffres au-dessus du graphique au fur et à mesure.</p>
+
+<div class="panel">
+ <div class="presets">
+  <button type="button" class="preset" onclick="sSet(0)" data-en="No screening" data-fr="Sans dépistage">Sans dépistage</button>
+  <button type="button" class="preset" onclick="sSet(12)" data-en="Every 5 years" data-fr="Tous les 5 ans">Tous les 5 ans</button>
+  <button type="button" class="preset" onclick="sSet(36)" data-en="Every 3 years" data-fr="Tous les 3 ans">Tous les 3 ans</button>
+  <button type="button" class="preset" onclick="sSet(60)" data-en="Annual" data-fr="Annuel">Annuel</button>
+ </div>
+ <div class="ctrl">
+  <label for="sSlider" class="slabel"><span data-en="Screening intensity" data-fr="Intensité du dépistage">Intensité du dépistage</span><span class="val" id="sVal"></span></label>
+  <input type="range" id="sSlider" min="0" max="60" step="6" value="0" oninput="sUpdate()">
+ </div>
+</div>
+
+<div class="smetrics" aria-live="polite">
+ <div class="num stat sm m-surv"><b id="mSurv"></b><span data-en="5-year survival" data-fr="survie à 5 ans">survie à 5 ans</span></div>
+ <div class="num stat sm m-death"><b id="mDeath"></b><span data-en="cancer deaths" data-fr="décès par cancer">décès par cancer</span></div>
+ <div class="num stat sm m-over"><b id="mOver"></b><span data-en="overdiagnosed" data-fr="surdiagnostiqués">surdiagnostiqués</span></div>
+ <div class="num stat sm m-save"><b id="mSave"></b><span data-en="lives saved" data-fr="vies sauvées">vies sauvées</span></div>
+ <div class="num stat sm"><b id="mDx"></b><span data-en="cancers diagnosed" data-fr="cancers diagnostiqués">cancers diagnostiqués</span></div>
+</div>
+
+<div class="sblegend">
+<span><svg class="sbg" viewBox="0 0 16 12"><circle cx="8" cy="6" r="2.4" fill="var(--text-main)"/></svg><span data-en="tumour detectable" data-fr="tumeur détectable">tumeur détectable</span></span>
+<span><svg class="sbg" viewBox="0 0 16 12"><circle cx="8" cy="6" r="3.4" fill="none" stroke="var(--text-main)" stroke-width="1.3"/></svg><span data-en="would cause symptoms" data-fr="causerait des symptômes">causerait des symptômes</span></span>
+<span><svg class="sbg" viewBox="0 0 16 12"><path d="M8,2 l3.5,6 l-7,0 z" fill="var(--text-main)"/></svg><span data-en="diagnosis" data-fr="diagnostic">diagnostic</span></span>
+<span><svg class="sbg" viewBox="0 0 16 12"><line x1="5" y1="3" x2="11" y2="9" stroke="var(--fn)" stroke-width="1.8"/><line x1="5" y1="9" x2="11" y2="3" stroke="var(--fn)" stroke-width="1.8"/></svg><span data-en="cancer death" data-fr="décès par cancer">décès par cancer</span></span>
+<span><svg class="sbg" viewBox="0 0 16 12"><line x1="5" y1="3" x2="11" y2="9" stroke="var(--text-sec)" stroke-width="1.8"/><line x1="5" y1="9" x2="11" y2="3" stroke="var(--text-sec)" stroke-width="1.8"/></svg><span data-en="death, other cause" data-fr="décès, autre cause">décès, autre cause</span></span>
+</div>
+<div class="figure"><div id="sbsvg" role="img" aria-label="Douze parcours de patients sur quinze ans, groupés en tortues, lapins et oiseaux, montrant détection, diagnostic et décès pour l'intensité de dépistage actuelle." data-aria-fr="Douze parcours de patients sur quinze ans, groupés en tortues, lapins et oiseaux, montrant détection, diagnostic et décès pour l'intensité de dépistage actuelle."></div></div>
+
+<div class="figcap wnote" data-en="Rows are grouped T (turtles), R (rabbits), B (birds). Cross colour is the cause of death: red cancer, grey other. As screening rises, five-year survival climbs steeply - fed by earlier diagnosis (birds and rabbits) and by overdiagnosed turtles who are guaranteed survivors - while cancer deaths fall only by the handful of rabbits caught in time. That gap, survival racing ahead of mortality, is the whole illusion." data-fr="Les lignes sont groupées T (tortues), R (lapins), B (oiseaux). La couleur de la croix est la cause du décès : rouge cancer, gris autre. Quand le dépistage augmente, la survie à cinq ans grimpe fortement - nourrie par le diagnostic plus précoce (oiseaux et lapins) et par les tortues surdiagnostiquées, survivantes garanties - tandis que les décès par cancer ne baissent que du petit nombre de lapins attrapés à temps. Cet écart, la survie filant devant la mortalité, est toute l'illusion.">Les lignes sont groupées T (tortues), R (lapins), B (oiseaux). La couleur de la croix est la cause du décès : rouge cancer, gris autre. Quand le dépistage augmente, la survie à cinq ans grimpe fortement - nourrie par le diagnostic plus précoce (oiseaux et lapins) et par les tortues surdiagnostiquées, survivantes garanties - tandis que les décès par cancer ne baissent que du petit nombre de lapins attrapés à temps. Cet écart, la survie filant devant la mortalité, est toute l'illusion.</div>
+
+<h2 data-en="What surprises people" data-fr="Ce qui surprend">Ce qui surprend</h2>
+
+<div class="list"><div data-en="Survival and mortality can point in opposite directions. Survival is measured among the diagnosed; mortality among everyone. Because screening changes who is diagnosed and when, survival can rise a lot while mortality barely moves - which is exactly what a useless screening programme also produces." data-fr="La survie et la mortalité peuvent pointer dans des directions opposées. La survie se mesure chez les diagnostiqués ; la mortalité chez tout le monde. Comme le dépistage change qui est diagnostiqué et quand, la survie peut monter beaucoup alors que la mortalité bouge à peine - c'est exactement ce que produit aussi un dépistage inutile.">La survie et la mortalité peuvent pointer dans des directions opposées. La survie se mesure chez les diagnostiqués ; la mortalité chez tout le monde. Comme le dépistage change qui est diagnostiqué et quand, la survie peut monter beaucoup alors que la mortalité bouge à peine - c'est exactement ce que produit aussi un dépistage inutile.</div><div data-en="Overdiagnosis is not a false positive. The turtle is a real cancer under the microscope. That is why a more accurate test cannot fix it - a perfect test would find every harmless tumour that is genuinely there." data-fr="Le surdiagnostic n'est pas un faux positif. La tortue est un vrai cancer au microscope. C'est pourquoi un test plus précis ne le corrige pas - un test parfait trouverait chaque tumeur inoffensive réellement présente.">Le surdiagnostic n'est pas un faux positif. La tortue est un vrai cancer au microscope. C'est pourquoi un test plus précis ne le corrige pas - un test parfait trouverait chaque tumeur inoffensive réellement présente.</div><div data-en="The only honest verdict is a randomized trial counting deaths. Invite half a population to screening, leave half alone, and compare how many die of the cancer - not how long the diagnosed survive. Every serious screening debate, mammography and PSA included, is fought on mortality." data-fr="Le seul verdict honnête est un essai randomisé qui compte les décès. Invitez la moitié d'une population au dépistage, laissez l'autre tranquille, et comparez combien meurent du cancer - pas combien de temps survivent les diagnostiqués. Tout débat sérieux sur le dépistage, mammographie et PSA compris, se joue sur la mortalité.">Le seul verdict honnête est un essai randomisé qui compte les décès. Invitez la moitié d'une population au dépistage, laissez l'autre tranquille, et comparez combien meurent du cancer - pas combien de temps survivent les diagnostiqués. Tout débat sérieux sur le dépistage, mammographie et PSA compris, se joue sur la mortalité.</div><div data-en="More screening is not always more benefit. Past a point, extra intensity mostly adds turtles - overdiagnosis and treatment harm - while the rabbits are already being caught. The dose of screening has its own therapeutic window." data-fr="Plus de dépistage n'est pas toujours plus de bénéfice. Au-delà d'un certain point, l'intensité supplémentaire ajoute surtout des tortues - surdiagnostic et dommages du traitement - alors que les lapins sont déjà attrapés. La dose de dépistage a sa propre fenêtre thérapeutique.">Plus de dépistage n'est pas toujours plus de bénéfice. Au-delà d'un certain point, l'intensité supplémentaire ajoute surtout des tortues - surdiagnostic et dommages du traitement - alors que les lapins sont déjà attrapés. La dose de dépistage a sa propre fenêtre thérapeutique.</div><div data-en="None of this means screening is useless. Rabbits are real, and catching them saves lives. It means you cannot read that benefit off a survival statistic - you have to look at whether fewer people died." data-fr="Rien de tout cela ne signifie que le dépistage est inutile. Les lapins existent, et les attraper sauve des vies. Cela signifie qu'on ne peut pas lire ce bénéfice sur une statistique de survie - il faut regarder si moins de gens sont morts." >Rien de tout cela ne signifie que le dépistage est inutile. Les lapins existent, et les attraper sauve des vies. Cela signifie qu'on ne peut pas lire ce bénéfice sur une statistique de survie - il faut regarder si moins de gens sont morts.</div></div>
+
+</article>
+
+<div class="softbox"><p style="margin:0 0 12px" data-en="This exact confusion was once a campaign talking point - 82% US survival against 44% British - sold as proof of better care while the death rates were nearly the same:" data-fr="Cette confusion précise a un jour servi d'argument de campagne - 82 % de survie aux États-Unis contre 44 % en Grande-Bretagne - vendus comme preuve de meilleurs soins alors que les taux de décès étaient presque identiques :">Cette confusion précise a un jour servi d'argument de campagne - 82 % de survie aux États-Unis contre 44 % en Grande-Bretagne - vendus comme preuve de meilleurs soins alors que les taux de décès étaient presque identiques :</p><a class="pill" href="/fr/fails/giuliani-prostate-cancer/" data-en="The 82% survival myth" data-fr="Le mythe des 82 %">Le mythe des 82 %</a></div>
+
+<div class="sources"><h2>Sources</h2><ul><li>Welch, H. G., &amp; Black, W. C. (2010). Overdiagnosis in cancer. <i>Journal of the National Cancer Institute</i>, 102(9), 605&ndash;613. <a href="https://doi.org/10.1093/jnci/djq099" rel="noopener">https://doi.org/10.1093/jnci/djq099</a></li><li>Welch, H. G. (2011). <i>Overdiagnosed: Making People Sick in the Pursuit of Health</i>. Beacon Press. <span data-en="(Origin of the bird / rabbit / turtle metaphor.)" data-fr="(Origine de la métaphore oiseau / lapin / tortue.)">(Origine de la métaphore oiseau / lapin / tortue.)</span></li><li>Gigerenzer, G., et al. (2007). Helping Doctors and Patients Make Sense of Health Statistics. <i>Psychological science in the public interest</i>, 8(2), 53&ndash;96. <a href="https://doi.org/10.1111/j.1539-6053.2008.00033.x" rel="noopener">https://doi.org/10.1111/j.1539-6053.2008.00033.x</a></li></ul></div>
+
+<section class="faq">
+<h2 data-en="Common questions" data-fr="Questions fréquentes">Questions fréquentes</h2>
+<details><summary data-en="What is lead-time bias?" data-fr="Qu'est-ce que le biais du temps d'avance ?">Qu'est-ce que le biais du temps d'avance ?</summary><p data-en="Screening moves the moment of diagnosis earlier without changing when the patient dies. Five-year survival is counted from diagnosis, so starting that clock sooner inflates survival even if no one lives a day longer. The gain is in the measurement, not in the outcome." data-fr="Le dépistage avance le moment du diagnostic sans changer la date du décès. La survie à cinq ans se compte à partir du diagnostic, donc démarrer ce chronomètre plus tôt gonfle la survie même si personne ne vit un jour de plus. Le gain est dans la mesure, pas dans le résultat.">Le dépistage avance le moment du diagnostic sans changer la date du décès. La survie à cinq ans se compte à partir du diagnostic, donc démarrer ce chronomètre plus tôt gonfle la survie même si personne ne vit un jour de plus. Le gain est dans la mesure, pas dans le résultat.</p></details>
+<details><summary data-en="What is overdiagnosis?" data-fr="Qu'est-ce que le surdiagnostic ?">Qu'est-ce que le surdiagnostic ?</summary><p data-en="Overdiagnosis is finding a cancer that would never have caused symptoms or death in the person's lifetime. Screening is best at catching these slow, harmless tumours, and every one found is counted as a survivor, which pushes survival up while helping no one." data-fr="Le surdiagnostic, c'est détecter un cancer qui n'aurait jamais causé de symptômes ni de décès du vivant de la personne. Le dépistage excelle à attraper ces tumeurs lentes et inoffensives, et chacune trouvée est comptée comme un survivant, ce qui fait monter la survie sans aider personne.">Le surdiagnostic, c'est détecter un cancer qui n'aurait jamais causé de symptômes ni de décès du vivant de la personne. Le dépistage excelle à attraper ces tumeurs lentes et inoffensives, et chacune trouvée est comptée comme un survivant, ce qui fait monter la survie sans aider personne.</p></details>
+<details><summary data-en="Why is mortality a better measure than survival for screening?" data-fr="Pourquoi la mortalité mesure-t-elle mieux le dépistage que la survie ?">Pourquoi la mortalité mesure-t-elle mieux le dépistage que la survie ?</summary><p data-en="Survival is measured from diagnosis and is inflated by both lead-time bias and overdiagnosis. Mortality, deaths per population over time, is anchored to the whole group and is not moved by when or whether you label someone, so it reflects whether screening actually keeps people alive." data-fr="La survie se mesure à partir du diagnostic et est gonflée à la fois par le biais du temps d'avance et par le surdiagnostic. La mortalité, les décès rapportés à la population au fil du temps, est ancrée sur tout le groupe et n'est pas déplacée par le moment ou le fait d'étiqueter quelqu'un ; elle reflète donc si le dépistage garde vraiment les gens en vie.">La survie se mesure à partir du diagnostic et est gonflée à la fois par le biais du temps d'avance et par le surdiagnostic. La mortalité, les décès rapportés à la population au fil du temps, est ancrée sur tout le groupe et n'est pas déplacée par le moment ou le fait d'étiqueter quelqu'un ; elle reflète donc si le dépistage garde vraiment les gens en vie.</p></details>
+</section>
+
+<div class="cta"><p data-en="Stat Exam Pro turns screening, survival and the rest of medical statistics into exam-style questions with worked answers, in English and French." data-fr="Stat Exam Pro transforme le dépistage, la survie et le reste des statistiques médicales en QCM type examen, corrigés et expliqués, en français et en anglais.">Stat Exam Pro transforme le dépistage, la survie et le reste des statistiques médicales en QCM type examen, corrigés et expliqués, en français et en anglais.</p><a href="https://apps.apple.com/fr/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-screening-bias-bottom','App Store button (Screening bias bottom)')"><span class="apple-icon"></span><span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Télécharger sur iPhone</span></a></div>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/fr/">Accueil</a><span style="opacity:.3">|</span><a href="/fr/calculators/">Calculateurs</a> : <a href="/fr/ppv-calculator/">VPP/VPN</a><span style="opacity:.3">|</span><a href="/fr/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/fr/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/fr/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/fr/screening-bias/">Biais du dépistage</a></p>
+ <p><a href="/fr/lessons/">Cours</a><span style="opacity:.3">|</span><a href="/fr/fails/">Stat Fails</a> : <a href="/fr/fails/hiv-false-positives/">Les conseillers sûrs à 100 %</a><span style="opacity:.3">|</span><a href="/fr/fails/the-1995-pill-scare/">La panique de la pilule de 1995</a><span style="opacity:.3">|</span><a href="/fr/fails/epic-sepsis-model/">L'IA de sepsis</a><span style="opacity:.3">|</span><a href="/fr/fails/giuliani-prostate-cancer/">Le mythe des 82 %</a></p>
+ <p><a href="/fr/fagan-nomogram/">Nomogramme de Fagan</a><span style="opacity:.3">|</span><a href="/fr/exercises/">Exercices corrigés</a><span style="opacity:.3">|</span><a href="/fr/cheatsheets/">Fiches de révision</a><span style="opacity:.3">|</span><a href="/fr/studies/">Études et jeux de données connus</a><span style="opacity:.3">|</span><a href="/fr/privacy.html">Politique de confidentialité</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../../site.js"></script>
+<script>
+
+// --- screening microsim: 12 patients, birds/rabbits/turtles ---
+var LANG='fr';
+var STR={en:{none:'no screening',every:function(n){return 'screen every '+n+' months';},yr:'15 years'},
+         fr:{none:'sans dépistage',every:function(n){return 'dépistage tous les '+n+' mois';},yr:'15 ans'}};
+var HORIZON=180, INF=9999;
+var PT=[
+ {t:'T',d:18,sym:INF,cd:INF,o:150},
+ {t:'T',d:12,sym:INF,cd:INF,o:96},
+ {t:'T',d:30,sym:INF,cd:INF,o:132},
+ {t:'T',d:24,sym:INF,cd:INF,o:72},
+ {t:'R',d:24,sym:60,cd:96,o:156},
+ {t:'R',d:36,sym:72,cd:140,o:168},
+ {t:'R',d:30,sym:54,cd:84,o:144},
+ {t:'R',d:18,sym:48,cd:78,o:126},
+ {t:'R',d:42,sym:84,cd:150,o:174},
+ {t:'B',d:36,sym:48,cd:66,o:150},
+ {t:'B',d:24,sym:36,cd:54,o:138},
+ {t:'B',d:54,sym:60,cd:78,o:156}
+];
+var gInterval=INF;  // Infinity-like via INF sentinel; 0-slider -> no screening
+function screenTime(p,interval){
+ if(interval>=INF)return null;
+ var hi=Math.min(p.sym,p.o,HORIZON+1);
+ var k=Math.max(1,Math.ceil(p.d/interval));
+ for(var t=k*interval;t<hi;t+=interval){ if(t>=p.d)return t; }
+ return null;
+}
+function outcome(p,interval){
+ var ts=screenTime(p,interval), o={type:p.t};
+ if(ts!==null){
+  o.screened=true; o.diagnosed=true; o.tdiag=ts;
+  var wouldSurface=(p.sym<p.o);            // absent screening, symptoms before other death
+  if(!wouldSurface){ o.over=true; o.death=p.o; o.cancerDeath=false; }
+  else if(p.t==='R'){ o.saved=true; o.death=p.o; o.cancerDeath=false; o.lead=p.sym; }   // cured
+  else { o.death=p.cd; o.cancerDeath=true; o.lead=p.sym; }                              // bird: no benefit
+ } else {
+  o.screened=false;
+  if(p.sym<p.o){ o.diagnosed=true; o.tdiag=p.sym; o.death=p.cd; o.cancerDeath=true; }
+  else { o.diagnosed=false; o.death=p.o; o.cancerDeath=false; }
+ }
+ return o;
+}
+function metrics(interval){
+ var dx=0,deaths=0,over=0,save=0,surv=0;
+ for(var i=0;i<PT.length;i++){var o=outcome(PT[i],interval);
+  if(o.diagnosed)dx++;
+  if(o.cancerDeath)deaths++;
+  if(o.over)over++;
+  if(o.saved)save++;
+  if(o.diagnosed&&o.death>=o.tdiag+60)surv++;
+ }
+ return {dx:dx,deaths:deaths,over:over,save:save,survPct:dx?Math.round(surv/dx*100):0};
+}
+// geometry
+function kx(m){return 40+Math.min(m,HORIZON)/HORIZON*400;}
+function yr(i){return 34+i*17;}
+function sbDraw(interval){
+ var s='<svg viewBox="0 0 460 296" xmlns="http://www.w3.org/2000/svg">';
+ // screen comb
+ if(interval<INF){for(var t=interval;t<=HORIZON;t+=interval){var gx=kx(t).toFixed(1);
+   s+='<line x1="'+gx+'" y1="26" x2="'+gx+'" y2="240" stroke="var(--accent)" stroke-opacity="0.14" stroke-width="1"/>';}}
+ for(var i=0;i<PT.length;i++){var p=PT[i],o=outcome(p,interval),y=yr(i);
+  // row tint
+  if(o.over)s+='<rect x="26" y="'+(y-7)+'" width="424" height="14" fill="var(--fn)" fill-opacity="0.08"/>';
+  else if(o.saved)s+='<rect x="26" y="'+(y-7)+'" width="424" height="14" fill="var(--accent)" fill-opacity="0.09"/>';
+  var col=p.t==='T'?'var(--text-sec)':(p.t==='R'?'var(--accent)':'var(--fp)');
+  s+='<text x="10" y="'+(y+3)+'" font-size="9" font-weight="700" fill="'+col+'">'+p.t+'</text>';
+  s+='<line x1="'+kx(0)+'" y1="'+y+'" x2="'+kx(o.death).toFixed(1)+'" y2="'+y+'" stroke="var(--hairline)" stroke-width="1.5"/>';
+  // detectable dot
+  s+='<circle cx="'+kx(p.d).toFixed(1)+'" cy="'+y+'" r="2.4" fill="'+col+'"/>';
+  // would-be symptom (hollow) if within horizon
+  if(p.sym<=HORIZON)s+='<circle cx="'+kx(p.sym).toFixed(1)+'" cy="'+y+'" r="3.2" fill="none" stroke="'+col+'" stroke-width="1.3"/>';
+  // lead-time connector
+  if(o.screened&&o.lead&&o.lead<=HORIZON)s+='<line x1="'+kx(o.tdiag).toFixed(1)+'" y1="'+y+'" x2="'+kx(o.lead).toFixed(1)+'" y2="'+y+'" stroke="var(--accent)" stroke-width="1" stroke-dasharray="2 2"/>';
+  // diagnosis triangle
+  if(o.diagnosed){var dxp=kx(o.tdiag).toFixed(1);s+='<path d="M'+dxp+','+(y-8)+' l3.5,6 l-7,0 z" fill="var(--text-main)"/>';}
+  // death cross
+  var dc=o.cancerDeath?'var(--fn)':'var(--text-sec)',cxp=kx(o.death).toFixed(1);
+  s+='<line x1="'+(cxp-3)+'" y1="'+(y-3)+'" x2="'+(+cxp+3)+'" y2="'+(y+3)+'" stroke="'+dc+'" stroke-width="1.8"/><line x1="'+(cxp-3)+'" y1="'+(y+3)+'" x2="'+(+cxp+3)+'" y2="'+(y-3)+'" stroke="'+dc+'" stroke-width="1.8"/>';
+ }
+ // axis
+ s+='<line x1="40" y1="244" x2="440" y2="244" stroke="var(--text-sec)" stroke-width="1"/>';
+ for(var yv=0;yv<=180;yv+=36){s+='<line x1="'+kx(yv).toFixed(1)+'" y1="244" x2="'+kx(yv).toFixed(1)+'" y2="248" stroke="var(--text-sec)" stroke-width="1"/>'+
+   '<text x="'+kx(yv).toFixed(1)+'" y="260" font-size="9" fill="var(--text-sec)" text-anchor="middle">'+(yv/12)+'</text>';}
+ s+='<text x="240" y="278" font-size="10" fill="var(--text-sec)" text-anchor="middle">'+STR[LANG].yr+'</text>';
+ s+='</svg>';
+ document.getElementById('sbsvg').innerHTML=s;
+}
+function sSet(v){document.getElementById('sSlider').value=v;sUpdate();}
+function sUpdate(){
+ var v=+document.getElementById('sSlider').value;
+ gInterval = v===0 ? INF : 72-v;    // v:6..60 -> interval 66..12
+ var S=STR[LANG];
+ document.getElementById('sVal').textContent = v===0 ? S.none : S.every(gInterval);
+ var m=metrics(gInterval);
+ document.getElementById('mSurv').textContent=sxpFmtPct(m.survPct/100,0);
+ document.getElementById('mDeath').textContent=m.deaths;
+ document.getElementById('mOver').textContent=m.over;
+ document.getElementById('mSave').textContent=m.save;
+ document.getElementById('mDx').textContent=m.dx;
+ sbDraw(gInterval);
+}
+sUpdate();
+</script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>
