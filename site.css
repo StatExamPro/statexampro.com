@@ -48,7 +48,7 @@ header{padding:20px 0;display:flex;justify-content:space-between;align-items:cen
 .seg{display:flex;background:var(--card-bg);border-radius:var(--r-pill);padding:3px}
 .seg a,.seg span{border:none;background:transparent;padding:5px 13px;border-radius:var(--r-pill);font-weight:600;cursor:pointer;color:var(--text-sec);font-family:inherit;font-size:.85rem;text-decoration:none;display:inline-block;line-height:1.4}
 .seg .active{background:var(--btn-bg);color:var(--btn-text)}
-.theme-btn{border:none;background:var(--card-bg);color:var(--text-main);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1rem;line-height:1}
+.theme-btn{border:none;background:var(--card-bg);color:var(--text-main);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1rem;line-height:1;flex:none}
 .sitenav{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
 .sitenav::-webkit-scrollbar{display:none}
 .sitenav a{flex:none;background:var(--card-bg);color:var(--text-sec);padding:6px 14px;border-radius:var(--r-pill);font-size:.82rem;font-weight:600;text-decoration:none}
@@ -248,9 +248,12 @@ article p{margin-bottom:16px;font-size:1.02rem}
  body.home.nav-collapsed .main{max-width:960px}   /* landing keeps its fuller width when the rail is tucked away */
 }
 @media(max-width:900px){
- .shell{grid-template-columns:1fr;gap:0}
+ .shell{grid-template-columns:1fr;gap:0;z-index:auto}   /* drop the stacking context so the fixed drawer (z 28) rises above the scrim (z 25) and stays tappable */
  .coursenav{position:fixed;top:0;left:0;z-index:28;height:100vh;width:290px;max-width:86vw;border-radius:0;transform:translateX(-100%);transition:transform .26s ease;box-shadow:0 0 40px rgba(0,0,0,.18)}
  body.nav-open .coursenav{transform:none}
  body.nav-open .scrim{display:block}
  .main{padding:20px 0 50px}
+}
+@media(max-width:560px){
+ .top .logo span{display:none}   /* phones: logo mark only, so the top bar can't crowd the round buttons into ovals */
 }
