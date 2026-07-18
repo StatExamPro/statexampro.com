@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Monte Carlo simulation - a four-part guide</title>
+<meta name="description" content="A four-part guide to Monte Carlo simulation, from throwing darts at pi to option pricing and variance reduction. With playgrounds and a notebook you can run in the browser.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<meta property="og:title" content="Monte Carlo simulation - a four-part guide">
+<meta property="og:description" content="From throwing darts at pi to option pricing and variance reduction. Parts 1 and 2 are the beginner's guide; parts 3 and 4 are for people who already simulate for a living.">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="icon" href="../../favicon.ico">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/lessons/monte-carlo/">
+<meta property="og:url" content="https://statexampro.com/lessons/monte-carlo/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - biostatistics exam prep">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../../site.css">
+<style>h1{font-size:2rem;font-weight:800;letter-spacing:-.8px;margin:16px 0 8px}
+.mc-part{background:var(--card-bg);border-radius:var(--r-lg);padding:20px 24px;margin:14px 0;display:flex;gap:22px;align-items:center}
+.mc-part .mc-body{flex:1;min-width:0}
+.mc-part .mc-shot{flex:none;width:320px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--hairline-2);display:block;line-height:0}
+.mc-part .mc-shot img{width:100%;height:auto;display:block}
+@media(max-width:720px){.mc-part{flex-direction:column;align-items:stretch}.mc-part .mc-shot{width:100%;order:-1}}
+.mc-part h2{font-size:1.2rem;font-weight:800;letter-spacing:-.3px;margin:0 0 8px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.mc-part h2 .k{color:var(--accent);font-variant-numeric:tabular-nums;flex:none;font-size:1rem}
+.mc-part h2 a{color:var(--text-main);text-decoration:none}
+.mc-part h2 a:hover{color:var(--accent)}
+.mc-part .tag{font-size:.8rem;color:var(--text-sec);font-weight:600;margin:0 0 8px}
+.mc-part p{color:var(--text-sec);font-size:.96rem;margin:0;max-width:68ch}
+.mc-part .soon{font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-sec);background:var(--bg-color);padding:3px 7px;border-radius:99px}
+.mc-band{font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-sec);margin:26px 0 2px}
+.mc-nb{background:var(--card-bg);border-radius:var(--r-lg);padding:22px 24px;margin:26px 0}
+.mc-nb h2{font-size:1.1rem;font-weight:800;margin:0 0 8px}
+.mc-nb p{color:var(--text-sec);font-size:.96rem;margin:0 0 14px;max-width:66ch}
+.mc-nb .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mc-nb .row a{text-decoration:none}
+@media(max-width:600px){h1{font-size:1.6rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Monte Carlo simulation - a four-part guide","inLanguage":"en","description":"A four-part guide to Monte Carlo simulation, from estimating pi by throwing darts to option pricing and variance reduction.","url":"https://statexampro.com/lessons/monte-carlo/","publisher":{"@type":"Organization","name":"Stat Exam Pro","logo":{"@type":"ImageObject","url":"https://statexampro.com/web-app-manifest-512x512.png"}}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://statexampro.com/"},{"@type":"ListItem","position":2,"name":"Lessons","item":"https://statexampro.com/lessons/"},{"@type":"ListItem","position":3,"name":"Monte Carlo"}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+
+
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Course menu">&#9776;</button>
+ <a class="logo" href="/"><img src="../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Course">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Predictive values</span></h4><ul>
+<li><a href="/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">PPV &amp; NPV, explained</span></a></li>
+<li><a href="/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</span></a></li>
+<li><a href="/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Worked exercises</span></a></li>
+<li><a href="/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Cheat sheet &amp; PDF</span></a></li>
+<li><a href="/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC &amp; AUC</span></h4><ul>
+<li><a href="/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC &amp; AUC, explained</span></a></li>
+<li><a href="/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</span></a></li>
+<li><a href="/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">The sepsis AI that missed two thirds</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Treatment effect</span></h4><ul>
+<li><a href="/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT &amp; absolute risk</span></a></li>
+<li><a href="/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Survival analysis</span></h4><ul>
+<li><a href="/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Kaplan&ndash;Meier curves</span></a></li>
+<li><a href="/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">The 82% survival myth</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Screening &amp; bias</span></h4><ul>
+<li><a href="/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Screening bias, live</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Lead-time &amp; overdiagnosis</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significance &amp; multiplicity</span></h4><ul>
+<li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">07</span> <span data-en="Monte Carlo &amp; simulation" data-fr="Monte Carlo et simulation">Monte Carlo &amp; simulation</span></h4><ul>
+<li><a class="cn-on" href="/lessons/monte-carlo/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="Monte Carlo, explained" data-fr="Monte Carlo, expliqué">Monte Carlo, explained</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
+<li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">By format</span></h4><ul>
+<li><a href="/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">All calculators</span></a></li>
+<li><a href="/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">All lessons</span></a></li>
+<li><a href="/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">All exercises</span></a></li>
+<li><a href="/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">All cheat sheets</span></a></li>
+<li><a href="/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">All stat questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<div class="crumb"><a href="/lessons/" data-en="Lessons">Lessons</a> <span data-en="/ Monte Carlo">/ Monte Carlo</span></div>
+
+<h1 data-en="Monte Carlo simulation">Monte Carlo simulation</h1>
+<p class="lead" data-en="A four-part guide to the method behind option pricing, A/B tests and clinical trial design - built from first principles, with playgrounds and a notebook you can run in the browser. Every part pairs a chapter to read with a section to run.">A four-part guide to the method behind option pricing, A/B tests and clinical trial design - built from first principles, with playgrounds and a notebook you can run in the browser. Every part pairs a chapter to read with a section to run.</p>
+
+<p class="mc-band" data-en="The beginner's guide">The beginner's guide</p>
+
+<div class="mc-part">
+ <div class="mc-body">
+ <h2><span class="k">Part 1</span><a href="/lessons/monte-carlo/first-principles/" data-en="Monte Carlo simulation, explained from first principles">Monte Carlo simulation, explained from first principles</a></h2>
+ <p class="tag" data-en="The engine &middot; estimating pi &middot; the law of large numbers &middot; the square-root law &middot; seeds">The engine &middot; estimating pi &middot; the law of large numbers &middot; the square-root law &middot; seeds</p>
+ <p data-en="What Monte Carlo actually is, in one sentence - and how it differs from the bootstrap and MCMC. Throw darts at a quarter circle to estimate pi, watch the law of large numbers make randomness eat itself, then meet the square-root law that prices every simulation you will ever run. Two playgrounds, no install.">What Monte Carlo actually is, in one sentence - and how it differs from the bootstrap and MCMC. Throw darts at a quarter circle to estimate pi, watch the law of large numbers make randomness eat itself, then meet the square-root law that prices every simulation you will ever run. Two playgrounds, no install.</p>
+</div>
+ <a class="mc-shot" href="/lessons/monte-carlo/first-principles/" tabindex="-1" aria-hidden="true"><img src="../../assets/mc-first-principles.webp" width="1200" height="664" loading="lazy" alt=""></a>
+</div>
+
+<div class="mc-part">
+ <div class="mc-body">
+ <h2><span class="k">Part 2</span><a href="/lessons/monte-carlo/recipe-and-projects/" data-en="The recipe, and two real projects">The recipe, and two real projects</a></h2>
+ <p class="tag" data-en="Sampling any distribution &middot; the five-step recipe &middot; a valuation DCF &middot; power by simulation">Sampling any distribution &middot; the five-step recipe &middot; a valuation DCF &middot; power by simulation</p>
+ <p data-en="Turning uniform random numbers into any distribution you want, then the five-step recipe every simulation follows. Two complete projects: a valuation DCF rebuilt as a distribution of value rather than a single number, and statistical power derived by simulation instead of a formula. Plus the seven deadly sins.">Turning uniform random numbers into any distribution you want, then the five-step recipe every simulation follows. Two complete projects: a valuation DCF rebuilt as a distribution of value rather than a single number, and statistical power derived by simulation instead of a formula. Plus the seven deadly sins.</p>
+</div>
+ <a class="mc-shot" href="/lessons/monte-carlo/recipe-and-projects/" tabindex="-1" aria-hidden="true"><img src="../../assets/mc-recipe-and-projects.webp" width="1200" height="664" loading="lazy" alt=""></a>
+</div>
+
+<div class="mc-nb">
+ <h2 data-en="The notebook for parts 1 and 2">The notebook for parts 1 and 2</h2>
+ <p data-en="Every piece of code from the beginner's guide, ready to run in your browser - no install, nothing to configure. Sections 2 to 5 match part 1: the dartboard, the law of large numbers watched live, standard errors and confidence intervals, and the seed experiments including the parallel trap. Sections 6 to 9 match part 2: building distributions from uniforms by hand, the valuation DCF, and the power study. Read a section here, run the matching one there.">Every piece of code from the beginner's guide, ready to run in your browser - no install, nothing to configure. Sections 2 to 5 match part 1: the dartboard, the law of large numbers watched live, standard errors and confidence intervals, and the seed experiments including the parallel trap. Sections 6 to 9 match part 2: building distributions from uniforms by hand, the valuation DCF, and the power study. Read a section here, run the matching one there.</p>
+ <div class="row">
+  <a class="pill" href="https://colab.research.google.com/github/StatExamPro/statexampro.com/blob/main/notebooks/monte-carlo-entry.ipynb" rel="noopener" target="_blank" onclick="sxpGo('colab-open-monte-carlo-entry-hub','Open monte-carlo-entry in Colab (hub)')" data-en="Open in Colab">Open in Colab</a>
+  <a class="pill ghost" href="/notebooks/monte-carlo-entry.ipynb" download data-en="Download the notebook">Download the notebook</a>
+ </div>
+</div>
+
+<p class="mc-band" data-en="The pro guide">The pro guide</p>
+
+<div class="mc-part">
+ <div class="mc-body">
+ <h2><span class="k">Part 3</span><a href="/lessons/monte-carlo/paths-and-options/" data-en="Paths and options">Paths and options</a></h2>
+ <p class="tag" data-en="Random walks &middot; geometric Brownian motion &middot; option pricing &middot; Cholesky &middot; copulas">Random walks &middot; geometric Brownian motion &middot; option pricing &middot; Cholesky &middot; copulas</p>
+ <p data-en="What changes when time enters: random walks, geometric Brownian motion, and the option-pricing workflow certified against Black-Scholes. Then correlated inputs via Cholesky, and the dependence-modelling error that helped detonate 2008.">What changes when time enters: random walks, geometric Brownian motion, and the option-pricing workflow certified against Black-Scholes. Then correlated inputs via Cholesky, and the dependence-modelling error that helped detonate 2008.</p>
+</div>
+ <a class="mc-shot" href="/lessons/monte-carlo/paths-and-options/" tabindex="-1" aria-hidden="true"><img src="../../assets/mc-paths-and-options.webp" width="1200" height="664" loading="lazy" alt=""></a>
+</div>
+
+<div class="mc-part">
+ <div class="mc-body">
+ <h2><span class="k">Part 4</span><a href="/lessons/monte-carlo/variance-reduction/" data-en="Beating the square-root law">Beating the square-root law</a></h2>
+ <p class="tag" data-en="Antithetic &amp; control variates &middot; importance sampling &middot; quasi-Monte Carlo &middot; MCMC">Antithetic &amp; control variates &middot; importance sampling &middot; quasi-Monte Carlo &middot; MCMC</p>
+ <p data-en="Every halving of the error bar quadruples the bill - unless you stop buying runs and start shrinking the variance. Antithetic and control variates, importance sampling for rare events, quasi-Monte Carlo, simulation studies run as real experiments, and the bridge to MCMC.">Every halving of the error bar quadruples the bill - unless you stop buying runs and start shrinking the variance. Antithetic and control variates, importance sampling for rare events, quasi-Monte Carlo, simulation studies run as real experiments, and the bridge to MCMC.</p>
+</div>
+ <a class="mc-shot" href="/lessons/monte-carlo/variance-reduction/" tabindex="-1" aria-hidden="true"><img src="../../assets/mc-variance-reduction.webp" width="1200" height="664" loading="lazy" alt=""></a>
+</div>
+
+<div class="mc-nb">
+ <h2 data-en="The notebook for parts 3 and 4">The notebook for parts 3 and 4</h2>
+ <p data-en="A second notebook, because the pro guide leans on all of the first one. Sections 1 to 3 match part 3: the path simulator and its three certification tests, the Black-Scholes benchmark, common random numbers, Cholesky and copulas. Sections 4 to 8 match part 4: the variance-reduction scorecard, importance sampling and its effective-sample-size collapse, Sobol sequences, the cluster trial, and the ten-line Metropolis. Every number quoted in parts 3 and 4 is this notebook's actual output - seeds fixed, so you reproduce them to the digit.">A second notebook, because the pro guide leans on all of the first one. Sections 1 to 3 match part 3: the path simulator and its three certification tests, the Black-Scholes benchmark, common random numbers, Cholesky and copulas. Sections 4 to 8 match part 4: the variance-reduction scorecard, importance sampling and its effective-sample-size collapse, Sobol sequences, the cluster trial, and the ten-line Metropolis. Every number quoted in parts 3 and 4 is this notebook's actual output - seeds fixed, so you reproduce them to the digit.</p>
+ <div class="row">
+  <a class="pill" href="https://colab.research.google.com/github/StatExamPro/statexampro.com/blob/main/notebooks/monte-carlo-pro.ipynb" rel="noopener" target="_blank" onclick="sxpGo('colab-open-monte-carlo-pro-hub','Open monte-carlo-pro in Colab (hub)')" data-en="Open in Colab">Open in Colab</a>
+  <a class="pill ghost" href="/notebooks/monte-carlo-pro.ipynb" download data-en="Download the notebook">Download the notebook</a>
+ </div>
+</div>
+
+<div class="cta">
+ <p data-en="This guide is free and always will be. The app is how it stays that way - exam-style questions on the traps behind all of this, with worked answers, in English and French.">This guide is free and always will be. The app is how it stays that way - exam-style questions on the traps behind all of this, with worked answers, in English and French.</p>
+ <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-monte-carlo-hub','App Store button (Monte Carlo hub)')">
+  <span class="apple-icon"></span>
+  <span data-en="Get it on iPhone">Get it on iPhone</span>
+ </a>
+</div>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../../site.js"></script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>

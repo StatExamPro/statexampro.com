@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Stat Exam Pro - interactive medical biostatistics</title>
+<meta name="description" content="Interactive calculators, playgrounds, worked lessons and printable cheat sheets for medical biostatistics - free on the web, in English and French.">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/">
+<meta property="og:url" content="https://statexampro.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:title" content="Stat Exam Pro - interactive medical biostatistics">
+<meta property="og:description" content="Interactive calculators, playgrounds, worked lessons and dense cheat sheets for medical biostatistics. Free, in English and French.">
+<meta property="og:image" content="https://statexampro.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - interactive medical biostatistics">
+<meta name="twitter:image" content="https://statexampro.com/og-card.png">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<link rel="stylesheet" href="../site.css">
+<style>.sc-hero{text-align:center;max-width:960px;margin:0 auto;padding:56px 0 10px}
+.sc-hero .eyebrow{font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 16px}
+.sc-hero h1{font-size:3.4rem;font-weight:800;letter-spacing:-1.8px;line-height:1.04;margin:0 auto 22px;max-width:940px}
+.sc-hero .sub{font-size:1.13rem;line-height:1.5;color:var(--text-sec);margin:0 auto;max-width:600px}
+.sc-cta{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;margin:28px 0 6px}
+.sc-cta .go{display:inline-flex;align-items:center;background:var(--accent);color:#fff;font-weight:700;font-size:.98rem;padding:12px 22px;border-radius:var(--r-pill);text-decoration:none}
+.sc-cta .go:hover{filter:brightness(.95)}
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1000px;margin:34px auto 0}
+.sc-card{background:var(--card-bg);border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--hairline-2)}
+.sc-card .shot{aspect-ratio:16/10;overflow:hidden;background:var(--bg-color);border-bottom:1px solid var(--hairline-2)}
+.sc-card .shot img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.sc-card .cap{padding:15px 20px 17px}
+.sc-card .cap h3{font-size:1.05rem;font-weight:800;letter-spacing:-.3px;margin:0 0 5px}
+.sc-card .cap p{font-size:.92rem;color:var(--text-sec);margin:0;line-height:1.45}
+.sc-feature{display:flex;gap:32px;align-items:flex-start;background:var(--card-bg);border:1px solid var(--hairline-2);border-radius:var(--r-lg);padding:30px 34px;max-width:1000px;margin:18px auto 0}
+.sc-feat-txt{flex:1;min-width:0}
+.sc-feat-txt h3{font-size:1.4rem;font-weight:800;letter-spacing:-.5px;margin:0 0 10px}
+.sc-feat-txt p{font-size:1rem;color:var(--text-sec);line-height:1.5;margin:0 0 16px;max-width:52ch}
+.sc-feat-shot{flex:none;width:290px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--hairline);box-shadow:0 12px 44px rgba(0,0,0,.14);line-height:0}
+.sc-feat-shot img{width:100%;height:auto;display:block}
+.sc-values{display:flex;justify-content:center;gap:10px 26px;flex-wrap:wrap;max-width:900px;margin:30px auto 0;font-size:.92rem;font-weight:600;color:var(--text-sec)}
+.sc-values b{color:var(--accent);font-weight:800}
+.sc-foot-cta{text-align:center;margin:38px 0 8px}
+.sc-foot-cta p{font-size:1.05rem;color:var(--text-sec);margin:0 0 14px}
+@media(max-width:760px){.sc-hero{padding-top:40px}.sc-hero h1{font-size:2.2rem;letter-spacing:-1px}.sc-grid{grid-template-columns:1fr;gap:16px}.sc-feature{flex-direction:column;align-items:stretch;text-align:center}.sc-feat-txt p{margin-left:auto;margin-right:auto}.sc-feat-shot{width:100%;max-width:300px}}
+</style>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+<div class="container">
+
+<header>
+ <a class="logo" href="/"><img src="../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <div class="header-right">
+  <div class="seg" role="group" aria-label="Language"><span class="active">EN</span><a href="/fr/showcase/" hreflang="fr">FR</a></div>
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ </div>
+</header>
+
+<section class="sc-hero">
+ <p class="eyebrow" data-en="Interactive medical biostatistics" data-fr="Biostatistique médicale interactive">Interactive medical biostatistics</p>
+ <h1 data-en="The biostatistics behind clinical medicine" data-fr="La biostatistique qui sous-tend la médecine clinique">The biostatistics behind clinical medicine</h1>
+</section>
+
+<section class="sc-grid">
+ <div class="sc-card">
+  <div class="shot"><img src="../assets/showcase-fagan.webp" data-src-fr="../assets/showcase-fagan-fr.webp" width="1200" height="483" loading="lazy" alt="The Fagan nomogram calculator with adjustable pre-test probability, sensitivity and specificity" data-alt-fr="Le nomogramme de Fagan avec probabilité pré-test, sensibilité et spécificité réglables"></div>
+  <div class="cap"><h3 data-en="Interactive calculators" data-fr="Calculateurs interactifs">Interactive calculators</h3><p data-en="PPV and NPV, NNT, the Fagan nomogram, Kaplan-Meier, screening bias - every input is adjustable, and the result recomputes as you change it." data-fr="VPP et VPN, NNT, le nomogramme de Fagan, Kaplan-Meier, biais du dépistage - chaque entrée est réglable, et le résultat se recalcule à mesure.">PPV and NPV, NNT, the Fagan nomogram, Kaplan-Meier, screening bias - every input is adjustable, and the result recomputes as you change it.</p></div>
+ </div>
+ <div class="sc-card">
+  <div class="shot"><img src="../assets/showcase-roc.webp" data-src-fr="../assets/showcase-roc-fr.webp" width="1200" height="447" loading="lazy" alt="The ROC playground with an interactive curve" data-alt-fr="Le simulateur ROC avec une courbe interactive"></div>
+  <div class="cap"><h3 data-en="Playgrounds" data-fr="Simulateurs">Playgrounds</h3><p data-en="Rank the patients, move the threshold, and the ROC curve is redrawn from the numbers - the same for Kaplan-Meier, Monte Carlo and the rest." data-fr="Classez les patients, déplacez le seuil, et la courbe ROC est retracée à partir des chiffres - de même pour Kaplan-Meier, Monte-Carlo et les autres.">Rank the patients, move the threshold, and the ROC curve is redrawn from the numbers - the same for Kaplan-Meier, Monte Carlo and the rest.</p></div>
+ </div>
+ <div class="sc-card">
+  <div class="shot"><img src="../assets/mc-first-principles.webp" width="1200" height="664" loading="lazy" alt="A worked lesson page on Monte Carlo simulation" data-alt-fr="Une page de cours détaillée sur la simulation de Monte-Carlo"></div>
+  <div class="cap"><h3 data-en="Worked lessons" data-fr="Cours détaillés">Worked lessons</h3><p data-en="Each topic developed from its definition to its use, with the derivations shown rather than asserted and the reasoning made explicit at each step." data-fr="Chaque sujet développé de sa définition à son usage, les démonstrations montrées plutôt qu'affirmées, et le raisonnement explicité à chaque étape.">Each topic developed from its definition to its use, with the derivations shown rather than asserted and the reasoning made explicit at each step.</p></div>
+ </div>
+</section>
+
+<section class="sc-feature">
+ <div class="sc-feat-txt">
+  <h3 data-en="Cheat sheets, built to print" data-fr="Fiches, prêtes à imprimer">Cheat sheets, built to print</h3>
+  <p data-en="The whole topic on one dense page - strict definitions, the 2x2 table, Bayes in four forms, and the worked numbers that make the point. Read it on screen or download the PDF, in English and French." data-fr="Tout le sujet sur une page dense - définitions strictes, le tableau 2x2, Bayes sous quatre formes, et les chiffres travaillés qui font le point. À lire à l'écran ou en PDF, en français et en anglais.">The whole topic on one dense page - strict definitions, the 2x2 table, Bayes in four forms, and the worked numbers that make the point. Read it on screen or download the PDF, in English and French.</p>
+  <a class="pill" href="/cheatsheets/" data-en="See the cheat sheets" data-fr="Voir les fiches">See the cheat sheets</a>
+ </div>
+ <a class="sc-feat-shot" href="/cheatsheets/ppv-npv/" tabindex="-1" aria-hidden="true"><img src="../cheatsheets/ppv-npv/ppv-npv-cheat-sheet-1.webp" data-src-fr="../cheatsheets/ppv-npv/vpp-vpn-fiche-1.webp" width="1600" height="2264" loading="lazy" alt="The PPV and NPV cheat sheet - a dense one-page reference" data-alt-fr="La fiche VPP / VPN - une reference dense d'une page"></a>
+</section>
+
+<div class="sc-values">
+ <span><b data-en="Free" data-fr="Gratuit">Free</b> <span data-en="on the web" data-fr="sur le web">on the web</span></span>
+ <span><b data-en="English &amp; French" data-fr="Français et anglais">English &amp; French</b> <span data-en="on every page" data-fr="sur chaque page">on every page</span></span>
+ <span><b data-en="Exam-focused" data-fr="Pensé pour l'examen">Exam-focused</b> <span data-en=", worked in full" data-fr=", traité en entier">, worked in full</span></span>
+</div>
+
+<div class="sc-foot-cta">
+ <p data-en="Interactive calculators, worked lessons, and cheat sheets dense enough to revise from." data-fr="Des calculateurs interactifs, des cours détaillés et des fiches assez denses pour réviser.">Interactive calculators, worked lessons, and cheat sheets dense enough to revise from.</p>
+ <div class="sc-cta" style="margin-top:0">
+  <a class="go" href="/" data-en="Explore the tools" data-fr="Explorer les outils">Explore the tools</a>
+  <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-showcase','App Store button (showcase)')"><span class="apple-icon"></span><span data-en="Get it on iPhone" data-fr="Télécharger sur iPhone">Get it on iPhone</span></a>
+ </div>
+</div>
+
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+
+</div>
+<script src="../site.js"></script>
+</body>
+</html>

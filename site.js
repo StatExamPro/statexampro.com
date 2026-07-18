@@ -21,7 +21,7 @@ function setTheme(th) {
 function toggleTheme() { setTheme(currentTheme() === 'dark' ? 'light' : 'dark'); }
 /* goatcounter event helper (every App Store CTA calls this) */
 function sxpGo(path, title) { if (window.goatcounter) goatcounter.count({ path: path, title: title, event: true }); }
-/* Number formatting. Each interactive page sets `var LANG`; build_fr.py flips it to 'fr'. */
+/* Number formatting. Each interactive page sets `var LANG`; the French build flips it to 'fr'. */
 function sxpFmtPct(x, digits) {
   var s = (100 * x).toFixed(digits);
   return (window.LANG === 'fr') ? s.replace('.', ',') + ' %' : s + '%';

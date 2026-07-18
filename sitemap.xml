@@ -326,4 +326,24 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://statexampro.com/stat-questions/multiple-comparisons/"/>
     <lastmod>2026-07-15</lastmod>
   </url>
+  <url>
+    <loc>https://statexampro.com/lessons/monte-carlo/</loc>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/lessons/monte-carlo/first-principles/</loc>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/lessons/monte-carlo/recipe-and-projects/</loc>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/lessons/monte-carlo/paths-and-options/</loc>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://statexampro.com/lessons/monte-carlo/variance-reduction/</loc>
+    <lastmod>2026-07-16</lastmod>
+  </url>
 </urlset>

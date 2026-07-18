@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Monte Carlo part 3: paths, option pricing, and Cholesky</title>
+<meta name="description" content="Simulate price paths with geometric Brownian motion, price an option and certify it against Black-Scholes, then correlate your inputs with Cholesky - and meet the dependence model that helped detonate 2008.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<meta property="og:title" content="Paths, options, and correlated inputs">
+<meta property="og:description" content="Drop one term from the drift and your asset earns 3.2% a year out of thin air - and nothing crashes. This is why every path simulator gets certified against a known answer first.">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="icon" href="../../../favicon.ico">
+<link rel="manifest" href="../../../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/lessons/monte-carlo/paths-and-options/">
+<meta property="og:url" content="https://statexampro.com/lessons/monte-carlo/paths-and-options/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/assets/og-monte-carlo-paths-and-options.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - Monte Carlo paths, option pricing and correlated inputs">
+<meta name="twitter:image" content="https://statexampro.com/assets/og-monte-carlo-paths-and-options.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<script defer src="../../../vendor/katex/katex.min.js"></script>
+<script defer src="../../../vendor/katex/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../../../site.css">
+<style>h1{font-size:2.1rem;font-weight:800;letter-spacing:-1px;margin:16px 0 10px}
+.mc-dial{margin:14px 0 0;padding-left:0;list-style:none}
+.mc-dial li{padding:10px 0;border-top:1px solid var(--hairline-2);font-size:.97rem}
+.mc-dial li:first-child{border-top:none}
+.mc-dial b{color:var(--accent)}
+.mc-tblwrap{overflow-x:auto;margin:14px 0}
+.mc-tbl{border-collapse:collapse;font-size:.86rem;min-width:440px;font-variant-numeric:tabular-nums}
+.mc-tbl th{text-align:left;font-weight:700;color:var(--text-sec);padding:6px 18px 6px 0;border-bottom:1px solid var(--hairline)}
+.mc-tbl td{text-align:left;padding:8px 18px 8px 0;border-bottom:1px solid var(--hairline-2);color:var(--text-sec)}
+.mc-tbl td b{color:var(--text-main)}
+.mc-tbl tr.hl td{color:var(--fn);font-weight:700}
+.mc-play{margin:24px 0}
+.mc-chart{background:var(--card-bg);border-radius:var(--r-lg);padding:16px}
+.mc-chart svg{width:100%;height:auto;display:block}
+.mc-verdict{margin:14px 0 0;font-size:.95rem}
+.mc-check{display:flex;align-items:center;gap:9px;font-size:.88rem;font-weight:600;margin-top:10px;cursor:pointer}
+.mc-check input{width:16px;height:16px;accent-color:var(--fn);cursor:pointer}
+.mc-nb{background:var(--card-bg);border-radius:var(--r-lg);padding:22px 24px;margin:24px 0}
+.mc-nb h3{font-size:1.1rem;font-weight:800;margin:0 0 8px}
+.mc-nb p{color:var(--text-sec);font-size:.96rem;margin:0 0 14px;max-width:66ch}
+.mc-nb .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mc-nb .row a{text-decoration:none}
+.mc-next{list-style:none;padding:0;margin:12px 0 0}
+.mc-next li{padding:11px 0;border-top:1px solid var(--hairline-2);font-size:.96rem;color:var(--text-sec)}
+.mc-next li:first-child{border-top:none}
+.mc-next b{color:var(--text-main)}
+.mc-faq details{background:var(--card-bg);border-radius:var(--r-md);padding:14px 18px;margin:10px 0}
+.mc-faq summary{cursor:pointer;font-weight:700;font-size:.98rem}
+.mc-faq p{font-size:.94rem;color:var(--text-sec);margin:10px 0 0}
+details.mc-more{margin-top:12px;border-top:1px solid var(--hairline-2);padding-top:10px}
+details.mc-more summary{cursor:pointer;font-weight:700;font-size:.9rem;color:var(--accent);list-style:none}
+details.mc-more summary::-webkit-details-marker{display:none}
+details.mc-more summary::before{content:"+ ";font-weight:800}
+details.mc-more[open] summary::before{content:"\2212 "}
+details.mc-more p{font-size:.93rem;color:var(--text-sec);margin:10px 0 0}
+@media(max-width:820px){h1{font-size:1.7rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Paths, options, and correlated inputs","inLanguage":"en","about":"Monte Carlo simulation of stochastic processes","url":"https://statexampro.com/lessons/monte-carlo/paths-and-options/","datePublished":"2026-07-16","dateModified":"2026-07-16","author":{"@type":"Organization","name":"Stat Exam Pro"},"publisher":{"@type":"Organization","name":"Stat Exam Pro","logo":{"@type":"ImageObject","url":"https://statexampro.com/web-app-manifest-512x512.png"}},"image":"https://statexampro.com/og-card.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://statexampro.com/lessons/monte-carlo/paths-and-options/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why does geometric Brownian motion have a minus sigma squared over two in the drift?","acceptedAnswer":{"@type":"Answer","text":"Because exponentiating is convex, so the mean of the exponential exceeds the exponential of the mean. If you want the simulated price to grow at rate mu, the drift of the log must be set to mu minus half sigma squared, precisely so the convexity bonus restores it. Drop the correction and every step gains unearned return: at 25 percent volatility that is about 3.2 percent a year of phantom growth, and nothing crashes."}},{"@type":"Question","name":"Why is the drift set to the risk-free rate when pricing options by Monte Carlo?","acceptedAnswer":{"@type":"Answer","text":"Because an option can be replicated by a portfolio of the stock and cash, and when you work through that replication the stock's real expected return cancels out of the price entirely. Since it does not appear in the answer, you may compute the answer in whichever fictional world is easiest, and the easiest is the one where every asset drifts at the risk-free rate. Risk-neutral paths are a pricing device, not a forecast."}},{"@type":"Question","name":"What are common random numbers in Monte Carlo?","acceptedAnswer":{"@type":"Answer","text":"Reusing the same random draws across two scenarios you intend to compare, so their shared noise cancels in the difference. Because the variance of a difference falls as the two terms become positively correlated, common random numbers can cut the variance of a finite-difference Greek by hundreds of times at no extra computation."}},{"@type":"Question","name":"What is the Cholesky decomposition used for in simulation?","acceptedAnswer":{"@type":"Answer","text":"It turns independent normal draws into correlated ones. Any linear map applied to independent normals produces a covariance equal to the map times its transpose, so generating a target correlation matrix reduces to factoring that matrix into a lower-triangular factor and its transpose. That factorisation is the Cholesky decomposition, and each row of the factor reads as a mixing recipe: a factor model in disguise."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://statexampro.com/"},{"@type":"ListItem","position":2,"name":"Lessons","item":"https://statexampro.com/lessons/"},{"@type":"ListItem","position":3,"name":"Monte Carlo","item":"https://statexampro.com/lessons/monte-carlo/"},{"@type":"ListItem","position":4,"name":"Part 3 - Paths and options"}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+
+
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Course menu">&#9776;</button>
+ <a class="logo" href="/"><img src="../../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Course">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Predictive values</span></h4><ul>
+<li><a href="/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">PPV &amp; NPV, explained</span></a></li>
+<li><a href="/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</span></a></li>
+<li><a href="/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Worked exercises</span></a></li>
+<li><a href="/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Cheat sheet &amp; PDF</span></a></li>
+<li><a href="/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC &amp; AUC</span></h4><ul>
+<li><a href="/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC &amp; AUC, explained</span></a></li>
+<li><a href="/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</span></a></li>
+<li><a href="/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">The sepsis AI that missed two thirds</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Treatment effect</span></h4><ul>
+<li><a href="/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT &amp; absolute risk</span></a></li>
+<li><a href="/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Survival analysis</span></h4><ul>
+<li><a href="/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Kaplan&ndash;Meier curves</span></a></li>
+<li><a href="/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">The 82% survival myth</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Screening &amp; bias</span></h4><ul>
+<li><a href="/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Screening bias, live</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Lead-time &amp; overdiagnosis</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significance &amp; multiplicity</span></h4><ul>
+<li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">07</span> <span data-en="Monte Carlo &amp; simulation" data-fr="Monte Carlo et simulation">Monte Carlo &amp; simulation</span></h4><ul>
+<li><a href="/lessons/monte-carlo/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="Monte Carlo, explained" data-fr="Monte Carlo, expliqué">Monte Carlo, explained</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
+<li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">By format</span></h4><ul>
+<li><a href="/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">All calculators</span></a></li>
+<li><a href="/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">All lessons</span></a></li>
+<li><a href="/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">All exercises</span></a></li>
+<li><a href="/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">All cheat sheets</span></a></li>
+<li><a href="/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">All stat questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<div class="crumb"><a href="/lessons/" data-en="Lessons">Lessons</a> <span data-en="/">/</span> <a href="/lessons/monte-carlo/" data-en="Monte Carlo">Monte Carlo</a> <span data-en="/ Part 3 &middot; Paths and options">/ Part 3 &middot; Paths and options</span></div>
+
+<h1 data-en="Paths, options, and correlated inputs">Paths, options, and correlated inputs</h1>
+<p class="lead" data-en="Parts 1 and 2 assumed away the two hardest features of real problems: time, and dependence. This part removes both. A scenario stops being a handful of numbers and becomes a trajectory; inputs stop pretending they don't know each other. Everything gets certified against an answer we already know before it is aimed at one we don't.">Parts 1 and 2 assumed away the two hardest features of real problems: time, and dependence. This part removes both. A scenario stops being a handful of numbers and becomes a trajectory; inputs stop pretending they don't know each other. Everything gets certified against an answer we already know before it is aimed at one we don't.</p>
+
+<section class="lesson" id="paths">
+ <h2 data-en="What changes when time enters">What changes when time enters</h2>
+ <p data-en="In Part 2 a scenario was a growth rate, a margin, a multiple. Many real problems refuse to be summarised that way: an option's payoff can depend on the average price over a year, or on whether a barrier was ever touched; a patient's outcome depends on a disease path; a queue's performance depends on its entire arrival history. The random object is now a function of time, and one scenario is a path - a vector of values at many time points.">In Part 2 a scenario was a growth rate, a margin, a multiple. Many real problems refuse to be summarised that way: an option's payoff can depend on the average price over a year, or on whether a barrier was ever touched; a patient's outcome depends on a disease path; a queue's performance depends on its entire arrival history. The random object is now a function of time, and one scenario is a path - a vector of values at many time points.</p>
+ <p data-en="The good news you already own: Part 1 proved the Monte Carlo error rate contains no dimension. A path sampled at 252 daily points is a 252-dimensional random vector, and the estimator does not care. So nothing here is new statistics - it is new model-building: how to construct paths whose randomness has the right structure. It arrives in three steps.">The good news you already own: Part 1 proved the Monte Carlo error rate contains no dimension. A path sampled at 252 daily points is a 252-dimensional random vector, and the estimator does not care. So nothing here is new statistics - it is new model-building: how to construct paths whose randomness has the right structure. It arrives in three steps.</p>
+ <ul class="mc-dial">
+  <li><b data-en="The random walk.">The random walk.</b> <span data-en="Start at zero and add an independent shock each period. Two properties define everything that follows: increments are independent - tomorrow's surprise doesn't remember today's - and the variance of the position grows linearly in time, so the typical displacement grows like the square root of t. You have met that square root before wearing a different costume: it is the same one from the standard error, and honestly so, because a random walk is a running sum of independent draws.">Start at zero and add an independent shock each period. Two properties define everything that follows: increments are independent - tomorrow's surprise doesn't remember today's - and the variance of the position grows linearly in time, so the typical displacement grows like the square root of t. You have met that square root before wearing a different costume: it is the same one from the standard error, and honestly so, because a random walk is a running sum of independent draws.</span></li>
+  <li><b data-en="Brownian motion.">Brownian motion.</b> <span data-en="Let the period shrink to zero while holding variance-per-unit-time fixed and the walk becomes continuous. For simulation you need exactly one fact: over any interval, the increment is normal with variance equal to the interval's length, independent of everything before. On a grid, a Brownian path is just the cumulative sum of independent normal draws - the random walk again, with no apology needed.">Let the period shrink to zero while holding variance-per-unit-time fixed and the walk becomes continuous. For simulation you need exactly one fact: over any interval, the increment is normal with variance equal to the interval's length, independent of everything before. On a grid, a Brownian path is just the cumulative sum of independent normal draws - the random walk again, with no apology needed.</span></li>
+  <li><b data-en="Geometric Brownian motion.">Geometric Brownian motion.</b> <span data-en="Prices can't go negative, and shocks are naturally proportional - the stock moved 2%, never 2 dollars regardless of level. That is Part 2's lognormal country, so model the log of the price as a random walk with drift. The payoff is that the resulting equation has an exact solution, and the exact solution is the simulation recipe.">Prices can't go negative, and shocks are naturally proportional - the stock moved 2%, never 2 dollars regardless of level. That is Part 2's lognormal country, so model the log of the price as a random walk with drift. The payoff is that the resulting equation has an exact solution, and the exact solution is the simulation recipe.</span></li>
+ </ul>
+ <div class="formula-box">$$S(t+\Delta) = S(t)\cdot \exp\Big(\big(\mu - \tfrac{\sigma^2}{2}\big)\Delta + \sigma\sqrt{\Delta}\,Z\Big), \qquad Z \sim N(0,1)$$</div>
+ <p data-en="So a path is: generate a row of independent normals, turn each into a log-increment with that formula, take the cumulative sum, exponentiate. Rows are worlds, columns are time - the exact array discipline from Part 2's DCF, now with 252 columns instead of 5.">So a path is: generate a row of independent normals, turn each into a log-increment with that formula, take the cumulative sum, exponentiate. Rows are worlds, columns are time - the exact array discipline from Part 2's DCF, now with 252 columns instead of 5.</p>
+</section>
+
+<section class="lesson" id="drift">
+ <h2 data-en="The minus sigma squared over two is a load-bearing wall">The minus sigma squared over two is a load-bearing wall</h2>
+ <p data-en="Every beginner looks at that formula and asks the same question: what is that correction doing there, and can I drop it? You can, and your asset will then earn about 3.2% a year out of thin air at 25% volatility. Nothing will crash. The paths will look completely plausible.">Every beginner looks at that formula and asks the same question: what is that correction doing there, and can I drop it? You can, and your asset will then earn about 3.2% a year out of thin air at 25% volatility. Nothing will crash. The paths will look completely plausible.</p>
+ <p data-en="Here is the cleanest way to hold it, and it is Part 2's lesson returning with a vengeance. For a lognormal variable the mean of the exponential exceeds the exponential of the mean, because exponentiating is convex and the upside of a symmetric shock outweighs its downside once you exponentiate. That is Jensen. It is always Jensen. So if you want your simulated price to have expected growth rate mu - which is what &ldquo;drift mu&rdquo; means - you must set the drift of the log to mu minus half sigma squared, precisely so that the convexity bonus restores it.">Here is the cleanest way to hold it, and it is Part 2's lesson returning with a vengeance. For a lognormal variable the mean of the exponential exceeds the exponential of the mean, because exponentiating is convex and the upside of a symmetric shock outweighs its downside once you exponentiate. That is Jensen. It is always Jensen. So if you want your simulated price to have expected growth rate mu - which is what &ldquo;drift mu&rdquo; means - you must set the drift of the log to mu minus half sigma squared, precisely so that the convexity bonus restores it.</p>
+ <div class="callout warn"><span data-en="Drop the correction and every step gains an unearned factor; over a year of daily steps those factors compound to about 1.0317 at 25% volatility - the phantom 3.2%. The bug is vicious precisely because nothing breaks: the bias hides inside the drift, where only a check against theory will ever find it. Which is why the check against theory is not optional.">Drop the correction and every step gains an unearned factor; over a year of daily steps those factors compound to about 1.0317 at 25% volatility - the phantom 3.2%. The bug is vicious precisely because nothing breaks: the bias hides inside the drift, where only a check against theory will ever find it. Which is why the check against theory is not optional.</span></div>
+ <p data-en="The same fact wearing its finance costume: a stock with 25% volatility whose log-return averages zero loses nothing on average in price terms - but its median path decays. Volatility drags the median down by half sigma squared per year even as the mean stays flat, because the mean is held up by a shrinking minority of huge paths. That is &ldquo;volatility drag&rdquo; in retirement planning and the &ldquo;variance tax&rdquo; in trading folklore. All the same term.">The same fact wearing its finance costume: a stock with 25% volatility whose log-return averages zero loses nothing on average in price terms - but its median path decays. Volatility drags the median down by half sigma squared per year even as the mean stays flat, because the mean is held up by a shrinking minority of huge paths. That is &ldquo;volatility drag&rdquo; in retirement planning and the &ldquo;variance tax&rdquo; in trading folklore. All the same term.</p>
+ <details class="mc-more"><summary data-en="Exact schemes versus Euler - know which luxury you have">Exact schemes versus Euler - know which luxury you have</summary>
+  <p data-en="Geometric Brownian motion is a luxury model: that one-step formula is exact at any step size, so if you only need the terminal price you can jump straight there in a single step. You discretise time only when the payoff looks at intermediate dates.">Geometric Brownian motion is a luxury model: that one-step formula is exact at any step size, so if you only need the terminal price you can jump straight there in a single step. You discretise time only when the payoff looks at intermediate dates.</p>
+  <p data-en="Most stochastic models are not so lucky - interest-rate models, stochastic volatility, anything nonlinear - and there you fall back on the Euler scheme, the first-order approximation. Euler carries discretisation bias that vanishes only as the step shrinks: applied to GBM, where we can see the truth, the simulated mean crawls from 108.02 at one step per year to 108.35 at 252 steps against a true 108.33.">Most stochastic models are not so lucky - interest-rate models, stochastic volatility, anything nonlinear - and there you fall back on the Euler scheme, the first-order approximation. Euler carries discretisation bias that vanishes only as the step shrinks: applied to GBM, where we can see the truth, the simulated mean crawls from 108.02 at one step per year to 108.35 at 252 steps against a true 108.33.</p>
+  <p data-en="The professional takeaway is a taxonomy, not a formula. With an exact scheme your only error is statistical - it shrinks like the square root of N and your error bar reports it honestly. With Euler you carry a second, invisible error that no error bar mentions, and you must manage it separately: halve the step, watch the answer move. Confusing the two is a classic production incident - teams double N forever, wondering why the answer converges confidently to the wrong number.">The professional takeaway is a taxonomy, not a formula. With an exact scheme your only error is statistical - it shrinks like the square root of N and your error bar reports it honestly. With Euler you carry a second, invisible error that no error bar mentions, and you must manage it separately: halve the step, watch the answer move. Confusing the two is a classic production incident - teams double N forever, wondering why the answer converges confidently to the wrong number.</p>
+ </details>
+ <details class="mc-more"><summary data-en="The certification ritual: three one-line tests every path simulator passes first">The certification ritual: three one-line tests every path simulator passes first</summary>
+  <p data-en="Before any path simulator touches a real payoff it passes three tests. The mean test: the simulated expected terminal price equals the theoretical one within the error bar. The martingale test: under the pricing measure below, the discounted price must average exactly the starting price - a correct simulator returns 100.02 give or take 0.05, and the dropped-correction bug returns 103.19, failing loudly. The variance test: the variance of the log terminal price equals sigma squared times T.">Before any path simulator touches a real payoff it passes three tests. The mean test: the simulated expected terminal price equals the theoretical one within the error bar. The martingale test: under the pricing measure below, the discounted price must average exactly the starting price - a correct simulator returns 100.02 give or take 0.05, and the dropped-correction bug returns 103.19, failing loudly. The variance test: the variance of the log terminal price equals sigma squared times T.</p>
+  <p data-en="Three lines of assertions that would have caught the majority of path-simulation bugs ever shipped. Notice they cost nothing and run in a second - and notice that the bug we just discussed is invisible to every other kind of inspection.">Three lines of assertions that would have caught the majority of path-simulation bugs ever shipped. Notice they cost nothing and run in a second - and notice that the bug we just discussed is invisible to every other kind of inspection.</p>
+ </details>
+</section>
+
+<section class="lesson" id="pricing">
+ <h2 data-en="Option pricing: the workflow your colleagues actually meant">Option pricing: the workflow your colleagues actually meant</h2>
+ <p data-en="When a valuation team says &ldquo;we'll price the option by Monte Carlo with GBM&rdquo;, they mean four lines. Simulate N terminal prices under GBM with the drift set to the risk-free rate - not the stock's real expected return. Compute the payoff in each world. Average. Discount at the risk-free rate.">When a valuation team says &ldquo;we'll price the option by Monte Carlo with GBM&rdquo;, they mean four lines. Simulate N terminal prices under GBM with the drift set to the risk-free rate - not the stock's real expected return. Compute the payoff in each world. Average. Discount at the risk-free rate.</p>
+ <p data-en="Three of those four are Part 1's engine verbatim: a price expressed as a discounted expectation, estimated by an average, error bar attached. The entire novelty is the strange instruction in the first one.">Three of those four are Part 1's engine verbatim: a price expressed as a discounted expectation, estimated by an average, error bar attached. The entire novelty is the strange instruction in the first one.</p>
+ <p data-en="Why the drift becomes the risk-free rate, in honest plain language. Part 2 met the puzzle already: when valuing risky cash flows, riskiness has to be priced somewhere - there we kept the scenarios realistic and priced risk in the discount rate. Option pricing resolves the same tension in the opposite, cleverer direction: distort the scenarios, simplify the discounting.">Why the drift becomes the risk-free rate, in honest plain language. Part 2 met the puzzle already: when valuing risky cash flows, riskiness has to be priced somewhere - there we kept the scenarios realistic and priced risk in the discount rate. Option pricing resolves the same tension in the opposite, cleverer direction: distort the scenarios, simplify the discounting.</p>
+ <p data-en="The deep fact is that an option's payoff can be replicated by a continuously rebalanced portfolio of the stock and cash. Two assets with identical payoffs in every state must have identical prices - otherwise free money - so the option's price is the cost of the replicating portfolio. And here is the punchline: when you grind through that replication argument, the stock's actual expected return cancels out of the answer entirely. It has to, because the hedge neutralises the stock's direction, so how strongly the stock trends cannot matter. Only the starting price, the strike, the horizon, the rate and the volatility survive.">The deep fact is that an option's payoff can be replicated by a continuously rebalanced portfolio of the stock and cash. Two assets with identical payoffs in every state must have identical prices - otherwise free money - so the option's price is the cost of the replicating portfolio. And here is the punchline: when you grind through that replication argument, the stock's actual expected return cancels out of the answer entirely. It has to, because the hedge neutralises the stock's direction, so how strongly the stock trends cannot matter. Only the starting price, the strike, the horizon, the rate and the volatility survive.</p>
+ <p data-en="Since the real drift doesn't appear in the answer, we are free to compute the answer in whichever fictional world makes the computation easiest - and the easiest is the one where every asset drifts at the risk-free rate, because there, pricing collapses to a discounted expected payoff, which is exactly a Monte Carlo average. That world is called the risk-neutral measure.">Since the real drift doesn't appear in the answer, we are free to compute the answer in whichever fictional world makes the computation easiest - and the easiest is the one where every asset drifts at the risk-free rate, because there, pricing collapses to a discounted expected payoff, which is exactly a Monte Carlo average. That world is called the risk-neutral measure.</p>
+ <div class="callout warn"><span data-en="Be very clear about what it is not. Nobody claims investors are indifferent to risk, and risk-neutral paths are not forecasts - the simulated distribution is deliberately wrong as a prediction, since its mean grows at the risk-free rate rather than the stock's. It is a pricing device, justified by replication, that happens to have the shape of an expectation and is therefore Monte-Carlo-able. Keep the two modes separated in your head and in your codebase: real-world drift for risk management and &ldquo;what might happen&rdquo; questions, risk-neutral drift for pricing only. Feeding a value-at-risk question risk-neutral paths, or a pricing question real-world paths, is a category error with money attached - and both happen in practice.">Be very clear about what it is not. Nobody claims investors are indifferent to risk, and risk-neutral paths are not forecasts - the simulated distribution is deliberately wrong as a prediction, since its mean grows at the risk-free rate rather than the stock's. It is a pricing device, justified by replication, that happens to have the shape of an expectation and is therefore Monte-Carlo-able. Keep the two modes separated in your head and in your codebase: real-world drift for risk management and &ldquo;what might happen&rdquo; questions, risk-neutral drift for pricing only. Feeding a value-at-risk question risk-neutral paths, or a pricing question real-world paths, is a category error with money attached - and both happen in practice.</span></div>
+</section>
+
+<section class="lesson" id="playground-bs">
+ <h2 data-en="Certify it against Black-Scholes">Certify it against Black-Scholes</h2>
+ <p data-en="The European call has a closed-form price, which makes it the perfect certification target: we never need Monte Carlo for it, and that is exactly why we start there. The blue band is the simulation's estimate give or take two standard errors; the black line is the exact answer. A pass isn't &ldquo;the numbers look close&rdquo; - it is the disagreement measured in units of the standard error, with the criterion stated in advance.">The European call has a closed-form price, which makes it the perfect certification target: we never need Monte Carlo for it, and that is exactly why we start there. The blue band is the simulation's estimate give or take two standard errors; the black line is the exact answer. A pass isn't &ldquo;the numbers look close&rdquo; - it is the disagreement measured in units of the standard error, with the criterion stated in advance.</p>
+ <div class="play mc-play">
+  <div class="panel">
+   <div class="ctrl"><label for="bsN"><span data-en="Simulated paths">Simulated paths</span><span class="val" id="bsNv"></span></label><input type="range" id="bsN" min="0" max="100" value="55" oninput="bsInput()"></div>
+   <div class="ctrl"><label for="bsV"><span data-en="Volatility">Volatility</span><span class="val" id="bsVv"></span></label><input type="range" id="bsV" min="10" max="60" step="5" value="25" oninput="bsInput()"></div>
+   <label class="mc-check"><input type="checkbox" id="bsBug" onchange="bsRun()"><span data-en="Drop the minus sigma squared over two (the bug that never crashes)">Drop the minus sigma squared over two (the bug that never crashes)</span></label>
+   <div aria-live="polite">
+    <div class="bignum" id="bsSE"></div>
+    <div class="bignum-label" data-en="standard errors away from the exact answer">standard errors away from the exact answer</div>
+    <div class="smallnum" id="bsNum"></div>
+   </div>
+  </div>
+  <div class="mc-chart">
+   <div id="bsPlot"></div>
+   <div class="mc-verdict softbox" id="bsVerdict"></div>
+  </div>
+ </div>
+ <p class="note" data-en="Two things to try. Drag the paths up and watch the band narrow around the exact line at the familiar square-root rate - the error bar is honest, and it contains the truth. Then tick the bug: the price jumps and the band stays exactly as narrow as before. That is the whole point. A tight error bar tells you the simulation is precise, never that it is right.">Two things to try. Drag the paths up and watch the band narrow around the exact line at the familiar square-root rate - the error bar is honest, and it contains the truth. Then tick the bug: the price jumps and the band stays exactly as narrow as before. That is the whole point. A tight error bar tells you the simulation is precise, never that it is right.</p>
+</section>
+
+<section class="lesson" id="greeks">
+ <h2 data-en="Greeks, and the quiet star of the whole guide">Greeks, and the quiet star of the whole guide</h2>
+ <p data-en="A price alone is half a deliverable; desks live on sensitivities. Delta - how the price moves when the stock moves - is the obvious one, and the obvious estimator is a finite difference: price at a slightly higher spot, price at a slightly lower one, subtract, divide by the gap. Here Monte Carlo lays a trap that teaches a beautiful lesson.">A price alone is half a deliverable; desks live on sensitivities. Delta - how the price moves when the stock moves - is the obvious one, and the obvious estimator is a finite difference: price at a slightly higher spot, price at a slightly lower one, subtract, divide by the gap. Here Monte Carlo lays a trap that teaches a beautiful lesson.</p>
+ <p data-en="Use independent random draws for the two bumped prices and each carries its own noise; the difference of two noisy numbers divided by a small gap amplifies that noise catastrophically. Measured: delta = 0.5112 give or take 0.0226 - a 4%-wide error bar on a quantity of size 0.52, which is garbage for hedging.">Use independent random draws for the two bumped prices and each carries its own noise; the difference of two noisy numbers divided by a small gap amplifies that noise catastrophically. Measured: delta = 0.5112 give or take 0.0226 - a 4%-wide error bar on a quantity of size 0.52, which is garbage for hedging.</p>
+ <p data-en="Now the fix, which costs exactly zero extra computation: use the same normal draws for both bumps. Common random numbers. Each scenario's noise now appears in both prices and cancels in the subtraction; what survives is precisely the systematic effect of the bump. Result: 0.5195 give or take 0.0012, against a true Black-Scholes delta of 0.5199 - a measured variance reduction of 349 times. Same estimator, same N, one line about seed discipline, two and a half decimal digits purchased for free.">Now the fix, which costs exactly zero extra computation: use the same normal draws for both bumps. Common random numbers. Each scenario's noise now appears in both prices and cancels in the subtraction; what survives is precisely the systematic effect of the bump. Result: 0.5195 give or take 0.0012, against a true Black-Scholes delta of 0.5199 - a measured variance reduction of 349 times. Same estimator, same N, one line about seed discipline, two and a half decimal digits purchased for free.</p>
+ <div class="callout"><span data-en="Pause on why, because this is Part 1's deepest thread paying off. The variance of a difference equals the sum of the variances minus twice the covariance - so making the two terms positively correlated shrinks the variance of their difference. Common random numbers are the deliberate engineering of that covariance. It is the same principle you already used informally when comparing strategy A against B on the same seed, and the same principle Part 4's antithetic variates will invert, using negative correlation to shrink a sum instead. Correlation, which the next section treats as a modelling hazard, is also the professional's favourite tool.">Pause on why, because this is Part 1's deepest thread paying off. The variance of a difference equals the sum of the variances minus twice the covariance - so making the two terms positively correlated shrinks the variance of their difference. Common random numbers are the deliberate engineering of that covariance. It is the same principle you already used informally when comparing strategy A against B on the same seed, and the same principle Part 4's antithetic variates will invert, using negative correlation to shrink a sum instead. Correlation, which the next section treats as a modelling hazard, is also the professional's favourite tool.</span></div>
+ <details class="mc-more"><summary data-en="Where Monte Carlo actually earns its salary, and two honest boundary markers">Where Monte Carlo actually earns its salary, and two honest boundary markers</summary>
+  <p data-en="Everything so far, Black-Scholes could have done without us. Now change one word in the contract: the call pays on the average price over 52 weekly observations - an arithmetic Asian option, beloved by corporates precisely because averaging suppresses manipulation and noise. The price is now a genuinely 52-dimensional integral with no closed form, and Part 1 told you what happens to grid methods in dimension 52. For Monte Carlo it is four lines: simulate weekly paths, average each row, payoff, discount, mean. Measured: 4.3514 give or take 0.0363 at 200,000 paths. That error bar is a little wide for a real desk - which is not a problem but a setup, because this exact option is Part 4's patient, where a control variate shrinks it to about a thousandth at the same N.">Everything so far, Black-Scholes could have done without us. Now change one word in the contract: the call pays on the average price over 52 weekly observations - an arithmetic Asian option, beloved by corporates precisely because averaging suppresses manipulation and noise. The price is now a genuinely 52-dimensional integral with no closed form, and Part 1 told you what happens to grid methods in dimension 52. For Monte Carlo it is four lines: simulate weekly paths, average each row, payoff, discount, mean. Measured: 4.3514 give or take 0.0363 at 200,000 paths. That error bar is a little wide for a real desk - which is not a problem but a setup, because this exact option is Part 4's patient, where a control variate shrinks it to about a thousandth at the same N.</p>
+  <p data-en="Two boundary markers. American options - exercisable at any time - add an optimal-stopping decision to every path, and naive Monte Carlo cannot handle &ldquo;decide optimally at each moment&rdquo; because a path does not know the conditional value of continuing. The industry standard fix, Longstaff-Schwartz, estimates that continuation value by regressing future payoffs on current state across paths. Know the name and the shape of the idea. And model risk outranks everything in this section: real markets have fatter tails and stochastic volatility, which is why desks calibrate fancier processes - simulated with the same workflow you just certified. The workflow is permanent; GBM is merely its training wheels.">Two boundary markers. American options - exercisable at any time - add an optimal-stopping decision to every path, and naive Monte Carlo cannot handle &ldquo;decide optimally at each moment&rdquo; because a path does not know the conditional value of continuing. The industry standard fix, Longstaff-Schwartz, estimates that continuation value by regressing future payoffs on current state across paths. Know the name and the shape of the idea. And model risk outranks everything in this section: real markets have fatter tails and stochastic volatility, which is why desks calibrate fancier processes - simulated with the same workflow you just certified. The workflow is permanent; GBM is merely its training wheels.</p>
+ </details>
+</section>
+
+<section class="lesson" id="correlation">
+ <h2 data-en="Correlated inputs: sin 4 comes due">Correlated inputs: sin 4 comes due</h2>
+ <p data-en="Part 2's fourth deadly sin - independence by default, silently - was allowed at entry level with a confession attached. This is where the confession stops being enough, and one table explains why. Take an equal-weight portfolio of ten assets, each with the same 20% volatility, and vary only how correlated they are:">Part 2's fourth deadly sin - independence by default, silently - was allowed at entry level with a confession attached. This is where the confession stops being enough, and one table explains why. Take an equal-weight portfolio of ten assets, each with the same 20% volatility, and vary only how correlated they are:</p>
+ <div class="mc-tblwrap"><table class="mc-tbl">
+  <tr><th data-en="Pairwise correlation">Pairwise correlation</th><th data-en="Portfolio volatility">Portfolio volatility</th><th data-en="A bad-year loss (P5)">A bad-year loss (P5)</th></tr>
+  <tr><td><b>0.0</b></td><td>6.3%</td><td>&minus;10.4%</td></tr>
+  <tr><td><b>0.3</b></td><td>12.2%</td><td>&minus;20.0%</td></tr>
+  <tr class="hl"><td><b>0.6</b></td><td>16.0%</td><td>&minus;26.3%</td></tr>
+  <tr><td><b>0.9</b></td><td>19.1%</td><td>&minus;31.3%</td></tr>
+ </table></div>
+ <p data-en="At zero correlation, diversification works exactly as theory promises - the portfolio volatility is the single-asset volatility divided by the square root of ten, which is another free certification. At 0.6 - an unremarkable correlation for equities in a stressed market - the bad-year loss is two and a half times worse than the independent model claims. Every marginal distribution in both models is identical. The entire difference is dependence.">At zero correlation, diversification works exactly as theory promises - the portfolio volatility is the single-asset volatility divided by the square root of ten, which is another free certification. At 0.6 - an unremarkable correlation for equities in a stressed market - the bad-year loss is two and a half times worse than the independent model claims. Every marginal distribution in both models is identical. The entire difference is dependence.</p>
+ <div class="callout warn"><span data-en="Correlation is not a refinement of a risk model. In any aggregation problem - portfolios, project cost roll-ups, system reliability with common-cause failures - correlation is the risk model, and it lives exactly where you care most: in the tails.">Correlation is not a refinement of a risk model. In any aggregation problem - portfolios, project cost roll-ups, system reliability with common-cause failures - correlation is the risk model, and it lives exactly where you care most: in the tails.</span></div>
+</section>
+
+<section class="lesson" id="playground-corr">
+ <h2 data-en="Turn the correlation dial">Turn the correlation dial</h2>
+ <p data-en="Ten assets, each with exactly the same 20% volatility no matter where the dial sits. Only their dependence changes. Watch what that alone does to the left tail - the part of the distribution that pays your losses.">Ten assets, each with exactly the same 20% volatility no matter where the dial sits. Only their dependence changes. Watch what that alone does to the left tail - the part of the distribution that pays your losses.</p>
+ <div class="play mc-play">
+  <div class="panel">
+   <div class="ctrl"><label for="coR"><span data-en="Pairwise correlation">Pairwise correlation</span><span class="val" id="coRv"></span></label><input type="range" id="coR" min="0" max="90" step="5" value="0" oninput="coInput()"></div>
+   <div aria-live="polite">
+    <div class="bignum" id="coP5"></div>
+    <div class="bignum-label" data-en="the bad year: worst 5% of outcomes start here">the bad year: worst 5% of outcomes start here</div>
+    <div class="smallnum" id="coSD"></div>
+   </div>
+  </div>
+  <div class="mc-chart">
+   <div id="coHist"></div>
+   <div class="mc-verdict softbox" id="coVerdict"></div>
+  </div>
+ </div>
+ <p class="note" data-en="Nothing about any individual asset changed between the two ends of that dial. Every one of them still has a 20% volatility and the same bell-shaped distribution. Only the wiring between them moved - and the bad year got three times worse.">Nothing about any individual asset changed between the two ends of that dial. Every one of them still has a 20% volatility and the same bell-shaped distribution. Only the wiring between them moved - and the bad year got three times worse.</p>
+</section>
+
+<section class="lesson" id="cholesky">
+ <h2 data-en="Cholesky, copulas, and the 2008 lesson">Cholesky, copulas, and the 2008 lesson</h2>
+ <p data-en="So we need to generate correlated inputs. For the multivariate normal case there is a complete, exact, three-line answer, and it is worth understanding rather than merely calling.">So we need to generate correlated inputs. For the multivariate normal case there is a complete, exact, three-line answer, and it is worth understanding rather than merely calling.</p>
+ <p data-en="The goal: given a target correlation matrix, produce vectors with that covariance out of the independent normals your generator supplies. Any linear map applied to independent normals produces a covariance equal to the map times its own transpose. So the task reduces to factoring the target matrix into a factor and its transpose - and choosing that factor lower-triangular makes the factorisation unique, cheap and interpretable. That is the Cholesky decomposition, and it is one library call.">The goal: given a target correlation matrix, produce vectors with that covariance out of the independent normals your generator supplies. Any linear map applied to independent normals produces a covariance equal to the map times its own transpose. So the task reduces to factoring the target matrix into a factor and its transpose - and choosing that factor lower-triangular makes the factorisation unique, cheap and interpretable. That is the Cholesky decomposition, and it is one library call.</p>
+ <div class="formula-box" style="text-align:left"><code>L = np.linalg.cholesky(C)     # C = L @ L.T, L lower-triangular<br>X = Z @ L.T                   # rows of Z: iid normals -&gt; rows of X: correlated</code></div>
+ <p data-en="The interpretation is the valuable part. Each row of that factor is a mixing recipe: variable k is built from the first k independent noise sources, with weights chosen so its covariances with the earlier variables come out exactly right and its total variance stays at one. Variable 1 is pure factor 1; variable 2 is some parts factor 1 plus enough fresh factor 2 to top up the variance; and so on. Cholesky is a factor model in disguise - each variable equals loadings on common factors plus its own idiosyncratic noise - which is exactly how practitioners think about dependence even when they never say the word.">The interpretation is the valuable part. Each row of that factor is a mixing recipe: variable k is built from the first k independent noise sources, with weights chosen so its covariances with the earlier variables come out exactly right and its total variance stays at one. Variable 1 is pure factor 1; variable 2 is some parts factor 1 plus enough fresh factor 2 to top up the variance; and so on. Cholesky is a factor model in disguise - each variable equals loadings on common factors plus its own idiosyncratic noise - which is exactly how practitioners think about dependence even when they never say the word.</p>
+ <details class="mc-more"><summary data-en="Field notes, because each has ended someone's afternoon">Field notes, because each has ended someone's afternoon</summary>
+  <p data-en="The target matrix must be a genuine covariance matrix - positive semi-definite - and correlation matrices assembled by hand from pairwise expert guesses frequently are not. Cholesky then throws an error, which is the good outcome; the fix is projecting to the nearest valid matrix. Estimated correlations from short histories are noisy and unstable, which is why shrinkage estimators exist. And correlations are famously regime-dependent: the value you estimated in calm markets is not the one that shows up in the crash - a modelling wound no generator can heal, but a perfect segue.">The target matrix must be a genuine covariance matrix - positive semi-definite - and correlation matrices assembled by hand from pairwise expert guesses frequently are not. Cholesky then throws an error, which is the good outcome; the fix is projecting to the nearest valid matrix. Estimated correlations from short histories are noisy and unstable, which is why shrinkage estimators exist. And correlations are famously regime-dependent: the value you estimated in calm markets is not the one that shows up in the crash - a modelling wound no generator can heal, but a perfect segue.</p>
+ </details>
+ <h3 data-en="Copulas: dependence with any marginals">Copulas: dependence with any marginals</h3>
+ <p data-en="Cholesky solves the normal case. But Part 2 taught you that real inputs are lognormal, triangular, empirical - and you still need them correlated. Enter the copula, which is nothing more mysterious than Part 2's percentile machine run in both directions. Generate correlated normals with Cholesky. Squash each coordinate through its own normal CDF to get correlated uniforms - any variable through its own CDF becomes uniform, and the dependence survives the squashing. Then push each uniform through whatever inverse CDF you want for that input.">Cholesky solves the normal case. But Part 2 taught you that real inputs are lognormal, triangular, empirical - and you still need them correlated. Enter the copula, which is nothing more mysterious than Part 2's percentile machine run in both directions. Generate correlated normals with Cholesky. Squash each coordinate through its own normal CDF to get correlated uniforms - any variable through its own CDF becomes uniform, and the dependence survives the squashing. Then push each uniform through whatever inverse CDF you want for that input.</p>
+ <p data-en="Marginals and dependence are now fully decoupled: you can hand each input its honest distribution and still wire the inputs together. That object is the Gaussian copula, and this three-step recipe is how sin 4 actually gets fixed in production cost and valuation models.">Marginals and dependence are now fully decoupled: you can hand each input its honest distribution and still wire the inputs together. That object is the Gaussian copula, and this three-step recipe is how sin 4 actually gets fixed in production cost and valuation models.</p>
+ <div class="callout warn"><span data-en="Now the caveat that carries a decade of financial history. The Gaussian copula has a provable property called zero tail dependence: as events get more extreme, Gaussian-linked variables become asymptotically independent - in that world simultaneous crashes of many names are essentially impossible, no matter how high you set the correlation. Swap the common shock from normal to a heavy-tailed one and you get the t-copula, in which extremes cluster. With identical marginals and an identical correlation of 0.6, the probability that two assets are simultaneously in their worst 5% is 0.25% if independent, 1.54% under the Gaussian copula, and 2.13% under a t-copula - a 40% difference in joint-crash probability from a modelling choice most spreadsheets never surface. The Gaussian copula was the industry-standard machine for pricing CDOs before 2008. The &ldquo;formula that killed Wall Street&rdquo; journalism oversimplifies a many-caused crisis, but the technical core is real and is exactly that number: a dependence model structurally incapable of joint extremes, pricing securities whose entire risk was joint extremes.">Now the caveat that carries a decade of financial history. The Gaussian copula has a provable property called zero tail dependence: as events get more extreme, Gaussian-linked variables become asymptotically independent - in that world simultaneous crashes of many names are essentially impossible, no matter how high you set the correlation. Swap the common shock from normal to a heavy-tailed one and you get the t-copula, in which extremes cluster. With identical marginals and an identical correlation of 0.6, the probability that two assets are simultaneously in their worst 5% is 0.25% if independent, 1.54% under the Gaussian copula, and 2.13% under a t-copula - a 40% difference in joint-crash probability from a modelling choice most spreadsheets never surface. The Gaussian copula was the industry-standard machine for pricing CDOs before 2008. The &ldquo;formula that killed Wall Street&rdquo; journalism oversimplifies a many-caused crisis, but the technical core is real and is exactly that number: a dependence model structurally incapable of joint extremes, pricing securities whose entire risk was joint extremes.</span></div>
+ <p data-en="The transferable lesson costs one sentence: correlation is one number, dependence is a whole function, and the difference between them lives in the tails - which is where you get paid or destroyed.">The transferable lesson costs one sentence: correlation is one number, dependence is a whole function, and the difference between them lives in the tails - which is where you get paid or destroyed.</p>
+</section>
+
+<div class="mc-nb">
+ <h3 data-en="Now go and run it">Now go and run it</h3>
+ <p data-en="Part 3 opens the pro notebook, and every number quoted above is its actual output - seeds fixed, so you will reproduce them to the digit. Section 1 builds the path simulator and runs the three certification tests including the martingale check that catches the dropped-correction bug. Section 2 is the option workflow, the Black-Scholes certification, common random numbers and the Asian option. Section 3 is Cholesky, the portfolio, and the Gaussian-versus-t copula scatter.">Part 3 opens the pro notebook, and every number quoted above is its actual output - seeds fixed, so you will reproduce them to the digit. Section 1 builds the path simulator and runs the three certification tests including the martingale check that catches the dropped-correction bug. Section 2 is the option workflow, the Black-Scholes certification, common random numbers and the Asian option. Section 3 is Cholesky, the portfolio, and the Gaussian-versus-t copula scatter.</p>
+ <div class="row">
+  <a class="pill" href="https://colab.research.google.com/github/StatExamPro/statexampro.com/blob/main/notebooks/monte-carlo-pro.ipynb" rel="noopener" target="_blank" onclick="sxpGo('colab-open-monte-carlo-pro','Open the pro notebook in Colab')" data-en="Open in Colab">Open in Colab</a>
+  <a class="pill ghost" href="/notebooks/monte-carlo-pro.ipynb" download data-en="Download the notebook">Download the notebook</a>
+ </div>
+</div>
+
+<section class="lesson" id="next">
+ <h2 data-en="What's next">What's next</h2>
+ <ul class="mc-next">
+  <li><b><a href="/lessons/monte-carlo/variance-reduction/" data-en="Part 4 - beating the square-root law.">Part 4 - beating the square-root law.</a></b> <span data-en="Every halving of the error bar quadruples the bill - unless you stop buying runs and start shrinking the variance. Antithetic and control variates (the Asian option's error bar collapses by a factor of 35), importance sampling that turns a hopeless one-in-a-million estimate routine, quasi-Monte Carlo, and the bridge to MCMC.">Every halving of the error bar quadruples the bill - unless you stop buying runs and start shrinking the variance. Antithetic and control variates (the Asian option's error bar collapses by a factor of 35), importance sampling that turns a hopeless one-in-a-million estimate routine, quasi-Monte Carlo, and the bridge to MCMC.</span></li>
+ </ul>
+ <p class="note"><span data-en="New here?">New here?</span> <a href="/lessons/monte-carlo/first-principles/" data-en="Part 1 builds the engine">Part 1 builds the engine</a><span data-en=",">,</span> <a href="/lessons/monte-carlo/recipe-and-projects/" data-en="Part 2 the recipe and two projects">Part 2 the recipe and two projects</a><span data-en=", and the">, and the</span> <a href="/lessons/monte-carlo/" data-en="series hub">series hub</a> <span data-en="lists all four.">lists all four.</span></p>
+</section>
+
+<section class="lesson mc-faq" id="faq">
+ <h2 data-en="Frequently asked">Frequently asked</h2>
+ <details>
+  <summary data-en="Why does geometric Brownian motion subtract half the variance from the drift?">Why does geometric Brownian motion subtract half the variance from the drift?</summary>
+  <p data-en="Because exponentiating is convex, so the mean of the exponential exceeds the exponential of the mean. If you want the simulated price to grow at rate mu, the drift of the log must be mu minus half sigma squared, precisely so the convexity bonus restores it. Drop the correction and every step gains unearned return - about 3.2% a year at 25% volatility - and nothing crashes.">Because exponentiating is convex, so the mean of the exponential exceeds the exponential of the mean. If you want the simulated price to grow at rate mu, the drift of the log must be mu minus half sigma squared, precisely so the convexity bonus restores it. Drop the correction and every step gains unearned return - about 3.2% a year at 25% volatility - and nothing crashes.</p>
+ </details>
+ <details>
+  <summary data-en="Why is the drift set to the risk-free rate when pricing options?">Why is the drift set to the risk-free rate when pricing options?</summary>
+  <p data-en="Because an option can be replicated by a portfolio of the stock and cash, and when you work through the replication the stock's real expected return cancels out of the price entirely. Since it doesn't appear in the answer, you may compute the answer in whichever fictional world is easiest - and the easiest is the one where everything drifts at the risk-free rate. Risk-neutral paths are a pricing device, not a forecast.">Because an option can be replicated by a portfolio of the stock and cash, and when you work through the replication the stock's real expected return cancels out of the price entirely. Since it doesn't appear in the answer, you may compute the answer in whichever fictional world is easiest - and the easiest is the one where everything drifts at the risk-free rate. Risk-neutral paths are a pricing device, not a forecast.</p>
+ </details>
+ <details>
+  <summary data-en="What are common random numbers?">What are common random numbers?</summary>
+  <p data-en="Reusing the same draws across two scenarios you intend to compare, so their shared noise cancels in the difference. Because the variance of a difference falls as the two terms become positively correlated, common random numbers can cut the variance of a finite-difference Greek by hundreds of times at no extra cost - measured here at 349 times.">Reusing the same draws across two scenarios you intend to compare, so their shared noise cancels in the difference. Because the variance of a difference falls as the two terms become positively correlated, common random numbers can cut the variance of a finite-difference Greek by hundreds of times at no extra cost - measured here at 349 times.</p>
+ </details>
+ <details>
+  <summary data-en="What is the Cholesky decomposition used for in simulation?">What is the Cholesky decomposition used for in simulation?</summary>
+  <p data-en="It turns independent normal draws into correlated ones. Any linear map applied to independent normals produces a covariance equal to the map times its transpose, so hitting a target correlation reduces to factoring that matrix into a lower-triangular factor and its transpose. Each row of the factor reads as a mixing recipe, which makes Cholesky a factor model in disguise.">It turns independent normal draws into correlated ones. Any linear map applied to independent normals produces a covariance equal to the map times its transpose, so hitting a target correlation reduces to factoring that matrix into a lower-triangular factor and its transpose. Each row of the factor reads as a mixing recipe, which makes Cholesky a factor model in disguise.</p>
+ </details>
+</section>
+
+<div class="cta">
+ <p data-en="Certifying a method against a known answer before trusting it is the habit this whole series is really teaching. Stat Exam Pro drills the same instinct on exam questions, with worked answers.">Certifying a method against a known answer before trusting it is the habit this whole series is really teaching. Stat Exam Pro drills the same instinct on exam questions, with worked answers.</p>
+ <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-monte-carlo-p3-bottom','App Store button (Monte Carlo part 3)')">
+  <span class="apple-icon"></span>
+  <span data-en="Get it on iPhone">Get it on iPhone</span>
+ </a>
+</div>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../../../site.js"></script>
+<script>
+var LANG='en';
+var seed=4242;
+function rnd(){ seed=(seed*1664525+1013904223)%4294967296; return seed/4294967296; }
+function randn(){ var u=0,v=0; while(u===0)u=rnd(); while(v===0)v=rnd(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+function ncdf(x){                                    // Abramowitz-Stegun: good to ~7 decimals
+  var t=1/(1+0.2316419*Math.abs(x)), d=0.3989423*Math.exp(-x*x/2);
+  var p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));
+  return x>0?1-p:p;
+}
+var S0=100, K=105, R=0.03, T=1;
+function bsCall(sig){                                // the exact answer we certify against
+  var d1=(Math.log(S0/K)+(R+sig*sig/2)*T)/(sig*Math.sqrt(T)), d2=d1-sig*Math.sqrt(T);
+  return S0*ncdf(d1)-K*Math.exp(-R*T)*ncdf(d2);
+}
+// ---- playground 1: certify the option price against Black-Scholes ---------------
+var bsTimer=null;
+function bsCount(v){ return Math.round(1000*Math.pow(10,v/100*2.7)); }   // 1k .. 500k
+function bsInput(){
+  document.getElementById('bsNv').textContent=sxpInt(bsCount(+document.getElementById('bsN').value));
+  document.getElementById('bsVv').textContent=sxpFmtPct(+document.getElementById('bsV').value/100,0);
+  clearTimeout(bsTimer); bsTimer=setTimeout(bsRun,120);
+}
+function bsRun(){
+  var N=bsCount(+document.getElementById('bsN').value), sig=+document.getElementById('bsV').value/100;
+  var bug=document.getElementById('bsBug').checked;
+  document.getElementById('bsNv').textContent=sxpInt(N);
+  var s=0,s2=0;
+  for(var i=0;i<N;i++){
+    var drift=bug ? R*T : (R-sig*sig/2)*T;           // the bug: keep the drift, forget the correction
+    var ST=S0*Math.exp(drift+sig*Math.sqrt(T)*randn());
+    var pay=Math.max(ST-K,0)*Math.exp(-R*T);
+    s+=pay; s2+=pay*pay;
+  }
+  var mc=s/N, sd=Math.sqrt(Math.max(0,s2/N-mc*mc)), se=sd/Math.sqrt(N), exact=bsCall(sig);
+  var off=Math.abs(mc-exact)/se;
+  document.getElementById('bsSE').textContent=sxpNum(off.toFixed(1));
+  document.getElementById('bsNum').textContent='Monte Carlo '+sxpNum(mc.toFixed(4))+' ± '+sxpNum((2*se).toFixed(4))+'  ·  Black-Scholes '+sxpNum(exact.toFixed(4));
+  bsPlot(mc,se,exact);
+  var v=document.getElementById('bsVerdict');
+  if(bug) v.innerHTML='<b>Certification failed - and look at the error bar.</b> It is exactly as narrow as before. The simulation is just as precise and now confidently wrong: the phantom drift inflates every path, so the call looks more valuable than it is. Nothing threw an exception. Only the check against theory caught it.';
+  else if(off<2) v.innerHTML='<b>Certified.</b> The disagreement is under two standard errors - statistically indistinguishable from the exact answer, with the pass criterion stated in advance. That is what earns this machinery the right to be pointed at payoffs that have no formula.';
+  else v.innerHTML='<b>More than two standard errors out.</b> With an honest simulator this happens about one time in twenty by pure luck - nudge the paths and it should settle back. If it never settles, the simulator is lying.';
+}
+function bsPlot(mc,se,exact){
+  var W=560,H=200,ML=12,MR=12,MT=30,MB=34,pw=W-ML-MR;
+  var lo=Math.min(mc-3*se,exact)-0.05, hi=Math.max(mc+3*se,exact)+0.05;
+  var X=function(v){ return ML+(v-lo)/(hi-lo)*pw; }, yb=MT+40;
+  var s=['<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Monte Carlo price with its error bar against the exact Black-Scholes price">'];
+  s.push('<rect x="'+X(mc-2*se).toFixed(1)+'" y="'+(yb-16)+'" width="'+Math.max(1,(X(mc+2*se)-X(mc-2*se))).toFixed(1)+'" height="32" fill="var(--accent)" opacity="0.22" rx="3"/>');
+  s.push('<line x1="'+X(mc).toFixed(1)+'" y1="'+(yb-22)+'" x2="'+X(mc).toFixed(1)+'" y2="'+(yb+22)+'" stroke="var(--accent)" stroke-width="2.6"/>');
+  s.push('<text x="'+X(mc).toFixed(1)+'" y="'+(yb-30)+'" font-size="11" font-weight="700" fill="var(--accent)" text-anchor="middle">simulated ± 2 SE</text>');
+  s.push('<line x1="'+X(exact).toFixed(1)+'" y1="'+(yb-30)+'" x2="'+X(exact).toFixed(1)+'" y2="'+(yb+34)+'" stroke="var(--text-main)" stroke-width="2.2" stroke-dasharray="5 3"/>');
+  s.push('<text x="'+X(exact).toFixed(1)+'" y="'+(yb+50)+'" font-size="11" font-weight="700" fill="var(--text-main)" text-anchor="middle">exact answer</text>');
+  s.push('<line x1="'+ML+'" y1="'+(yb+22)+'" x2="'+(ML+pw)+'" y2="'+(yb+22)+'" stroke="var(--hairline)" stroke-width="1"/>');
+  s.push('<text x="'+ML+'" y="'+(H-6)+'" font-size="10" fill="var(--text-sec)">'+sxpNum(lo.toFixed(2))+'</text>');
+  s.push('<text x="'+(ML+pw)+'" y="'+(H-6)+'" font-size="10" fill="var(--text-sec)" text-anchor="end">'+sxpNum(hi.toFixed(2))+'</text>');
+  s.push('</svg>');
+  document.getElementById('bsPlot').innerHTML=s.join('');
+}
+// ---- playground 2: correlation and the tail -------------------------------------
+var CO_N=30000, coTimer=null;
+function coInput(){
+  document.getElementById('coRv').textContent=sxpNum((+document.getElementById('coR').value/100).toFixed(2));
+  clearTimeout(coTimer); coTimer=setTimeout(coRun,120);
+}
+function coRun(){
+  var rho=+document.getElementById('coR').value/100;
+  var a=Math.sqrt(rho), b=Math.sqrt(1-rho), v=[], sum=0;    // one common factor + idiosyncratic noise
+  for(var i=0;i<CO_N;i++){
+    var f=randn(), s=0;
+    for(var k=0;k<10;k++){ s+=0.20*(a*f+b*randn()); }       // every asset keeps a 20% volatility
+    s/=10; v.push(s); sum+=s;
+  }
+  var mean=sum/CO_N, sq=0;
+  for(var j=0;j<CO_N;j++){ sq+=(v[j]-mean)*(v[j]-mean); }
+  var sd=Math.sqrt(sq/CO_N);
+  v.sort(function(x,y){return x-y;});
+  var p5=v[Math.floor(0.05*CO_N)];
+  document.getElementById('coP5').textContent=sxpFmtPct(p5,1);
+  document.getElementById('coSD').textContent='portfolio volatility '+sxpFmtPct(sd,1)+'  ·  each asset is still '+sxpFmtPct(0.20,0);
+  coDraw(v,p5);
+  var d=document.getElementById('coVerdict');
+  if(rho===0) d.innerHTML='<b>Diversification, exactly as promised.</b> Ten independent assets at 20% each give a portfolio at 20% over the square root of ten - about 6.3%. That the simulation reproduces the textbook formula is another free certification.';
+  else if(rho<=0.35) d.innerHTML='<b>A little dependence, a lot of damage.</b> The assets are individually unchanged, yet the bad year has already roughly doubled. Diversification is quietly leaking.';
+  else d.innerHTML='<b>Diversification has mostly stopped working.</b> At this correlation the ten assets behave increasingly like one - which is precisely what happens in a stressed market, and precisely when you were counting on them not to.';
+}
+function coDraw(v,p5){
+  var W=560,H=230,ML=8,MR=8,MT=22,MB=28,pw=W-ML-MR,ph=H-MT-MB;
+  var lo=v[Math.floor(0.002*v.length)], hi=v[Math.floor(0.998*v.length)];
+  var BINS=46, c=new Array(BINS).fill(0);
+  for(var i=0;i<v.length;i++){ var b=Math.floor((v[i]-lo)/(hi-lo)*BINS); if(b>=0&&b<BINS)c[b]++; }
+  var cmax=Math.max.apply(null,c)||1, X=function(x){ return ML+(x-lo)/(hi-lo)*pw; };
+  var s=['<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Distribution of portfolio returns at the chosen correlation">'];
+  for(var b2=0;b2<BINS;b2++){
+    var mid=lo+(b2+0.5)/BINS*(hi-lo), bh=c[b2]/cmax*ph;
+    s.push('<rect x="'+(ML+b2/BINS*pw).toFixed(1)+'" y="'+(MT+ph-bh).toFixed(1)+'" width="'+(pw/BINS-1).toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+(mid<p5?'var(--fn)':'var(--accent)')+'" opacity="'+(mid<p5?0.55:0.3)+'"/>');
+  }
+  s.push('<line x1="'+X(p5).toFixed(1)+'" y1="'+MT+'" x2="'+X(p5).toFixed(1)+'" y2="'+(MT+ph+4)+'" stroke="var(--fn)" stroke-width="2.2"/>');
+  s.push('<text x="'+X(p5).toFixed(1)+'" y="'+(MT-6)+'" font-size="10" font-weight="700" fill="var(--fn)" text-anchor="middle">worst 5% start here</text>');
+  s.push('<line x1="'+X(0).toFixed(1)+'" y1="'+MT+'" x2="'+X(0).toFixed(1)+'" y2="'+(MT+ph)+'" stroke="var(--text-sec)" stroke-width="1" stroke-dasharray="3 3"/>');
+  s.push('<line x1="'+ML+'" y1="'+(MT+ph)+'" x2="'+(ML+pw)+'" y2="'+(MT+ph)+'" stroke="var(--hairline)" stroke-width="1"/>');
+  s.push('<text x="'+ML+'" y="'+(MT+ph+18)+'" font-size="10" fill="var(--text-sec)">'+sxpFmtPct(lo,0)+'</text>');
+  s.push('<text x="'+(ML+pw)+'" y="'+(MT+ph+18)+'" font-size="10" fill="var(--text-sec)" text-anchor="end">'+sxpFmtPct(hi,0)+'</text>');
+  s.push('</svg>');
+  document.getElementById('coHist').innerHTML=s.join('');
+}
+bsInput(); coInput();
+</script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>

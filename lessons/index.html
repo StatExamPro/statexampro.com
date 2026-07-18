@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-<title>Biostatistics lessons - explained for clinicians</title>
-<meta name="description" content="Illustrated biostatistics lessons, built step by step: the ROC curve and AUC from scratch, with the one sentence that makes each idea stick.">
-<meta property="og:title" content="Biostatistics lessons, explained for clinicians">
+<title>Statistics lessons - built from the ground up</title>
+<meta name="description" content="Illustrated statistics lessons, built step by step: the ROC curve and AUC from scratch, and Monte Carlo simulation from first principles, with a runnable notebook.">>
+<meta property="og:title" content="Statistics lessons, built from the ground up">
 <meta property="og:description" content="Illustrated lessons: each idea built step by step, with the one sentence that makes it stick. Starting with ROC and AUC.">
 <meta name="apple-itunes-app" content="app-id=6755912771">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -86,6 +86,9 @@
 <li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
 <li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
 </ul></div>
+<div class="cn-grp"><h4><span class="cn-n">07</span> <span data-en="Monte Carlo &amp; simulation" data-fr="Monte Carlo et simulation">Monte Carlo &amp; simulation</span></h4><ul>
+<li><a href="/lessons/monte-carlo/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="Monte Carlo, explained" data-fr="Monte Carlo, expliqué">Monte Carlo, explained</span></a></li>
+</ul></div>
 <div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
 <li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
 </ul></div>
@@ -99,10 +102,16 @@
 </nav>
 <main class="main">
 
-<h1 data-en="Biostatistics lessons" data-fr="Cours de biostatistiques">Biostatistics lessons</h1>
-<p class="lead" data-en="Illustrated explainers for medical biostatistics, built from the ground up: what each idea is, how it is constructed step by step, and the one sentence that makes it stick." data-fr="Des cours illustrés de biostatistique médicale, construits depuis la base : ce qu'est chaque notion, comment elle se construit pas à pas, et la phrase qui la fait retenir.">Illustrated explainers for medical biostatistics, built from the ground up: what each idea is, how it is constructed step by step, and the one sentence that makes it stick.</p>
+<h1 data-en="Statistics lessons" data-fr="Cours de statistiques">Statistics lessons</h1>
+<p class="lead" data-en="Illustrated explainers built from the ground up: what each idea is, how it is constructed step by step, and the one sentence that makes it stick. Medical biostatistics first, plus the broader methods it leans on." data-fr="Des cours illustrés construits depuis la base : ce qu'est chaque notion, comment elle se construit pas à pas, et la phrase qui la fait retenir. La biostatistique médicale d'abord, puis les méthodes plus larges sur lesquelles elle s'appuie.">Illustrated explainers built from the ground up: what each idea is, how it is constructed step by step, and the one sentence that makes it stick. Medical biostatistics first, plus the broader methods it leans on.</p>
 
 <article>
+
+<div class="hub-card">
+ <h2><a href="/lessons/monte-carlo/" data-en="Monte Carlo simulation, explained from first principles" data-fr="La simulation de Monte-Carlo, expliquée depuis les principes premiers">Monte Carlo simulation, explained from first principles</a></h2>
+ <p class="hc-tag" data-en="Monte Carlo &middot; the square-root law &middot; seeds &amp; reproducibility" data-fr="Monte-Carlo &middot; la loi en racine carrée &middot; graines et reproductibilité &middot; en anglais">Monte Carlo &middot; the square-root law &middot; seeds &amp; reproducibility</p>
+ <p class="hc-desc" data-en="A four-part guide to the method behind option pricing, A/B tests and clinical trial design. What the engine is, how it differs from the bootstrap and MCMC, and where it lives - then the parts build it from pi upwards, with playgrounds and a notebook you can run." data-fr="Un guide en quatre parties sur la méthode derrière la valorisation d'options, les tests A/B et la conception d'essais cliniques. Ce qu'est le moteur, en quoi il diffère du bootstrap et du MCMC, et où il vit - puis les parties le construisent depuis pi, avec des simulateurs et un notebook.">A four-part guide to the method behind option pricing, A/B tests and clinical trial design. What the engine is, how it differs from the bootstrap and MCMC, and where it lives - then the parts build it from pi upwards, with playgrounds and a notebook you can run.</p>
+</div>
 
 <div class="hub-card">
  <h2><a href="/lessons/roc-auc/" data-en="ROC and AUC, explained for clinicians" data-fr="ROC et AUC, expliqués pour les cliniciens">ROC and AUC, explained for clinicians</a></h2>

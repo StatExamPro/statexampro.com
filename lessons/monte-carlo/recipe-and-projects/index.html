@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Monte Carlo part 2: the recipe, a DCF, and power by simulation</title>
+<meta name="description" content="Turn uniform random numbers into any distribution, learn the five-step recipe every simulation follows, then build two: a valuation DCF as a distribution of value, and statistical power without a formula.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<meta property="og:title" content="The Monte Carlo recipe, and two real projects">
+<meta property="og:description" content="A point-estimate DCF says the business is worth $40M. A simulated one says: somewhere between $28M and $55M, and the $40M asking price is a coin flip.">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="icon" href="../../../favicon.ico">
+<link rel="manifest" href="../../../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/lessons/monte-carlo/recipe-and-projects/">
+<meta property="og:url" content="https://statexampro.com/lessons/monte-carlo/recipe-and-projects/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/assets/og-monte-carlo-recipe-and-projects.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - the Monte Carlo recipe, a valuation DCF and power by simulation">
+<meta name="twitter:image" content="https://statexampro.com/assets/og-monte-carlo-recipe-and-projects.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<script defer src="../../../vendor/katex/katex.min.js"></script>
+<script defer src="../../../vendor/katex/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../../../site.css">
+<style>h1{font-size:2.1rem;font-weight:800;letter-spacing:-1px;margin:16px 0 10px}
+.mc-dial{margin:14px 0 0;padding-left:0;list-style:none}
+.mc-dial li{padding:10px 0;border-top:1px solid var(--hairline-2);font-size:.97rem}
+.mc-dial li:first-child{border-top:none}
+.mc-dial b{color:var(--accent)}
+.mc-step{background:var(--card-bg);border-radius:var(--r-lg);padding:18px 22px;margin:12px 0}
+.mc-step h3{font-size:1.05rem;font-weight:800;margin:0 0 6px;display:flex;gap:10px;align-items:baseline}
+.mc-step h3 .k{color:var(--accent);font-variant-numeric:tabular-nums;flex:none}
+.mc-step p{color:var(--text-sec);font-size:.95rem;margin:0;max-width:70ch}
+.mc-tblwrap{overflow-x:auto;margin:14px 0}
+.mc-tbl{border-collapse:collapse;font-size:.86rem;min-width:520px}
+.mc-tbl th{text-align:left;font-weight:700;color:var(--text-sec);padding:6px 16px 6px 0;border-bottom:1px solid var(--hairline)}
+.mc-tbl td{text-align:left;padding:8px 16px 8px 0;border-bottom:1px solid var(--hairline-2);color:var(--text-sec);vertical-align:top}
+.mc-tbl td b{color:var(--text-main)}
+.mc-play{margin:24px 0}
+.mc-chart{background:var(--card-bg);border-radius:var(--r-lg);padding:16px}
+.mc-chart svg{width:100%;height:auto;display:block}
+.mc-verdict{margin:14px 0 0;font-size:.95rem}
+.mc-btn{font:inherit;font-size:.85rem;font-weight:700;padding:8px 14px;border-radius:10px;border:1px solid var(--hairline);background:var(--bg-color);color:var(--text-main);cursor:pointer;margin-top:4px}
+.mc-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mc-nb{background:var(--card-bg);border-radius:var(--r-lg);padding:22px 24px;margin:24px 0}
+.mc-nb h3{font-size:1.1rem;font-weight:800;margin:0 0 8px}
+.mc-nb p{color:var(--text-sec);font-size:.96rem;margin:0 0 14px;max-width:66ch}
+.mc-nb .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mc-nb .row a{text-decoration:none}
+.mc-next{list-style:none;padding:0;margin:12px 0 0}
+.mc-next li{padding:11px 0;border-top:1px solid var(--hairline-2);font-size:.96rem;color:var(--text-sec)}
+.mc-next li:first-child{border-top:none}
+.mc-next b{color:var(--text-main)}
+.mc-sins{list-style:none;padding:0;margin:12px 0 0}
+.mc-sins li{padding:12px 0;border-top:1px solid var(--hairline-2);font-size:.95rem;color:var(--text-sec)}
+.mc-sins li:first-child{border-top:none}
+.mc-sins b{color:var(--fn)}
+.mc-faq details{background:var(--card-bg);border-radius:var(--r-md);padding:14px 18px;margin:10px 0}
+.mc-faq summary{cursor:pointer;font-weight:700;font-size:.98rem}
+.mc-faq p{font-size:.94rem;color:var(--text-sec);margin:10px 0 0}
+details.mc-more{margin-top:12px;border-top:1px solid var(--hairline-2);padding-top:10px}
+details.mc-more summary{cursor:pointer;font-weight:700;font-size:.9rem;color:var(--accent);list-style:none}
+details.mc-more summary::-webkit-details-marker{display:none}
+details.mc-more summary::before{content:"+ ";font-weight:800}
+details.mc-more[open] summary::before{content:"\2212 "}
+details.mc-more p{font-size:.93rem;color:var(--text-sec);margin:10px 0 0}
+@media(max-width:820px){h1{font-size:1.7rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"The Monte Carlo recipe, and two real projects","inLanguage":"en","about":"Monte Carlo simulation","url":"https://statexampro.com/lessons/monte-carlo/recipe-and-projects/","datePublished":"2026-07-16","dateModified":"2026-07-16","author":{"@type":"Organization","name":"Stat Exam Pro"},"publisher":{"@type":"Organization","name":"Stat Exam Pro","logo":{"@type":"ImageObject","url":"https://statexampro.com/web-app-manifest-512x512.png"}},"image":"https://statexampro.com/og-card.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://statexampro.com/lessons/monte-carlo/recipe-and-projects/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do you turn a uniform random number into any distribution?","acceptedAnswer":{"@type":"Answer","text":"Use the inverse transform. A uniform draw is a random percentile, and the inverse CDF translates a percentile back into a value, so X = F-inverse(U) has exactly the distribution F. For the exponential this inverts by hand to minus log of one minus U, divided by the rate. The normal has no closed-form inverse CDF, which is why it gets bespoke algorithms such as Box-Muller."}},{"@type":"Question","name":"How do you calculate statistical power by simulation?","acceptedAnswer":{"@type":"Answer","text":"Power is the probability your test detects a real effect, so estimate it as a frequency. Write a function that simulates one complete study including its analysis and returns whether it reached significance, run it thousands of times with the effect you care about, and take the mean. Validate the simulator against the closed-form answer on the textbook case first, then add dropout, skew or any other realism the formula cannot handle."}},{"@type":"Question","name":"Why is a Monte Carlo DCF better than a point-estimate DCF?","acceptedAnswer":{"@type":"Answer","text":"A point estimate feeds the midpoint of every uncertainty into the model and returns one number with no sense of how wrong it might be. It is also biased: valuation arithmetic is nonlinear, so the value at the average inputs is not the average value. Simulation feeds distributions instead and returns a distribution of value, which supports the sentences a decision actually needs, such as the probability the value falls below the asking price."}},{"@type":"Question","name":"What are the five steps of a Monte Carlo simulation?","acceptedAnswer":{"@type":"Answer","text":"Model the uncertain inputs by giving each a distribution and stating dependencies. Generate N scenarios from a seeded generator. Propagate each scenario through the deterministic business logic. Aggregate the N outcomes into a mean, percentiles and tail probabilities. Quantify the simulation error with standard errors, then re-run with another seed and double N as a sanity check."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://statexampro.com/"},{"@type":"ListItem","position":2,"name":"Lessons","item":"https://statexampro.com/lessons/"},{"@type":"ListItem","position":3,"name":"Monte Carlo","item":"https://statexampro.com/lessons/monte-carlo/"},{"@type":"ListItem","position":4,"name":"Part 2 - The recipe"}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+
+
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Course menu">&#9776;</button>
+ <a class="logo" href="/"><img src="../../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Course">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Predictive values</span></h4><ul>
+<li><a href="/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">PPV &amp; NPV, explained</span></a></li>
+<li><a href="/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</span></a></li>
+<li><a href="/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Worked exercises</span></a></li>
+<li><a href="/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Cheat sheet &amp; PDF</span></a></li>
+<li><a href="/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC &amp; AUC</span></h4><ul>
+<li><a href="/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC &amp; AUC, explained</span></a></li>
+<li><a href="/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</span></a></li>
+<li><a href="/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">The sepsis AI that missed two thirds</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Treatment effect</span></h4><ul>
+<li><a href="/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT &amp; absolute risk</span></a></li>
+<li><a href="/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Survival analysis</span></h4><ul>
+<li><a href="/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Kaplan&ndash;Meier curves</span></a></li>
+<li><a href="/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">The 82% survival myth</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Screening &amp; bias</span></h4><ul>
+<li><a href="/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Screening bias, live</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Lead-time &amp; overdiagnosis</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significance &amp; multiplicity</span></h4><ul>
+<li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">07</span> <span data-en="Monte Carlo &amp; simulation" data-fr="Monte Carlo et simulation">Monte Carlo &amp; simulation</span></h4><ul>
+<li><a href="/lessons/monte-carlo/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="Monte Carlo, explained" data-fr="Monte Carlo, expliqué">Monte Carlo, explained</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
+<li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">By format</span></h4><ul>
+<li><a href="/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">All calculators</span></a></li>
+<li><a href="/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">All lessons</span></a></li>
+<li><a href="/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">All exercises</span></a></li>
+<li><a href="/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">All cheat sheets</span></a></li>
+<li><a href="/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">All stat questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<div class="crumb"><a href="/lessons/" data-en="Lessons">Lessons</a> <span data-en="/">/</span> <a href="/lessons/monte-carlo/" data-en="Monte Carlo">Monte Carlo</a> <span data-en="/ Part 2 &middot; The recipe">/ Part 2 &middot; The recipe</span></div>
+
+<h1 data-en="The recipe, and two real projects">The recipe, and two real projects</h1>
+<p class="lead" data-en="Part 1 gave you the engine and its error bar. Now the assembly instructions: how to manufacture any distribution from uniform noise, the five steps every simulation follows, and two complete builds - a valuation rebuilt as a distribution of value, and a sample-size analysis that survives contact with reality.">Part 1 gave you the engine and its error bar. Now the assembly instructions: how to manufacture any distribution from uniform noise, the five steps every simulation follows, and two complete builds - a valuation rebuilt as a distribution of value, and a sample-size analysis that survives contact with reality.</p>
+
+<section class="lesson" id="sampling">
+ <h2 data-en="From uniform to anything">From uniform to anything</h2>
+ <p data-en="Deep down a random generator produces exactly one thing: numbers spread uniformly between 0 and 1. Yet real models need normal returns, lognormal prices, exponential waiting times, Poisson arrival counts. Every one of those is manufactured from uniforms by a transformation. In practice you call the library and let it do the manufacturing - but the two classic techniques underneath are worth owning, because one day you'll need a distribution the library doesn't stock, or one that exists only as data.">Deep down a random generator produces exactly one thing: numbers spread uniformly between 0 and 1. Yet real models need normal returns, lognormal prices, exponential waiting times, Poisson arrival counts. Every one of those is manufactured from uniforms by a transformation. In practice you call the library and let it do the manufacturing - but the two classic techniques underneath are worth owning, because one day you'll need a distribution the library doesn't stock, or one that exists only as data.</p>
+ <p data-en="The inverse transform is the universal adapter, and the idea is easier than the name. Every distribution has a CDF - a curve climbing from 0 to 1 - and that curve is a translator between two languages: the horizontal axis speaks values, the vertical axis speaks percentiles. Saying F(120) = 0.85 is saying &ldquo;120 is the 85th percentile&rdquo;. So: draw a uniform number and read it as a percentile request. Then translate it back into a value with the inverse CDF. That's it.">The inverse transform is the universal adapter, and the idea is easier than the name. Every distribution has a CDF - a curve climbing from 0 to 1 - and that curve is a translator between two languages: the horizontal axis speaks values, the vertical axis speaks percentiles. Saying F(120) = 0.85 is saying &ldquo;120 is the 85th percentile&rdquo;. So: draw a uniform number and read it as a percentile request. Then translate it back into a value with the inverse CDF. That's it.</p>
+ <div class="formula-box">$$X = F^{-1}(U), \qquad U \sim \text{Uniform}[0,1]$$</div>
+ <p data-en="Why it must work, in one sentence of intuition: a uniform draw picks every percentile equally often, and the inverse CDF automatically converts equal percentile-traffic into correct value-traffic - crowding draws where the curve is steep (values packed together, which is what high density means) and thinning them where it's flat.">Why it must work, in one sentence of intuition: a uniform draw picks every percentile equally often, and the inverse CDF automatically converts equal percentile-traffic into correct value-traffic - crowding draws where the curve is steep (values packed together, which is what high density means) and thinning them where it's flat.</p>
+ <details class="mc-more"><summary data-en="The proof in one line, and the interview favourite worked by hand">The proof in one line, and the interview favourite worked by hand</summary>
+  <p data-en="The proof is short enough to memorise. The probability that X is at most x equals the probability that the inverse CDF of U is at most x, which equals the probability that U is at most F(x) - and for a uniform, the probability of being below u is just u. So that probability is F(x), which is exactly what it means for X to have distribution F.">The proof is short enough to memorise. The probability that X is at most x equals the probability that the inverse CDF of U is at most x, which equals the probability that U is at most F(x) - and for a uniform, the probability of being below u is just u. So that probability is F(x), which is exactly what it means for X to have distribution F.</p>
+  <p data-en="Now the classic interview question: generate an exponential from a uniform. The exponential CDF is one minus e to the minus lambda x. Set that equal to u and solve for x, and you get x = -ln(1 - u)/lambda. Two lines of code and you have built a distribution with your bare hands. (Since 1 - U is also uniform, -ln(u)/lambda works too - a small elegance interviewers enjoy.)">Now the classic interview question: generate an exponential from a uniform. The exponential CDF is one minus e to the minus lambda x. Set that equal to u and solve for x, and you get x = -ln(1 - u)/lambda. Two lines of code and you have built a distribution with your bare hands. (Since 1 - U is also uniform, -ln(u)/lambda works too - a small elegance interviewers enjoy.)</p>
+  <p data-en="The method is fully general - it works for any one-dimensional distribution, including empirical ones: sort your historical data and the sorted array is a discretised inverse CDF, which is how you simulate draws that look like your own dataset. Its only weakness is that some inverse CDFs have no closed form. The normal is the famous offender, which is why it gets bespoke algorithms - Box-Muller being the one a human can rederive at a whiteboard: take two uniforms, use one for a random angle and the other for a random radius, convert to Cartesian coordinates, and out come two exact standard normals. Polar coordinates do all the work.">The method is fully general - it works for any one-dimensional distribution, including empirical ones: sort your historical data and the sorted array is a discretised inverse CDF, which is how you simulate draws that look like your own dataset. Its only weakness is that some inverse CDFs have no closed form. The normal is the famous offender, which is why it gets bespoke algorithms - Box-Muller being the one a human can rederive at a whiteboard: take two uniforms, use one for a random angle and the other for a random radius, convert to Cartesian coordinates, and out come two exact standard normals. Polar coordinates do all the work.</p>
+  <p data-en="The other classic is accept-reject, and it is Part 1's dartboard reused. Suppose you can evaluate a density but can't invert its CDF. Draw the density curve inside a box, throw uniform darts at the box, keep the ones that land under the curve and discard the rest: the survivors' x-coordinates have exactly that density, because tall regions of the curve catch proportionally more darts - which is what density means. The catch is efficiency: if the curve fills little of the box, you throw away almost everything, and in high dimensions that becomes hopeless. That inefficiency is precisely the gap MCMC was invented to fill.">The other classic is accept-reject, and it is Part 1's dartboard reused. Suppose you can evaluate a density but can't invert its CDF. Draw the density curve inside a box, throw uniform darts at the box, keep the ones that land under the curve and discard the rest: the survivors' x-coordinates have exactly that density, because tall regions of the curve catch proportionally more darts - which is what density means. The catch is efficiency: if the curve fills little of the box, you throw away almost everything, and in high dimensions that becomes hopeless. That inefficiency is precisely the gap MCMC was invented to fill.</p>
+ </details>
+ <h3 data-en="Which distribution should you use?">Which distribution should you use?</h3>
+ <p data-en="Mechanics answered, the real question remains, and it is judgment rather than code. The working shortlist is mercifully small:">Mechanics answered, the real question remains, and it is judgment rather than code. The working shortlist is mercifully small:</p>
+ <ul class="mc-dial">
+  <li><b data-en="Normal">Normal</b> <span data-en="- sums of many small independent effects: measurement error, aggregate demand, log-returns over short horizons. Symmetric, and it allows negative values - which disqualifies it for prices, quantities and durations.">- sums of many small independent effects: measurement error, aggregate demand, log-returns over short horizons. Symmetric, and it allows negative values - which disqualifies it for prices, quantities and durations.</span></li>
+  <li><b data-en="Lognormal">Lognormal</b> <span data-en="- products of many small effects, meaning anything that grows multiplicatively: asset prices, firm sizes, incomes, project durations. Always positive, right-skewed. Rule of thumb: if the natural sentence is &ldquo;it could go up or down 20%&rdquo; - percent, not dollars - you're in lognormal country. In valuation you will live here.">- products of many small effects, meaning anything that grows multiplicatively: asset prices, firm sizes, incomes, project durations. Always positive, right-skewed. Rule of thumb: if the natural sentence is &ldquo;it could go up or down 20%&rdquo; - percent, not dollars - you're in lognormal country. In valuation you will live here.</span></li>
+  <li><b data-en="Triangular">Triangular</b> <span data-en="- the expert-elicitation workhorse: minimum, most likely, maximum, straight from an interview with whoever knows the business. Not deep theory; extremely honest about the shape of what you actually know.">- the expert-elicitation workhorse: minimum, most likely, maximum, straight from an interview with whoever knows the business. Not deep theory; extremely honest about the shape of what you actually know.</span></li>
+  <li><b data-en="Exponential and Poisson">Exponential and Poisson</b> <span data-en="- the memoryless pair: exponential for waiting times between independent random events, Poisson for the count of such events per period.">- the memoryless pair: exponential for waiting times between independent random events, Poisson for the count of such events per period.</span></li>
+  <li><b data-en="Uniform">Uniform</b> <span data-en="- genuine &ldquo;all I know is the range&rdquo;. Rarer than beginners think: usually you know at least where the middle is, and triangular represents that knowledge better.">- genuine &ldquo;all I know is the range&rdquo;. Rarer than beginners think: usually you know at least where the middle is, and triangular represents that knowledge better.</span></li>
+ </ul>
+ <div class="callout warn"><span data-en="This choice is model-error territory, and Part 1's tattoo applies exactly here: no N fixes a wrong distribution. If the tails matter for your question - risk, insurance, anything with the word &ldquo;worst&rdquo; in it - the choice of distribution matters far more than anything else in this guide.">This choice is model-error territory, and Part 1's tattoo applies exactly here: no N fixes a wrong distribution. If the tails matter for your question - risk, insurance, anything with the word &ldquo;worst&rdquo; in it - the choice of distribution matters far more than anything else in this guide.</span></div>
+</section>
+
+<section class="lesson" id="recipe">
+ <h2 data-en="The universal recipe">The universal recipe</h2>
+ <p data-en="Every Monte Carlo simulation ever built - pi, neutron transport, option pricing, clinical trial design - is the same five steps. Learn the skeleton once and you can read any simulation, and structure your own, instantly.">Every Monte Carlo simulation ever built - pi, neutron transport, option pricing, clinical trial design - is the same five steps. Learn the skeleton once and you can read any simulation, and structure your own, instantly.</p>
+ <div class="mc-step"><h3><span class="k">1</span><span data-en="Model">Model</span></h3><p data-en="Identify the uncertain inputs and give each one a distribution. Decide the dependencies between them - at entry level, independence, stated out loud as an assumption rather than assumed in silence.">Identify the uncertain inputs and give each one a distribution. Decide the dependencies between them - at entry level, independence, stated out loud as an assumption rather than assumed in silence.</p></div>
+ <div class="mc-step"><h3><span class="k">2</span><span data-en="Generate">Generate</span></h3><p data-en="Draw N scenarios of the inputs from a seeded generator. One scenario is one complete joint draw of every input: one possible world.">Draw N scenarios of the inputs from a seeded generator. One scenario is one complete joint draw of every input: one possible world.</p></div>
+ <div class="mc-step"><h3><span class="k">3</span><span data-en="Propagate">Propagate</span></h3><p data-en="Push each scenario through the deterministic business logic - the same arithmetic you'd do for a single case, vectorised over all N worlds at once. All your domain knowledge lives in this step; the other four are boilerplate.">Push each scenario through the deterministic business logic - the same arithmetic you'd do for a single case, vectorised over all N worlds at once. All your domain knowledge lives in this step; the other four are boilerplate.</p></div>
+ <div class="mc-step"><h3><span class="k">4</span><span data-en="Aggregate">Aggregate</span></h3><p data-en="Collapse N outcomes into answers: mean, spread, percentiles, the probability of landing below a threshold, a histogram. Notice the shift from a number to a distribution - that is the whole cultural payoff. A deterministic model answers &ldquo;what is the NPV?&rdquo;; this one answers &ldquo;what might the NPV be, with what probabilities?&rdquo;, which is the question the decision actually needs.">Collapse N outcomes into answers: mean, spread, percentiles, the probability of landing below a threshold, a histogram. Notice the shift from a number to a distribution - that is the whole cultural payoff. A deterministic model answers &ldquo;what is the NPV?&rdquo;; this one answers &ldquo;what might the NPV be, with what probabilities?&rdquo;, which is the question the decision actually needs.</p></div>
+ <div class="mc-step"><h3><span class="k">5</span><span data-en="Quantify the simulation error">Quantify the simulation error</span></h3><p data-en="Standard errors on everything you report, plus the thirty-second ritual: rerun with another seed - conclusions should survive - and double N, where results should move less than your reported error bar. Cheap, and it separates professionals from dart-throwers.">Standard errors on everything you report, plus the thirty-second ritual: rerun with another seed - conclusions should survive - and double N, where results should move less than your reported error bar. Cheap, and it separates professionals from dart-throwers.</p></div>
+ <p class="note" data-en="One structural note before the projects: everything here is static Monte Carlo - draw the inputs once, compute an outcome. Many famous applications are dynamic, where the random thing is a path evolving in time: a stock price day by day, a disease progressing, a queue filling and draining. Nothing conceptually new - a path is just a high-dimensional scenario generated one step at a time, and the square-root law's blindness to dimension is exactly why simulation handles paths so calmly - but path generation has its own techniques and its own bugs, so it opens Part 3.">One structural note before the projects: everything here is static Monte Carlo - draw the inputs once, compute an outcome. Many famous applications are dynamic, where the random thing is a path evolving in time: a stock price day by day, a disease progressing, a queue filling and draining. Nothing conceptually new - a path is just a high-dimensional scenario generated one step at a time, and the square-root law's blindness to dimension is exactly why simulation handles paths so calmly - but path generation has its own techniques and its own bugs, so it opens Part 3.</p>
+</section>
+
+<section class="lesson" id="dcf">
+ <h2 data-en="Project 1: from a point-estimate DCF to a distribution of value">Project 1: from a point-estimate DCF to a distribution of value</h2>
+ <p data-en="You're valuing a small subscription-software business over five years. The classical spreadsheet: pick a revenue growth rate - say 12% - an EBITDA margin of 30%, a discount rate, a terminal multiple; grind the arithmetic; announce that the business is worth $40M.">You're valuing a small subscription-software business over five years. The classical spreadsheet: pick a revenue growth rate - say 12% - an EBITDA margin of 30%, a discount rate, a terminal multiple; grind the arithmetic; announce that the business is worth $40M.</p>
+ <p data-en="Every number in that sentence is a guess dressed as a fact. Growth around 12% - could be 5%, could be 20%. Margin around 30% - depends on churn and hiring. The point-estimate DCF takes the midpoint of every uncertainty, multiplies them together, and produces one number with no honest sense of how wrong it might be.">Every number in that sentence is a guess dressed as a fact. Growth around 12% - could be 5%, could be 20%. Margin around 30% - depends on churn and hiring. The point-estimate DCF takes the midpoint of every uncertainty, multiplies them together, and produces one number with no honest sense of how wrong it might be.</p>
+ <div class="callout"><span data-en="And it is worse than merely vague, in a way that surprises people: the value at the average inputs is generally not the average value. Valuation arithmetic is nonlinear - growth compounds, terminal value multiplies margin by revenue - so feeding means into the model gives you a number that is not the mean of anything. That has a name, Jensen's inequality, and in this model it is worth about 1% of silent bias: the deterministic base case understates the true expected value. One percent sounds small until you notice it is pure, unearned, and invisible.">And it is worse than merely vague, in a way that surprises people: the value at the average inputs is generally not the average value. Valuation arithmetic is nonlinear - growth compounds, terminal value multiplies margin by revenue - so feeding means into the model gives you a number that is not the mean of anything. That has a name, Jensen's inequality, and in this model it is worth about 1% of silent bias: the deterministic base case understates the true expected value. One percent sounds small until you notice it is pure, unearned, and invisible.</span></div>
+ <p data-en="Monte Carlo's proposal: stop feeding the model midpoints. Feed it distributions, and let it tell you the distribution of value. Step 1 of the recipe - the inputs, their distributions, and the reason for each - is the heart of any simulation writeup, and the part a reviewer will actually challenge:">Monte Carlo's proposal: stop feeding the model midpoints. Feed it distributions, and let it tell you the distribution of value. Step 1 of the recipe - the inputs, their distributions, and the reason for each - is the heart of any simulation writeup, and the part a reviewer will actually challenge:</p>
+ <div class="mc-tblwrap"><table class="mc-tbl">
+  <tr><th data-en="Input">Input</th><th data-en="Distribution">Distribution</th><th data-en="Why">Why</th></tr>
+  <tr><td><b data-en="Revenue growth">Revenue growth</b></td><td data-en="A persistent level drawn once per world, around 12% give or take 4%, plus annual noise of about 3%">A persistent level drawn once per world, around 12% give or take 4%, plus annual noise of about 3%</td><td data-en="Businesses have a quality level that persists - good ones keep being good - with year-to-year noise on top. The persistence fattens the tails and creates the genuine compounding convexity behind Jensen's gap.">Businesses have a quality level that persists - good ones keep being good - with year-to-year noise on top. The persistence fattens the tails and creates the genuine compounding convexity behind Jensen's gap.</td></tr>
+  <tr><td><b data-en="EBITDA margin">EBITDA margin</b></td><td data-en="Triangular: worst 22%, most likely 30%, best 35%">Triangular: worst 22%, most likely 30%, best 35%</td><td data-en="Straight from the management interview. The skew is real: there are more ways to disappoint than to delight.">Straight from the management interview. The skew is real: there are more ways to disappoint than to delight.</td></tr>
+  <tr><td><b data-en="Discount rate">Discount rate</b></td><td data-en="Fixed at 11%">Fixed at 11%</td><td data-en="A choice, not a random state of the world - deliberately not simulated.">A choice, not a random state of the world - deliberately not simulated.</td></tr>
+  <tr><td><b data-en="Exit multiple">Exit multiple</b></td><td data-en="Triangular: 6, most likely 8, up to 11">Triangular: 6, most likely 8, up to 11</td><td data-en="Market-driven, wide, mildly right-skewed.">Market-driven, wide, mildly right-skewed.</td></tr>
+ </table></div>
+ <p data-en="One entry-level simplification, stated out loud: the inputs are independent. In reality growth and exit multiple are probably correlated - good businesses exit rich - and ignoring that understates the spread of value. We accept the bias knowingly and flag it; fixing it is Part 3. Notice the professional posture: not &ldquo;my model is right&rdquo; but &ldquo;here are my assumptions, and here is which direction each one biases the answer&rdquo;.">One entry-level simplification, stated out loud: the inputs are independent. In reality growth and exit multiple are probably correlated - good businesses exit rich - and ignoring that understates the spread of value. We accept the bias knowingly and flag it; fixing it is Part 3. Notice the professional posture: not &ldquo;my model is right&rdquo; but &ldquo;here are my assumptions, and here is which direction each one biases the answer&rdquo;.</p>
+ <details class="mc-more"><summary data-en="Steps 2 and 3 in nine lines, and the idiom to internalise">Steps 2 and 3 in nine lines, and the idiom to internalise</summary>
+  <div class="formula-box" style="text-align:left"><code>N, years, wacc, rev0 = 100_000, 5, 0.11, 10.0<br>rng = np.random.default_rng(2026)<br><br>g_bar = rng.normal(0.12, 0.04, size=(N, 1))        # persistent growth, one per world<br>g   = g_bar + rng.normal(0, 0.03, size=(N, years)) # plus annual noise<br>rev = rev0 * np.cumprod(1 + g, axis=1)             # compounded revenue paths<br>m   = rng.triangular(0.22, 0.30, 0.35, size=(N,1))<br>ebitda = rev * m<br><br>disc  = (1 + wacc) ** -np.arange(1, years + 1)<br>mult  = rng.triangular(6, 8, 11, size=N)<br>value = ebitda @ disc + mult * ebitda[:, -1] * disc[-1]</code></div>
+  <p data-en="The idiom to internalise is the shape: rows are worlds, columns are time. Compounding runs along each row, and the matrix-vector product with the discount factors performs 100,000 complete DCFs in one line. This is Part 1's vectorisation habit paying rent - and it is also your first taste of a dynamic simulation, because each row of the revenue array is a path. Squint and you can see geometric Brownian motion from here: make the log-growth normal per step and let the number of steps grow. That is literally Part 3's first model.">The idiom to internalise is the shape: rows are worlds, columns are time. Compounding runs along each row, and the matrix-vector product with the discount factors performs 100,000 complete DCFs in one line. This is Part 1's vectorisation habit paying rent - and it is also your first taste of a dynamic simulation, because each row of the revenue array is a path. Squint and you can see geometric Brownian motion from here: make the log-growth normal per step and let the number of steps grow. That is literally Part 3's first model.</p>
+ </details>
+</section>
+
+<section class="lesson" id="playground-dcf">
+ <h2 data-en="Value the business">Value the business</h2>
+ <p data-en="Twenty thousand possible five-year futures, one histogram. The dashed line is the deterministic base case - the single number the spreadsheet would have announced. Move the growth assumption and its uncertainty, then set an asking price and read the sentence a point estimate physically cannot say.">Twenty thousand possible five-year futures, one histogram. The dashed line is the deterministic base case - the single number the spreadsheet would have announced. Move the growth assumption and its uncertainty, then set an asking price and read the sentence a point estimate physically cannot say.</p>
+ <div class="play mc-play">
+  <div class="panel">
+   <div class="ctrl"><label for="dcfG"><span data-en="Revenue growth, central guess">Revenue growth, central guess</span><span class="val" id="dcfGv"></span></label><input type="range" id="dcfG" min="4" max="20" step="1" value="12" oninput="dcfInput()"></div>
+   <div class="ctrl"><label for="dcfS"><span data-en="How unsure are you about it">How unsure are you about it</span><span class="val" id="dcfSv"></span></label><input type="range" id="dcfS" min="0" max="9" step="1" value="4" oninput="dcfInput()"></div>
+   <div class="ctrl"><label for="dcfA"><span data-en="Asking price">Asking price</span><span class="val" id="dcfAv"></span></label><input type="range" id="dcfA" min="20" max="70" step="1" value="40" oninput="dcfInput()"></div>
+   <div aria-live="polite">
+    <div class="bignum" id="dcfP"></div>
+    <div class="bignum-label" data-en="chance the business is worth less than the asking price">chance the business is worth less than the asking price</div>
+    <div class="smallnum" id="dcfStat"></div>
+   </div>
+  </div>
+  <div class="mc-chart">
+   <div id="dcfHist"></div>
+   <div class="mc-verdict softbox" id="dcfVerdict"></div>
+  </div>
+ </div>
+ <p class="note" data-en="Notice three things. The spread is the message: at the default assumptions the value runs from roughly $28M to $55M - uncertain by a factor of two inside our own assumptions, which is the reason the method exists. The shape is right-skewed, because multiplicative arithmetic manufactures lognormal-ish outputs out of symmetric inputs. And the mean sits slightly above the dashed base case: that gap is Jensen's inequality, live - set the uncertainty slider to zero and watch it close.">Notice three things. The spread is the message: at the default assumptions the value runs from roughly $28M to $55M - uncertain by a factor of two inside our own assumptions, which is the reason the method exists. The shape is right-skewed, because multiplicative arithmetic manufactures lognormal-ish outputs out of symmetric inputs. And the mean sits slightly above the dashed base case: that gap is Jensen's inequality, live - set the uncertainty slider to zero and watch it close.</p>
+ <details class="mc-more"><summary data-en="How an analyst reads this, and the two judgment calls that teach the craft">How an analyst reads this, and the two judgment calls that teach the craft</summary>
+  <p data-en="Percentiles are the deliverable, not the mean. P5 / P25 / P50 / P75 / P95 is how simulation results are actually communicated, because &ldquo;a P5 of $28.5M&rdquo; is a stress case with a probability attached - categorically more useful than an arbitrary &ldquo;bear case&rdquo;. And tail probabilities come for free: if the asking price is $40M - exactly the base case - the chance of overpaying is about a coin flip, with the consolation that the upside tail is longer than the downside one. Try saying that with a point estimate.">Percentiles are the deliverable, not the mean. P5 / P25 / P50 / P75 / P95 is how simulation results are actually communicated, because &ldquo;a P5 of $28.5M&rdquo; is a stress case with a probability attached - categorically more useful than an arbitrary &ldquo;bear case&rdquo;. And tail probabilities come for free: if the asking price is $40M - exactly the base case - the chance of overpaying is about a coin flip, with the consolation that the upside tail is longer than the downside one. Try saying that with a point estimate.</p>
+  <p data-en="Why not simulate the discount rate? Because it isn't a random state of the world on par with growth - it's the price of risk, and in this design it is precisely the mechanism by which risk gets converted into value. Sprinkling a distribution on it double-counts uncertainty and mixes &ldquo;what might happen&rdquo; with &ldquo;how we price what might happen&rdquo;. The transferable lesson: not every number in the model should become a distribution. Simulate states of the world; choose policies and prices.">Why not simulate the discount rate? Because it isn't a random state of the world on par with growth - it's the price of risk, and in this design it is precisely the mechanism by which risk gets converted into value. Sprinkling a distribution on it double-counts uncertainty and mixes &ldquo;what might happen&rdquo; with &ldquo;how we price what might happen&rdquo;. The transferable lesson: not every number in the model should become a distribution. Simulate states of the world; choose policies and prices.</p>
+  <p data-en="Which input matters most? Freeze the inputs at their central values one at a time and watch the output spread shrink; rank them by how much spread they own. Here the persistent growth assumption dominates - it owns roughly two-thirds of the output variance - with margin and exit multiple splitting the rest. The practical consequence is a work plan: analyst hours belong on stress-testing the growth thesis, churn data and cohort analysis, not on polishing the margin assumption. The simulation just told you where diligence has the highest return. Not bad for forty lines.">Which input matters most? Freeze the inputs at their central values one at a time and watch the output spread shrink; rank them by how much spread they own. Here the persistent growth assumption dominates - it owns roughly two-thirds of the output variance - with margin and exit multiple splitting the rest. The practical consequence is a work plan: analyst hours belong on stress-testing the growth thesis, churn data and cohort analysis, not on polishing the margin assumption. The simulation just told you where diligence has the highest return. Not bad for forty lines.</p>
+ </details>
+</section>
+
+<section class="lesson" id="power">
+ <h2 data-en="Project 2: statistical power, without a formula">Project 2: statistical power, without a formula</h2>
+ <p data-en="Different domain, identical skeleton - which is the point of doing two. You're planning a study: a clinical trial, an A/B test, same maths. A new treatment against control, an effect you expect, a t-test at the 5% level. The question every study must answer before collecting data: how many subjects?">Different domain, identical skeleton - which is the point of doing two. You're planning a study: a clinical trial, an A/B test, same maths. A new treatment against control, an effect you expect, a t-test at the 5% level. The question every study must answer before collecting data: how many subjects?</p>
+ <p data-en="Too few and the study is a coin flip: a real effect exists but your test probably won't see it, and you've spent the budget - or exposed patients - to learn nothing. Too many wastes money and time. The quantity that formalises this is power: the probability your test detects the effect, given that the effect is real. Convention wants at least 80%.">Too few and the study is a coin flip: a real effect exists but your test probably won't see it, and you've spent the budget - or exposed patients - to learn nothing. Too many wastes money and time. The quantity that formalises this is power: the probability your test detects the effect, given that the effect is real. Convention wants at least 80%.</p>
+ <p data-en="For the textbook case - two groups, normal outcomes, known effect size - power has a closed formula, and you should absolutely use it. But nudge the design one inch toward reality and the formula dies: dropout, unequal groups, skewed outcomes, a nonparametric test, repeated measures, an interim analysis. No formula, or a formula resting on assumptions you know are false.">For the textbook case - two groups, normal outcomes, known effect size - power has a closed formula, and you should absolutely use it. But nudge the design one inch toward reality and the formula dies: dropout, unequal groups, skewed outcomes, a nonparametric test, repeated measures, an interim analysis. No formula, or a formula resting on assumptions you know are false.</p>
+ <div class="callout"><span data-en="Here is the philosophical inversion, and it is the lesson of this project. In Project 1 we simulated to learn about an unknown quantity - the value of a business. Here we simulate to learn about our own statistical procedure: we play God, manufacture worlds where the truth is known because we typed it, and then check how often our procedure finds that truth. Frequentist statistics is defined by behaviour under hypothetical repetition; simulation simply performs the repetition.">Here is the philosophical inversion, and it is the lesson of this project. In Project 1 we simulated to learn about an unknown quantity - the value of a business. Here we simulate to learn about our own statistical procedure: we play God, manufacture worlds where the truth is known because we typed it, and then check how often our procedure finds that truth. Frequentist statistics is defined by behaviour under hypothetical repetition; simulation simply performs the repetition.</span></div>
+ <p data-en="And once you see it that way the code writes itself, because power is a probability - so estimate it as a frequency, exactly like Part 1's gambler:">And once you see it that way the code writes itself, because power is a probability - so estimate it as a frequency, exactly like Part 1's gambler:</p>
+ <div class="formula-box" style="text-align:left"><code>def one_study(n_per_group, effect, sd, rng):<br>&nbsp;&nbsp;&nbsp;&nbsp;a = rng.normal(0,      sd, n_per_group)   # control<br>&nbsp;&nbsp;&nbsp;&nbsp;b = rng.normal(effect, sd, n_per_group)   # treatment<br>&nbsp;&nbsp;&nbsp;&nbsp;return ttest_ind(a, b).pvalue &lt; 0.05      # did we detect it?<br><br>power = np.mean([one_study(64, 0.5, 1.0, rng) for _ in range(5000)])</code></div>
+ <p data-en="Note the shape: one_study simulates one complete study, analysis included, and returns a single bit. Power is the mean of those bits. And because power is a proportion, its own standard error is the familiar square root of p times one minus p over the number of simulated studies - with 5,000 studies that's about ±0.6 percentage points, plenty for a design decision.">Note the shape: one_study simulates one complete study, analysis included, and returns a single bit. Power is the mean of those bits. And because power is a proportion, its own standard error is the familiar square root of p times one minus p over the number of simulated studies - with 5,000 studies that's about ±0.6 percentage points, plenty for a design decision.</p>
+ <div class="callout"><span data-en="Validate first - always. Run the textbook case, where n = 64 per group at an effect of half a standard deviation has a known analytical answer: the formula says 80.7%, the simulation says 79.3% give or take 1.1% - agreement within the simulation's own error bar, which is exactly what certification means. This step looks dispensable and is the opposite. Professionals validate simulators on solvable cases the way pilots check instruments on the ground, and Part 3 ritualises it: every new technique gets benchmarked against Black-Scholes, the great solvable case of finance.">Validate first - always. Run the textbook case, where n = 64 per group at an effect of half a standard deviation has a known analytical answer: the formula says 80.7%, the simulation says 79.3% give or take 1.1% - agreement within the simulation's own error bar, which is exactly what certification means. This step looks dispensable and is the opposite. Professionals validate simulators on solvable cases the way pilots check instruments on the ground, and Part 3 ritualises it: every new technique gets benchmarked against Black-Scholes, the great solvable case of finance.</span></div>
+</section>
+
+<section class="lesson" id="playground-power">
+ <h2 data-en="Size the study">Size the study</h2>
+ <p data-en="The power curve is the actual deliverable of a sample-size analysis. Each point is 600 complete simulated studies - generate two groups, run the t-test, count the detections. Set the effect you expect, then break the textbook with dropout and watch the closed form stop being able to help you.">The power curve is the actual deliverable of a sample-size analysis. Each point is 600 complete simulated studies - generate two groups, run the t-test, count the detections. Set the effect you expect, then break the textbook with dropout and watch the closed form stop being able to help you.</p>
+ <div class="play mc-play">
+  <div class="panel">
+   <div class="ctrl"><label for="pwE"><span data-en="Effect you expect, in SD">Effect you expect, in SD</span><span class="val" id="pwEv"></span></label><input type="range" id="pwE" min="20" max="100" step="5" value="50" oninput="pwInput()"></div>
+   <div class="ctrl"><label for="pwD"><span data-en="Patients who drop out">Patients who drop out</span><span class="val" id="pwDv"></span></label><input type="range" id="pwD" min="0" max="30" step="5" value="0" oninput="pwInput()"></div>
+   <div aria-live="polite">
+    <div class="bignum" id="pwN"></div>
+    <div class="bignum-label" data-en="patients per group for 80% power">patients per group for 80% power</div>
+    <div class="smallnum" id="pwF"></div>
+   </div>
+  </div>
+  <div class="mc-chart">
+   <div id="pwCurve"></div>
+   <div class="mc-verdict softbox" id="pwVerdict"></div>
+  </div>
+ </div>
+ <p class="note" data-en="With no dropout the simulation should land on the closed form - that's the certification, and it is printed under the number. Now add 15% dropout: the formula has no opinion, and the curve simply moves. That is the moment the method stops being a demo. If you can code the mess, you can power the mess.">With no dropout the simulation should land on the closed form - that's the certification, and it is printed under the number. Now add 15% dropout: the formula has no opinion, and the curve simply moves. That is the moment the method stops being a demo. If you can code the mess, you can power the mess.</p>
+ <details class="mc-more"><summary data-en="The same machinery, pointed at Type I error - a lie detector for methods">The same machinery, pointed at Type I error - a lie detector for methods</summary>
+  <p data-en="Power asks whether the test fires when it should. The mirror question - does it stay quiet when it shouldn't? - is checked by the same code with one character changed: set the effect to zero, and the rejection rate should come out at exactly 5%. That turns simulation into a lie detector for statistical methods. Point it at a t-test on heavily skewed data with fifteen per group and the real Type I error is about 4%, not 5 - conservative, which sounds virtuous until you realise it means quietly underpowered. Other assumption violations push the error the other way.">Power asks whether the test fires when it should. The mirror question - does it stay quiet when it shouldn't? - is checked by the same code with one character changed: set the effect to zero, and the rejection rate should come out at exactly 5%. That turns simulation into a lie detector for statistical methods. Point it at a t-test on heavily skewed data with fifteen per group and the real Type I error is about 4%, not 5 - conservative, which sounds virtuous until you realise it means quietly underpowered. Other assumption violations push the error the other way.</p>
+  <p data-en="Now point it at a genuinely bad practice: peek at the p-value every 20 subjects and stop as soon as it's significant. The false-positive rate balloons past 20%, and you have just derived, with your own hands, why sequential peeking without correction is a methodological crime. An enormous fraction of methodological research in biostatistics is exactly this loop - simulate under known truth, audit the method's error and coverage - and you now own the entire template. It fits in a dozen lines.">Now point it at a genuinely bad practice: peek at the p-value every 20 subjects and stop as soon as it's significant. The false-positive rate balloons past 20%, and you have just derived, with your own hands, why sequential peeking without correction is a methodological crime. An enormous fraction of methodological research in biostatistics is exactly this loop - simulate under known truth, audit the method's error and coverage - and you now own the entire template. It fits in a dozen lines.</p>
+ </details>
+ <p class="note"><span data-en="That last experiment is one we have already run on this site from the other end: the">That last experiment is one we have already run on this site from the other end: the</span> <a href="/stat-questions/multiple-comparisons/" data-en="multiple-comparisons case">multiple-comparisons case</a> <span data-en="shows the same inflation from scanning many contexts rather than many looks - and fixes it by simulating the null and taking the quantile of the maximum. Part 4 turns that pattern into calibrated sequential designs.">shows the same inflation from scanning many contexts rather than many looks - and fixes it by simulating the null and taking the quantile of the maximum. Part 4 turns that pattern into calibrated sequential designs.</span></p>
+</section>
+
+<section class="lesson" id="sins">
+ <h2 data-en="The seven deadly sins">The seven deadly sins</h2>
+ <p data-en="Collected from real code reviews. Each has appeared above; here they are as a pre-flight checklist - the referee's version of this guide.">Collected from real code reviews. Each has appeared above; here they are as a pre-flight checklist - the referee's version of this guide.</p>
+ <ul class="mc-sins">
+  <li><b data-en="1. Reporting a number without an error bar.">1. Reporting a number without an error bar.</b> <span data-en="The simulation grades its own homework; not asking for the grade is malpractice. And tail percentiles are far noisier than the mean - the P1 of 10,000 scenarios rests on just 100 points, so if the deliverable is a tail, size N for the tail.">The simulation grades its own homework; not asking for the grade is malpractice. And tail percentiles are far noisier than the mean - the P1 of 10,000 scenarios rests on just 100 points, so if the deliverable is a tail, size N for the tail.</span></li>
+  <li><b data-en="2. Confusing the spread of the world with the spread of your estimate.">2. Confusing the spread of the world with the spread of your estimate.</b> <span data-en="&ldquo;The NPV is $52M ± $30M&rdquo; - is that the project's risk or your simulation's noise? They differ by a factor of the square root of N, and confusing them misprices either the project or your own competence.">&ldquo;The NPV is $52M ± $30M&rdquo; - is that the project's risk or your simulation's noise? They differ by a factor of the square root of N, and confusing them misprices either the project or your own competence.</span></li>
+  <li><b data-en="3. No seed, or seed chaos.">3. No seed, or seed chaos.</b> <span data-en="Unreproducible analysis, undebuggable failures, A-versus-B comparisons polluted by luck. One explicit seeded generator per experiment, passed as an argument and recorded in the report - and spawned streams for parallelism, never hand-seeded workers.">Unreproducible analysis, undebuggable failures, A-versus-B comparisons polluted by luck. One explicit seeded generator per experiment, passed as an argument and recorded in the report - and spawned streams for parallelism, never hand-seeded workers.</span></li>
+  <li><b data-en="4. Independence by default, silently.">4. Independence by default, silently.</b> <span data-en="Correlated realities simulated as independent inputs - growth and exit multiples, component failures with a common cause, assets in the same market. The tails come out badly wrong, usually optimistically. Entry-level licence: assume independence out loud, with a sentence on which way it biases the result.">Correlated realities simulated as independent inputs - growth and exit multiples, component failures with a common cause, assets in the same market. The tails come out badly wrong, usually optimistically. Entry-level licence: assume independence out loud, with a sentence on which way it biases the result.</span></li>
+  <li><b data-en="5. Trusting the tails of a convenient distribution.">5. Trusting the tails of a convenient distribution.</b> <span data-en="Normal tails are thin; reality's usually are not. If the question is about extremes, the distribution choice is the analysis, and no N will rescue a thin-tailed model of a fat-tailed world.">Normal tails are thin; reality's usually are not. If the question is about extremes, the distribution choice is the analysis, and no N will rescue a thin-tailed model of a fat-tailed world.</span></li>
+  <li><b data-en="6. Judging convergence by eyeball.">6. Judging convergence by eyeball.</b> <span data-en="&ldquo;The number stopped moving, ship it.&rdquo; Skewed quantities plateau deceptively between rare huge draws. Convergence is declared by the standard error being small enough for the decision - a number, not a vibe.">&ldquo;The number stopped moving, ship it.&rdquo; Skewed quantities plateau deceptively between rare huge draws. Convergence is declared by the standard error being small enough for the decision - a number, not a vibe.</span></li>
+  <li><b data-en="7. Simulating what should be computed.">7. Simulating what should be computed.</b> <span data-en="The square-root law makes simulation the expensive route to easy problems. And when a closed form exists it isn't the enemy - it's the validation case your simulator gets certified against before facing the problems that have no formula.">The square-root law makes simulation the expensive route to easy problems. And when a closed form exists it isn't the enemy - it's the validation case your simulator gets certified against before facing the problems that have no formula.</span></li>
+ </ul>
+</section>
+
+<div class="mc-nb">
+ <h3 data-en="Now go and build them">Now go and build them</h3>
+ <p data-en="Both projects live in the companion notebook, complete and ready to run in your browser. Section 6 builds distributions from uniforms by hand, Section 8 is the full DCF including the Jensen check and the tornado analysis, and Section 9 is the power study with the validation case, the curve, dropout, skew and the peeking experiment. Change one line and it becomes your model.">Both projects live in the companion notebook, complete and ready to run in your browser. Section 6 builds distributions from uniforms by hand, Section 8 is the full DCF including the Jensen check and the tornado analysis, and Section 9 is the power study with the validation case, the curve, dropout, skew and the peeking experiment. Change one line and it becomes your model.</p>
+ <div class="row">
+  <a class="pill" href="https://colab.research.google.com/github/StatExamPro/statexampro.com/blob/main/notebooks/monte-carlo-entry.ipynb" rel="noopener" target="_blank" onclick="sxpGo('colab-open-monte-carlo-entry-p2','Open the entry notebook in Colab (part 2)')" data-en="Open in Colab">Open in Colab</a>
+  <a class="pill ghost" href="/notebooks/monte-carlo-entry.ipynb" download data-en="Download the notebook">Download the notebook</a>
+ </div>
+</div>
+
+<section class="lesson" id="next">
+ <h2 data-en="What's next">What's next</h2>
+ <ul class="mc-next">
+  <li><b><a href="/lessons/monte-carlo/paths-and-options/" data-en="Part 3 - paths and options.">Part 3 - paths and options.</a></b> <span data-en="What changes when time enters: random walks, geometric Brownian motion, and the option-pricing workflow certified against Black-Scholes. Then correlated inputs via Cholesky - the fix for sin 4 above - and the dependence-modelling error that helped detonate 2008.">What changes when time enters: random walks, geometric Brownian motion, and the option-pricing workflow certified against Black-Scholes. Then correlated inputs via Cholesky - the fix for sin 4 above - and the dependence-modelling error that helped detonate 2008.</span></li>
+ </ul>
+ <p class="note"><span data-en="Missed the engine and its error bar?">Missed the engine and its error bar?</span> <a href="/lessons/monte-carlo/first-principles/" data-en="Part 1 builds both from scratch">Part 1 builds both from scratch</a><span data-en=", and all four parts are listed on the">, and all four parts are listed on the</span> <a href="/lessons/monte-carlo/" data-en="series hub">series hub</a><span data-en=".">.</span></p>
+</section>
+
+<section class="lesson mc-faq" id="faq">
+ <h2 data-en="Frequently asked">Frequently asked</h2>
+ <details>
+  <summary data-en="How do you turn a uniform random number into any distribution?">How do you turn a uniform random number into any distribution?</summary>
+  <p data-en="Use the inverse transform: a uniform draw is a random percentile, and the inverse CDF translates a percentile back into a value, so X = F-inverse(U) has exactly the distribution F. For the exponential it inverts by hand to minus the log of one minus U, divided by the rate. The normal has no closed-form inverse CDF, which is why it gets bespoke algorithms such as Box-Muller.">Use the inverse transform: a uniform draw is a random percentile, and the inverse CDF translates a percentile back into a value, so X = F-inverse(U) has exactly the distribution F. For the exponential it inverts by hand to minus the log of one minus U, divided by the rate. The normal has no closed-form inverse CDF, which is why it gets bespoke algorithms such as Box-Muller.</p>
+ </details>
+ <details>
+  <summary data-en="How do you calculate statistical power by simulation?">How do you calculate statistical power by simulation?</summary>
+  <p data-en="Power is the probability your test detects a real effect, so estimate it as a frequency. Write a function that simulates one complete study including its analysis and returns whether it reached significance; run it thousands of times at the effect you care about; take the mean. Validate against the closed form on the textbook case first, then add dropout, skew, or any other realism the formula cannot handle.">Power is the probability your test detects a real effect, so estimate it as a frequency. Write a function that simulates one complete study including its analysis and returns whether it reached significance; run it thousands of times at the effect you care about; take the mean. Validate against the closed form on the textbook case first, then add dropout, skew, or any other realism the formula cannot handle.</p>
+ </details>
+ <details>
+  <summary data-en="Why is a Monte Carlo DCF better than a point-estimate DCF?">Why is a Monte Carlo DCF better than a point-estimate DCF?</summary>
+  <p data-en="A point estimate feeds the midpoint of every uncertainty into the model and returns one number with no sense of how wrong it might be. It is also quietly biased: valuation arithmetic is nonlinear, so the value at the average inputs is not the average value. Simulation feeds distributions instead and returns a distribution of value - which supports the sentences a decision actually needs, such as the probability that the value falls below the asking price.">A point estimate feeds the midpoint of every uncertainty into the model and returns one number with no sense of how wrong it might be. It is also quietly biased: valuation arithmetic is nonlinear, so the value at the average inputs is not the average value. Simulation feeds distributions instead and returns a distribution of value - which supports the sentences a decision actually needs, such as the probability that the value falls below the asking price.</p>
+ </details>
+ <details>
+  <summary data-en="What are the five steps of a Monte Carlo simulation?">What are the five steps of a Monte Carlo simulation?</summary>
+  <p data-en="Model the uncertain inputs by giving each a distribution and stating the dependencies. Generate N scenarios from a seeded generator. Propagate each scenario through the deterministic business logic. Aggregate the outcomes into a mean, percentiles and tail probabilities. Quantify the simulation error, then re-run with another seed and double N as a sanity check.">Model the uncertain inputs by giving each a distribution and stating the dependencies. Generate N scenarios from a seeded generator. Propagate each scenario through the deterministic business logic. Aggregate the outcomes into a mean, percentiles and tail probabilities. Quantify the simulation error, then re-run with another seed and double N as a sanity check.</p>
+ </details>
+</section>
+
+<div class="cta">
+ <p data-en="Power, dropout and the traps behind them are exam material long before they are job material. Stat Exam Pro drills the questions, with worked answers.">Power, dropout and the traps behind them are exam material long before they are job material. Stat Exam Pro drills the questions, with worked answers.</p>
+ <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-monte-carlo-p2-bottom','App Store button (Monte Carlo part 2)')">
+  <span class="apple-icon"></span>
+  <span data-en="Get it on iPhone">Get it on iPhone</span>
+ </a>
+</div>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../../../site.js"></script>
+<script>
+var LANG='en';
+var seed=12345;
+function rnd(){ seed=(seed*1664525+1013904223)%4294967296; return seed/4294967296; }
+function randn(){ var u=0,v=0; while(u===0)u=rnd(); while(v===0)v=rnd(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+function tri(a,c,b){                                  // triangular: min a, mode c, max b
+  var u=rnd(), f=(c-a)/(b-a);
+  return u<f ? a+Math.sqrt(u*(b-a)*(c-a)) : b-Math.sqrt((1-u)*(b-a)*(b-c));
+}
+function pct(a,q){ return a[Math.min(a.length-1,Math.max(0,Math.floor(q*a.length)))]; }
+
+// ---- playground 1: the DCF ------------------------------------------------------
+var DCF_N=20000, dcfTimer=null;
+function dcfBase(mu){          // the deterministic spreadsheet: every input at its MEAN, not its mode.
+  var m=(0.22+0.30+0.35)/3;   // Jensen's gap is f(mean inputs) vs mean of f, so the comparison is
+  var q=(6+8+11)/3;           // only honest if the base case really is the value at the means -
+  var rev=10, v=0;            // a triangular's mean sits below its mode here (0.29, not 0.30).
+  for(var t=1;t<=5;t++){ rev*=(1+mu); v+=rev*m/Math.pow(1.11,t); }
+  return v + q*rev*m/Math.pow(1.11,5);
+}
+function dcfInput(){
+  document.getElementById('dcfGv').textContent=sxpFmtPct(+document.getElementById('dcfG').value/100,0);
+  document.getElementById('dcfSv').textContent='± '+sxpFmtPct(+document.getElementById('dcfS').value/100,0);
+  document.getElementById('dcfAv').textContent='$'+sxpNum(+document.getElementById('dcfA').value)+'M';
+  clearTimeout(dcfTimer); dcfTimer=setTimeout(dcfRun,120);
+}
+function dcfRun(){
+  var mu=+document.getElementById('dcfG').value/100, sd=+document.getElementById('dcfS').value/100;
+  var ask=+document.getElementById('dcfA').value;
+  var val=[], sum=0;
+  for(var i=0;i<DCF_N;i++){
+    // one world: a persistent growth level, then five compounded years with annual noise
+    var gbar=mu+sd*randn(), r=10, npv=0;
+    for(var t=1;t<=5;t++){ r*=(1+gbar+0.03*randn()); npv+=r/Math.pow(1.11,t); }
+    var m=tri(0.22,0.30,0.35), mult=tri(6,8,11);
+    var value=npv*m + mult*r*m/Math.pow(1.11,5);
+    val.push(value); sum+=value;
+  }
+  var mean=sum/DCF_N; val.sort(function(a,b){return a-b;});
+  var below=0; for(var k=0;k<DCF_N;k++){ if(val[k]<ask)below++; }
+  var p=below/DCF_N, base=dcfBase(mu);
+  document.getElementById('dcfP').textContent=sxpFmtPct(p,0);
+  document.getElementById('dcfStat').textContent='mean $'+sxpNum(mean.toFixed(1))+'M  ·  90% range $'+sxpNum(pct(val,0.05).toFixed(0))+'M-$'+sxpNum(pct(val,0.95).toFixed(0))+'M  ·  base case $'+sxpNum(base.toFixed(1))+'M';
+  dcfDraw(val,ask,base);
+  var v2=document.getElementById('dcfVerdict'), gap=mean-base;
+  if(sd===0){
+    v2.innerHTML='<b>Persistent growth is now certain - and Jensen\'s gap is gone.</b> The mean lands exactly on the base case. Note the value still varies: margin, exit multiple and year-to-year noise remain. Independent annual noise averages out, but a persistent growth level compounds - convexity only bites when uncertainty persists.';
+    return;
+  }
+  if(Math.abs(p-0.5)<0.06) v2.innerHTML='<b>At this price the deal is a coin flip on value</b> - about even odds of overpaying, with the consolation that the upside tail runs longer than the downside. A point estimate physically cannot say this.';
+  else if(p<0.5) v2.innerHTML='<b>The price looks favourable</b> against these assumptions - but read the left tail, not the mean: that is where the money is lost.';
+  else v2.innerHTML='<b>Most simulated worlds land below the asking price.</b> The mean alone would not have told you that; the distribution does.';
+  v2.innerHTML+=' <span style="opacity:.75">The mean sits $'+sxpNum(gap.toFixed(2))+'M above the base case - that is Jensen\'s gap, and it is real: drag the uncertainty to zero and it closes.</span>';
+}
+function dcfDraw(val,ask,base){
+  var W=560,H=240,ML=8,MR=8,MT=22,MB=28,pw=W-ML-MR,ph=H-MT-MB;
+  var lo=pct(val,0.005), hi=pct(val,0.995); if(hi-lo<1){lo-=1;hi+=1;}
+  lo=Math.min(lo,ask,base)-2; hi=Math.max(hi,ask,base)+2;
+  var BINS=44, c=new Array(BINS).fill(0);
+  for(var i=0;i<val.length;i++){ var b=Math.floor((val[i]-lo)/(hi-lo)*BINS); if(b>=0&&b<BINS)c[b]++; }
+  var cmax=Math.max.apply(null,c)||1, X=function(v){ return ML+(v-lo)/(hi-lo)*pw; };
+  var s=['<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Histogram of 20000 simulated valuations">'];
+  for(var b2=0;b2<BINS;b2++){
+    var mid=lo+(b2+0.5)/BINS*(hi-lo), bh=c[b2]/cmax*ph;
+    s.push('<rect x="'+(ML+b2/BINS*pw).toFixed(1)+'" y="'+(MT+ph-bh).toFixed(1)+'" width="'+(pw/BINS-1).toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+(mid<ask?'var(--fn)':'var(--accent)')+'" opacity="'+(mid<ask?0.5:0.32)+'"/>');
+  }
+  s.push('<line x1="'+X(base).toFixed(1)+'" y1="'+MT+'" x2="'+X(base).toFixed(1)+'" y2="'+(MT+ph)+'" stroke="var(--text-sec)" stroke-width="1.6" stroke-dasharray="4 3"/>');
+  s.push('<text x="'+X(base).toFixed(1)+'" y="'+(MT-6)+'" font-size="10" fill="var(--text-sec)" text-anchor="middle">base case</text>');
+  s.push('<line x1="'+X(ask).toFixed(1)+'" y1="'+MT+'" x2="'+X(ask).toFixed(1)+'" y2="'+(MT+ph+4)+'" stroke="var(--accent)" stroke-width="2.4"/>');
+  s.push('<text x="'+X(ask).toFixed(1)+'" y="'+(MT+ph+18)+'" font-size="10" font-weight="700" fill="var(--accent)" text-anchor="middle">asking price</text>');
+  s.push('<line x1="'+ML+'" y1="'+(MT+ph)+'" x2="'+(ML+pw)+'" y2="'+(MT+ph)+'" stroke="var(--hairline)" stroke-width="1"/></svg>');
+  document.getElementById('dcfHist').innerHTML=s.join('');
+}
+
+// ---- playground 2: power by simulation ------------------------------------------
+var SIMS=1000, NS=[10,20,30,40,50,60,70,80,90,100,120,150], pwTimer=null;
+function tcrit(df){ return 1.96 + 9.49/(4*df); }      // Cornish-Fisher: within ~0.01 of the t table
+function oneStudy(n,eff,drop){
+  var a=[],b=[];
+  for(var i=0;i<n;i++){ if(rnd()>=drop) a.push(randn()); }
+  for(var j=0;j<n;j++){ if(rnd()>=drop) b.push(eff+randn()); }
+  if(a.length<3||b.length<3) return false;
+  var ma=0,mb=0,k;
+  for(k=0;k<a.length;k++)ma+=a[k]; ma/=a.length;
+  for(k=0;k<b.length;k++)mb+=b[k]; mb/=b.length;
+  var va=0,vb=0;
+  for(k=0;k<a.length;k++)va+=(a[k]-ma)*(a[k]-ma);
+  for(k=0;k<b.length;k++)vb+=(b[k]-mb)*(b[k]-mb);
+  var df=a.length+b.length-2, sp=Math.sqrt((va+vb)/df);
+  var t=Math.abs(mb-ma)/(sp*Math.sqrt(1/a.length+1/b.length));
+  return t>tcrit(df);
+}
+function powerAt(n,eff,drop){
+  var hit=0; for(var s=0;s<SIMS;s++){ if(oneStudy(n,eff,drop))hit++; }
+  return hit/SIMS;
+}
+function pwInput(){
+  document.getElementById('pwEv').textContent=sxpNum((+document.getElementById('pwE').value/100).toFixed(2))+' SD';
+  document.getElementById('pwDv').textContent=sxpFmtPct(+document.getElementById('pwD').value/100,0);
+  clearTimeout(pwTimer); pwTimer=setTimeout(pwRun,120);
+}
+function pwRun(){
+  var eff=+document.getElementById('pwE').value/100, drop=+document.getElementById('pwD').value/100;
+  var pts=NS.map(function(n){ return {n:n,p:powerAt(n,eff,drop)}; });
+  var need=null;                                      // interpolate where the curve crosses 80%,
+  for(var i=0;i<pts.length;i++){                      // or the coarse grid would report 70 where
+    if(pts[i].p>=0.8){                                // the closed form says 63 and the whole
+      if(i===0){ need=pts[0].n; }                     // certification story falls apart
+      else { var a=pts[i-1], b=pts[i]; need=Math.round(a.n+(0.8-a.p)*(b.n-a.n)/(b.p-a.p)); }
+      break;
+    }
+  }
+  document.getElementById('pwN').textContent = need? sxpNum(need) : '150+';
+  // the closed form only exists for the clean textbook case
+  var nf=Math.ceil(2*Math.pow(1.96+0.8416,2)/(eff*eff));
+  document.getElementById('pwF').textContent = drop===0
+    ? 'the closed form says '+sxpNum(nf)+' - the simulation should land on it'
+    : 'no closed form once patients drop out';
+  pwDraw(pts,need);
+  var v=document.getElementById('pwVerdict');
+  if(drop===0) v.innerHTML='<b>Certification.</b> With clean, normal, complete data the simulation is reproducing a formula we already trust. That agreement is what earns it the right to be believed on the messy designs below.';
+  else v.innerHTML='<b>The formula just left the building.</b> Dropout throws away patients, so the curve slides right and you must enrol more to keep the same power - a number with direct budget consequences that no closed form was going to hand you.';
+}
+function pwDraw(pts,need){
+  var W=560,H=240,ML=34,MR=10,MT=16,MB=30,pw=W-ML-MR,ph=H-MT-MB;
+  var X=function(n){ return ML+(n-10)/140*pw; }, Y=function(p){ return MT+ph-p*ph; };
+  var s=['<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Simulated power curve against patients per group">'];
+  s.push('<line x1="'+ML+'" y1="'+Y(0.8).toFixed(1)+'" x2="'+(ML+pw)+'" y2="'+Y(0.8).toFixed(1)+'" stroke="var(--text-sec)" stroke-width="1.2" stroke-dasharray="4 3"/>');
+  s.push('<text x="'+(ML-6)+'" y="'+(Y(0.8)+3).toFixed(1)+'" font-size="10" fill="var(--text-sec)" text-anchor="end">80%</text>');
+  s.push('<text x="'+(ML-6)+'" y="'+(Y(0)+3).toFixed(1)+'" font-size="10" fill="var(--text-sec)" text-anchor="end">0</text>');
+  var d=pts.map(function(pt,i){ return (i?'L':'M')+X(pt.n).toFixed(1)+' '+Y(pt.p).toFixed(1); }).join(' ');
+  s.push('<path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="2.4"/>');
+  pts.forEach(function(pt){ s.push('<circle cx="'+X(pt.n).toFixed(1)+'" cy="'+Y(pt.p).toFixed(1)+'" r="2.6" fill="var(--accent)"/>'); });
+  if(need){
+    s.push('<line x1="'+X(need).toFixed(1)+'" y1="'+MT+'" x2="'+X(need).toFixed(1)+'" y2="'+(MT+ph+4)+'" stroke="var(--fn)" stroke-width="1.8"/>');
+    s.push('<text x="'+X(need).toFixed(1)+'" y="'+(MT+ph+18)+'" font-size="10" font-weight="700" fill="var(--fn)" text-anchor="middle">n = '+need+'</text>');
+  }
+  s.push('<line x1="'+ML+'" y1="'+(MT+ph)+'" x2="'+(ML+pw)+'" y2="'+(MT+ph)+'" stroke="var(--hairline)" stroke-width="1"/>');
+  s.push('<text x="'+(ML+pw)+'" y="'+(MT+ph+18)+'" font-size="10" fill="var(--text-sec)" text-anchor="end">150 per group</text>');
+  s.push('</svg>');
+  document.getElementById('pwCurve').innerHTML=s.join('');
+}
+dcfInput(); pwInput();      // labels answer now; both simulations start on the same debounce
+</script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>

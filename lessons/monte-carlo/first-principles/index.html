@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){try{var t=localStorage.getItem('sxp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<title>Monte Carlo simulation, explained from first principles</title>
+<meta name="description" content="What Monte Carlo actually is, in one sentence. Estimate pi by throwing darts, watch the law of large numbers work, meet the square-root law that prices every simulation, and run it all yourself.">
+<meta name="apple-itunes-app" content="app-id=6755912771">
+<meta property="og:title" content="Monte Carlo simulation, explained from first principles">
+<meta property="og:description" content="Every Monte Carlo method is one sentence wearing different costumes. Here is the sentence, a dartboard that estimates pi, and the square-root law that decides what accuracy costs.">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="icon" href="../../../favicon.ico">
+<link rel="manifest" href="../../../site.webmanifest">
+<link rel="canonical" href="https://statexampro.com/lessons/monte-carlo/first-principles/">
+<meta property="og:url" content="https://statexampro.com/lessons/monte-carlo/first-principles/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Stat Exam Pro">
+<meta property="og:image" content="https://statexampro.com/assets/og-monte-carlo-first-principles.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Stat Exam Pro - Monte Carlo simulation, explained from first principles">
+<meta name="twitter:image" content="https://statexampro.com/assets/og-monte-carlo-first-principles.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<script data-goatcounter="https://statexampro.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<script defer src="../../../vendor/katex/katex.min.js"></script>
+<script defer src="../../../vendor/katex/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../../../site.css">
+<style>h1{font-size:2.1rem;font-weight:800;letter-spacing:-1px;margin:16px 0 10px}
+.mc-q{background:var(--card-bg);border-radius:var(--r-lg);padding:22px 24px;margin:22px 0}
+.mc-q .src{font-size:.82rem;color:var(--text-sec);font-weight:600;margin:0 0 10px}
+.mc-q .src a{color:var(--accent);text-decoration:none}
+.mc-q blockquote{margin:0;font-size:1.05rem;line-height:1.55;border-left:var(--edge) solid var(--accent);padding-left:16px}
+.mc-q figure{margin:16px 0 0}
+.mc-q img{width:100%;max-width:620px;height:auto;border-radius:var(--r-md);display:block}
+.mc-engine{background:var(--accent-soft);border-radius:var(--r-md);padding:18px 22px;margin:20px 0;font-size:1.08rem;line-height:1.5}
+.mc-dial{margin:14px 0 0;padding-left:0;list-style:none}
+.mc-dial li{padding:10px 0;border-top:1px solid var(--hairline-2);font-size:.97rem}
+.mc-dial li:first-child{border-top:none}
+.mc-dial b{color:var(--accent)}
+.mc-play{margin:24px 0}
+.mc-board{background:var(--card-bg);border-radius:var(--r-lg);padding:16px;display:flex;align-items:center;justify-content:center}
+.mc-board canvas{width:100%;max-width:340px;height:auto;display:block;border-radius:var(--r-sm)}
+.mc-chart{background:var(--card-bg);border-radius:var(--r-lg);padding:16px}
+.mc-chart svg{width:100%;height:auto;display:block}
+.mc-btn{font:inherit;font-size:.85rem;font-weight:700;padding:8px 14px;border-radius:10px;border:1px solid var(--hairline);background:var(--bg-color);color:var(--text-main);cursor:pointer;margin-top:4px}
+.mc-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mc-verdict{margin:14px 0 0;font-size:.95rem}
+.mc-nb{background:var(--card-bg);border-radius:var(--r-lg);padding:22px 24px;margin:24px 0}
+.mc-nb h3{font-size:1.1rem;font-weight:800;margin:0 0 8px}
+.mc-nb p{color:var(--text-sec);font-size:.96rem;margin:0 0 14px;max-width:66ch}
+.mc-nb .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mc-nb .row a{text-decoration:none}
+.mc-next{list-style:none;padding:0;margin:12px 0 0}
+.mc-next li{padding:11px 0;border-top:1px solid var(--hairline-2);font-size:.96rem;color:var(--text-sec)}
+.mc-next li:first-child{border-top:none}
+.mc-next b{color:var(--text-main)}
+.mc-faq details{background:var(--card-bg);border-radius:var(--r-md);padding:14px 18px;margin:10px 0}
+.mc-faq summary{cursor:pointer;font-weight:700;font-size:.98rem}
+.mc-faq p{font-size:.94rem;color:var(--text-sec);margin:10px 0 0}
+.mc-src{list-style:none;margin:12px 0 0;padding:0}
+.mc-src li{padding:8px 0;border-top:1px solid var(--hairline-2);font-size:.93rem;color:var(--text-sec)}
+.mc-src li:first-child{border-top:none}
+.mc-src a{color:var(--accent);text-decoration:none;font-weight:600}
+details.mc-more{margin-top:12px;border-top:1px solid var(--hairline-2);padding-top:10px}
+details.mc-more summary{cursor:pointer;font-weight:700;font-size:.9rem;color:var(--accent);list-style:none}
+details.mc-more summary::-webkit-details-marker{display:none}
+details.mc-more summary::before{content:"+ ";font-weight:800}
+details.mc-more[open] summary::before{content:"\2212 "}
+details.mc-more p{font-size:.93rem;color:var(--text-sec);margin:10px 0 0}
+@media(max-width:820px){h1{font-size:1.7rem}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Monte Carlo simulation, explained from first principles","inLanguage":"en","about":"Monte Carlo simulation","url":"https://statexampro.com/lessons/monte-carlo/first-principles/","datePublished":"2026-07-16","dateModified":"2026-07-16","author":{"@type":"Organization","name":"Stat Exam Pro"},"publisher":{"@type":"Organization","name":"Stat Exam Pro","logo":{"@type":"ImageObject","url":"https://statexampro.com/web-app-manifest-512x512.png"}},"image":"https://statexampro.com/og-card.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://statexampro.com/lessons/monte-carlo/first-principles/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is Monte Carlo simulation, in one sentence?","acceptedAnswer":{"@type":"Answer","text":"If a quantity is hard to compute exactly, express it as an average over random outcomes, then generate lots of random outcomes and take the average. Every Monte Carlo method is that one sentence plus creativity about what you sample and how."}},{"@type":"Question","name":"How many Monte Carlo simulations do I need?","acceptedAnswer":{"@type":"Answer","text":"The error of a Monte Carlo estimate shrinks like one over the square root of N. That means halving the error costs four times the runs, and each extra correct digit costs a hundred times more runs. Rather than guessing N, compute the standard error of your own estimate and pick N to make it small enough for the decision you are making."}},{"@type":"Question","name":"What is the difference between Monte Carlo, the bootstrap and MCMC?","acceptedAnswer":{"@type":"Answer","text":"Plain Monte Carlo samples from a probability model you chose. The bootstrap resamples your observed dataset instead, so the randomness comes from your data rather than a model. MCMC is for distributions you cannot sample from directly: it builds a Markov chain whose long-run behaviour mimics the target, and its samples are not independent."}},{"@type":"Question","name":"Why does Monte Carlo use a random seed?","acceptedAnswer":{"@type":"Answer","text":"Computer random numbers are produced by a deterministic generator, and the seed is its starting point. Fixing the seed makes a simulation reproduce exactly, which is what makes results auditable and bugs findable. It is a feature, not a compromise."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://statexampro.com/"},{"@type":"ListItem","position":2,"name":"Lessons","item":"https://statexampro.com/lessons/"},{"@type":"ListItem","position":3,"name":"Monte Carlo","item":"https://statexampro.com/lessons/monte-carlo/"},{"@type":"ListItem","position":4,"name":"Part 1 - First principles"}]}</script>
+</head>
+<body>
+<div class="blur-orb orb-1"></div>
+<div class="blur-orb orb-2"></div>
+
+
+<header class="top"><div class="top-in"><button type="button" class="theme-btn burger" id="burger" aria-label="Course menu">&#9776;</button>
+ <a class="logo" href="/"><img src="../../../logo.svg" alt=""><span>Stat Exam Pro</span></a>
+ <span class="spacer"></span><div class="header-right">
+  <button type="button" class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9789;</button>
+ </div>
+</div></header>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<nav class="coursenav" aria-label="Course">
+<div class="cn-grp"><h4><span class="cn-n">01</span> <span data-en="Predictive values" data-fr="Valeurs prédictives">Predictive values</span></h4><ul>
+<li><a href="/ppv-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="PPV &amp; NPV, explained" data-fr="VPP et VPN, expliqués">PPV &amp; NPV, explained</span></a></li>
+<li><a href="/fagan-nomogram/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Fagan nomogram" data-fr="Nomogramme de Fagan">Fagan nomogram</span></a></li>
+<li><a href="/exercises/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg></span><span class="cn-lb" data-en="Worked exercises" data-fr="Exercices corrigés">Worked exercises</span></a></li>
+<li><a href="/cheatsheets/ppv-npv/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12.5" x2="15" y2="12.5"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><span class="cn-lb" data-en="Cheat sheet &amp; PDF" data-fr="Fiche &amp; PDF">Cheat sheet &amp; PDF</span></a></li>
+<li><a href="/fails/hiv-false-positives/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The counsellors who were 100% sure" data-fr="Les conseillers sûrs à 100 %">The counsellors who were 100% sure</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">02</span> <span data-en="ROC &amp; AUC" data-fr="ROC et AUC">ROC &amp; AUC</span></h4><ul>
+<li><a href="/lessons/roc-auc/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="ROC &amp; AUC, explained" data-fr="ROC et AUC, expliqués">ROC &amp; AUC, explained</span></a></li>
+<li><a href="/roc-curve/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="ROC playground" data-fr="Simulateur ROC">ROC playground</span></a></li>
+<li><a href="/fails/epic-sepsis-model/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The sepsis AI that missed two thirds" data-fr="L'IA de sepsis qui en a manqué deux tiers">The sepsis AI that missed two thirds</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">03</span> <span data-en="Treatment effect" data-fr="Effet du traitement">Treatment effect</span></h4><ul>
+<li><a href="/nnt-calculator/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="NNT &amp; absolute risk" data-fr="NNT et risque absolu">NNT &amp; absolute risk</span></a></li>
+<li><a href="/fails/the-1995-pill-scare/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 1995 pill scare" data-fr="La panique de la pilule de 1995">The 1995 pill scare</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">04</span> <span data-en="Survival analysis" data-fr="Analyse de survie">Survival analysis</span></h4><ul>
+<li><a href="/kaplan-meier/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Kaplan&ndash;Meier curves" data-fr="Courbes de Kaplan&ndash;Meier">Kaplan&ndash;Meier curves</span></a></li>
+<li><a href="/fails/giuliani-prostate-cancer/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-2.2 3.5L17 12H6z"/></svg></span><span class="cn-lb" data-en="The 82% survival myth" data-fr="Le mythe des 82 % de survie">The 82% survival myth</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">05</span> <span data-en="Screening &amp; bias" data-fr="Dépistage et biais">Screening &amp; bias</span></h4><ul>
+<li><a href="/screening-bias/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><circle cx="9" cy="8" r="2.3" fill="var(--bg-color)"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="15" cy="16" r="2.3" fill="var(--bg-color)"/></svg></span><span class="cn-lb" data-en="Screening bias, live" data-fr="Biais du dépistage, en direct">Screening bias, live</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="Lead-time &amp; overdiagnosis" data-fr="Avance au diagnostic et surdiagnostic">Lead-time &amp; overdiagnosis</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">06</span> <span data-en="Significance &amp; multiplicity" data-fr="Significativité et multiplicité">Significance &amp; multiplicity</span></h4><ul>
+<li><a href="/stat-questions/multiple-comparisons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="Is a streak real?" data-fr="Une série est-elle réelle ?">Is a streak real?</span></a></li>
+<li><a class="cn-soon" href="#"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span><span class="cn-lb" data-en="p-values, done right" data-fr="Les valeurs p, bien faites">p-values, done right</span> <span class="cn-tag" data-en="soon" data-fr="bientôt">soon</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span class="cn-n">07</span> <span data-en="Monte Carlo &amp; simulation" data-fr="Monte Carlo et simulation">Monte Carlo &amp; simulation</span></h4><ul>
+<li><a href="/lessons/monte-carlo/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4z"/><path d="M7 11v4.5c0 1 2.4 2 5 2s5-1 5-2V11"/></svg></span><span class="cn-lb" data-en="Monte Carlo, explained" data-fr="Monte Carlo, expliqué">Monte Carlo, explained</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="Reference" data-fr="Référence">Reference</span></h4><ul>
+<li><a href="/studies/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.6 3.1 3 7 3s7-1.4 7-3V6"/><path d="M5 12v6c0 1.6 3.1 3 7 3s7-1.4 7-3v-6"/></svg></span><span class="cn-lb" data-en="Known studies &amp; datasets" data-fr="Études et jeux de données connus">Known studies &amp; datasets</span></a></li>
+</ul></div>
+<div class="cn-grp"><h4><span data-en="By format" data-fr="Par format">By format</span></h4><ul>
+<li><a href="/calculators/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All calculators" data-fr="Tous les calculateurs">All calculators</span></a></li>
+<li><a href="/lessons/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All lessons" data-fr="Tous les cours">All lessons</span></a></li>
+<li><a href="/exercises/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All exercises" data-fr="Tous les exercices">All exercises</span></a></li>
+<li><a href="/cheatsheets/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1.3"/><rect x="13" y="4" width="7" height="7" rx="1.3"/><rect x="4" y="13" width="7" height="7" rx="1.3"/><rect x="13" y="13" width="7" height="7" rx="1.3"/></svg></span><span class="cn-lb" data-en="All cheat sheets" data-fr="Toutes les fiches">All cheat sheets</span></a></li>
+<li><a href="/stat-questions/"><span class="cn-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V16H4z"/><path d="M9.6 9.4a2.4 2.4 0 1 1 3.4 2.2c-.9.5-1.3 1-1.3 1.9"/><path d="M11.7 16.2h.01"/></svg></span><span class="cn-lb" data-en="All stat questions" data-fr="Toutes les Stat Questions">All stat questions</span></a></li>
+</ul></div>
+</nav>
+<main class="main">
+
+<div class="crumb"><a href="/lessons/" data-en="Lessons">Lessons</a> <span data-en="/">/</span> <a href="/lessons/monte-carlo/" data-en="Monte Carlo">Monte Carlo</a> <span data-en="/ Part 1 &middot; First principles">/ Part 1 &middot; First principles</span></div>
+
+<h1 data-en="Monte Carlo simulation, explained from first principles">Monte Carlo simulation, explained from first principles</h1>
+<p class="lead" data-en="Option pricing, power analysis, particle transport, AlphaGo - every Monte Carlo method is one sentence wearing a different costume. Here is the sentence, the dartboard that makes it concrete, and the square-root law that decides what an answer costs.">Option pricing, power analysis, particle transport, AlphaGo - every Monte Carlo method is one sentence wearing a different costume. Here is the sentence, the dartboard that makes it concrete, and the square-root law that decides what an answer costs.</p>
+
+<div class="mc-q">
+ <p class="src"><span data-en="From the wild:">From the wild:</span> <a href="https://www.reddit.com/r/AskStatistics/comments/1utlfts/which_is_best_guide_to_understand_monte_carlo/" rel="nofollow noopener" target="_blank">r/AskStatistics</a></p>
+ <blockquote data-en="I'm a valuation intern and want to perform a Monte Carlo simulation. What is the best guide for beginner in understanding this?">I'm a valuation intern and want to perform a Monte Carlo simulation. What is the best guide for beginner in understanding this?</blockquote>
+ <figure>
+  <img src="../../../assets/reddit-monte-carlo.webp" width="1400" height="432" loading="lazy" alt="Screenshot of a Reddit post on r/AskStatistics asking: which is best guide to understand Monte Carlo simulation?">
+ </figure>
+</div>
+
+<p data-en="Some version of this gets asked every week, and the stock reply is always the same: &ldquo;Monte Carlo is a very broad term - what specifically do you want to do?&rdquo; That reply is true and useless. It is true because Monte Carlo isn't one method; it's an umbrella over thousands of algorithms across physics, finance, statistics and graphics. It is useless because if you already knew specifically what you wanted, you wouldn't be asking for a beginner's guide.">Some version of this gets asked every week, and the stock reply is always the same: &ldquo;Monte Carlo is a very broad term - what specifically do you want to do?&rdquo; That reply is true and useless. It is true because Monte Carlo isn't one method; it's an umbrella over thousands of algorithms across physics, finance, statistics and graphics. It is useless because if you already knew specifically what you wanted, you wouldn't be asking for a beginner's guide.</p>
+<p data-en="The answer that actually helps: underneath the umbrella, every single Monte Carlo method is powered by the same tiny engine. Learn the engine and you can walk up to any costume it happens to be wearing.">The answer that actually helps: underneath the umbrella, every single Monte Carlo method is powered by the same tiny engine. Learn the engine and you can walk up to any costume it happens to be wearing.</p>
+
+<section class="lesson" id="engine">
+ <h2 data-en="The engine, in one sentence">The engine, in one sentence</h2>
+ <div class="mc-engine"><span data-en="&#9654; If a quantity is hard to compute exactly, express it as an average over random outcomes, then generate lots of random outcomes and take the average.">&#9654; If a quantity is hard to compute exactly, express it as an average over random outcomes, then generate lots of random outcomes and take the average.</span></div>
+ <p data-en="That's the whole subject. Everything else is this sentence plus creativity about what you sample and how. It helps to hear it in three dialects, because different people find different versions obvious - and noticing they are the same thing is itself the first real lesson.">That's the whole subject. Everything else is this sentence plus creativity about what you sample and how. It helps to hear it in three dialects, because different people find different versions obvious - and noticing they are the same thing is itself the first real lesson.</p>
+ <ul class="mc-dial">
+  <li><b data-en="The gambler.">The gambler.</b> <span data-en="Want a probability? Run the experiment many times and count the fraction of times it happens. This estimates a probability as a frequency.">Want a probability? Run the experiment many times and count the fraction of times it happens. This estimates a probability as a frequency.</span></li>
+  <li><b data-en="The accountant.">The accountant.</b> <span data-en="Want an expected value? Generate many scenarios, compute the quantity in each, average them. Simulate ten thousand futures for a stock price, take the payoff in each, average. This estimates an expectation as a sample mean.">Want an expected value? Generate many scenarios, compute the quantity in each, average them. Simulate ten thousand futures for a stock price, take the payoff in each, average. This estimates an expectation as a sample mean.</span></li>
+  <li><b data-en="The mathematician.">The mathematician.</b> <span data-en="Want an integral with no closed form? That integral is by definition an expected value, so draw samples and average. This estimates an integral as a sample mean.">Want an integral with no closed form? That integral is by definition an expected value, so draw samples and average. This estimates an integral as a sample mean.</span></li>
+ </ul>
+ <p data-en="Pause on the third one, because it hides a small explosion: integration - a deterministic operation from calculus - can be performed by throwing dice. And for a large class of problems it is the best known way to do it.">Pause on the third one, because it hides a small explosion: integration - a deterministic operation from calculus - can be performed by throwing dice. And for a large class of problems it is the best known way to do it.</p>
+ <p data-en="The three are one. A probability is just the expected value of an indicator - the fraction of wins is the average of a pile of ones and zeros - and an expectation is an integral. So there is only one engine, seen at three levels of formality:">The three are one. A probability is just the expected value of an indicator - the fraction of wins is the average of a pile of ones and zeros - and an expectation is an integral. So there is only one engine, seen at three levels of formality:</p>
+ <div class="formula-box">$$\mathbb{E}[f(X)] \;\approx\; \frac{1}{N}\sum_{i=1}^{N} f(X_i), \qquad X_i \sim p$$</div>
+ <p class="note" data-en="Every Monte Carlo method you will ever meet is this formula, plus choices about what X is, what f is, and how to draw the samples efficiently.">Every Monte Carlo method you will ever meet is this formula, plus choices about what X is, what f is, and how to draw the samples efficiently.</p>
+</section>
+
+<section class="lesson" id="origin">
+ <h2 data-en="Where it came from: a sick physicist plays cards">Where it came from: a sick physicist plays cards</h2>
+ <p data-en="In 1946 the mathematician Stanislaw Ulam was recovering from an illness and playing solitaire. Being a mathematician he asked: what is the probability a randomly dealt game is winnable? He tried combinatorics, discovered the number of game states is astronomical, and then had a lazier and much better idea - just play a hundred games and count the wins. No enumeration. Repetition and counting.">In 1946 the mathematician Stanislaw Ulam was recovering from an illness and playing solitaire. Being a mathematician he asked: what is the probability a randomly dealt game is winnable? He tried combinatorics, discovered the number of game states is astronomical, and then had a lazier and much better idea - just play a hundred games and count the wins. No enumeration. Repetition and counting.</p>
+ <p data-en="Ulam was at Los Alamos, and John von Neumann saw the same trick could crack a problem they were genuinely stuck on: neutron diffusion. Each individual collision was governed by known probabilities, but the aggregate question - does the chain reaction sustain itself? - had no solvable equations for real geometries. Their move was to simulate individual neutron life stories, using random numbers to decide each scatter and each absorption, then tally thousands of them. The statistics of the simulated population approximate the physics of the real one.">Ulam was at Los Alamos, and John von Neumann saw the same trick could crack a problem they were genuinely stuck on: neutron diffusion. Each individual collision was governed by known probabilities, but the aggregate question - does the chain reaction sustain itself? - had no solvable equations for real geometries. Their move was to simulate individual neutron life stories, using random numbers to decide each scatter and each absorption, then tally thousands of them. The statistics of the simulated population approximate the physics of the real one.</p>
+ <p data-en="The project needed a code name. Ulam's uncle liked to borrow money from relatives to gamble at the casino in Monte Carlo. It's a good name: the method is, in a precise sense, industrialised gambling.">The project needed a code name. Ulam's uncle liked to borrow money from relatives to gamble at the casino in Monte Carlo. It's a good name: the method is, in a precise sense, industrialised gambling.</p>
+</section>
+
+<section class="lesson" id="not">
+ <h2 data-en="What Monte Carlo is not">What Monte Carlo is not</h2>
+ <p data-en="Because the term is broad it collides with its neighbours, and this is where most of the confusion in that Reddit thread actually lives. Fences:">Because the term is broad it collides with its neighbours, and this is where most of the confusion in that Reddit thread actually lives. Fences:</p>
+ <ul class="mc-dial">
+  <li><b data-en="Monte Carlo simulation">Monte Carlo simulation</b> <span data-en="- you know the probability model, you can draw independent samples from it directly, and you use them to estimate something. You are simulating from a model you chose. That's this lesson.">- you know the probability model, you can draw independent samples from it directly, and you use them to estimate something. You are simulating from a model you chose. That's this lesson.</span></li>
+  <li><b data-en="The bootstrap">The bootstrap</b> <span data-en="- you have no model, you have data. You resample your own dataset with replacement to estimate a statistic's uncertainty. Same repeat-and-average spirit, but the randomness comes from your data rather than a model.">- you have no model, you have data. You resample your own dataset with replacement to estimate a statistic's uncertainty. Same repeat-and-average spirit, but the randomness comes from your data rather than a model.</span></li>
+  <li><b data-en="MCMC">MCMC</b> <span data-en="- you have a distribution you cannot sample from directly, typically a Bayesian posterior known only up to a constant. So you build a random walk whose long-run behaviour mimics it. The samples are not independent, which changes both the maths and the diagnostics.">- you have a distribution you cannot sample from directly, typically a Bayesian posterior known only up to a constant. So you build a random walk whose long-run behaviour mimics it. The samples are not independent, which changes both the maths and the diagnostics.</span></li>
+  <li><b data-en="Monte Carlo algorithms">Monte Carlo algorithms</b> <span data-en="- in the computer-science sense (as opposed to Las Vegas algorithms): randomised algorithms returning a probably-correct answer in bounded time. Related in spirit, different community.">- in the computer-science sense (as opposed to Las Vegas algorithms): randomised algorithms returning a probably-correct answer in bounded time. Related in spirit, different community.</span></li>
+ </ul>
+ <div class="callout warn"><span data-en="And the fence that matters most in practice: Monte Carlo quantifies the uncertainty inside your model. It says nothing about whether the model is right. Assume stock returns are normal when they aren't, and a billion scenarios buy you a very precise answer to the wrong question. Simulation error and model error are different animals; Monte Carlo kills the first and is blind to the second. A million simulations of a bad model produce a beautifully converged wrong answer.">And the fence that matters most in practice: Monte Carlo quantifies the uncertainty inside your model. It says nothing about whether the model is right. Assume stock returns are normal when they aren't, and a billion scenarios buy you a very precise answer to the wrong question. Simulation error and model error are different animals; Monte Carlo kills the first and is blind to the second. A million simulations of a bad model produce a beautifully converged wrong answer.</span></div>
+</section>
+
+<section class="lesson" id="darts">
+ <h2 data-en="Your first simulation: estimating pi by throwing darts">Your first simulation: estimating pi by throwing darts</h2>
+ <p data-en="Everyone's first Monte Carlo estimates pi, and it's also the single most common Monte Carlo interview question - so let's do it as an anatomy lesson rather than a party trick. Every serious simulation you build later has this same skeleton.">Everyone's first Monte Carlo estimates pi, and it's also the single most common Monte Carlo interview question - so let's do it as an anatomy lesson rather than a party trick. Every serious simulation you build later has this same skeleton.</p>
+ <p data-en="Take the unit square. Inscribe a quarter circle of radius 1 in it. The square has area 1; the quarter circle has area pi/4, which is about 0.7854. Now throw a dart that lands uniformly at random in the square, so that any region's chance of catching it is proportional to its area. Then:">Take the unit square. Inscribe a quarter circle of radius 1 in it. The square has area 1; the quarter circle has area pi/4, which is about 0.7854. Now throw a dart that lands uniformly at random in the square, so that any region's chance of catching it is proportional to its area. Then:</p>
+ <div class="formula-box">$$P(\text{dart lands inside the quarter circle}) = \frac{\text{area of quarter circle}}{\text{area of square}} = \frac{\pi}{4}$$</div>
+ <p data-en="Read that right to left and you'll see the trick: pi, a deterministic constant, has been expressed as a probability - and probabilities are things we know how to estimate by counting. Throw N darts, take the fraction that land inside, multiply by 4.">Read that right to left and you'll see the trick: pi, a deterministic constant, has been expressed as a probability - and probabilities are things we know how to estimate by counting. Throw N darts, take the fraction that land inside, multiply by 4.</p>
+ <p data-en="This manoeuvre - rewrite the thing I want as an expected value of something I can simulate - is the fundamental move of the entire field. Here it looks like a curiosity. In part 2 the same move is &ldquo;rewrite the value of a business as the average NPV over simulated futures&rdquo;, and in part 3 &ldquo;rewrite an option price as a discounted average payoff&rdquo;. Same move every time.">This manoeuvre - rewrite the thing I want as an expected value of something I can simulate - is the fundamental move of the entire field. Here it looks like a curiosity. In part 2 the same move is &ldquo;rewrite the value of a business as the average NPV over simulated futures&rdquo;, and in part 3 &ldquo;rewrite an option price as a discounted average payoff&rdquo;. Same move every time.</p>
+ <details class="mc-more"><summary data-en="The six lines that do it, and the three habits inside them">The six lines that do it, and the three habits inside them</summary>
+  <div class="formula-box" style="text-align:left"><code>import numpy as np<br>rng = np.random.default_rng(seed=42)<br>N = 1_000_000<br>x = rng.uniform(0, 1, size=N)<br>y = rng.uniform(0, 1, size=N)<br>inside = (x**2 + y**2) &lt;= 1.0<br>pi_hat = 4 * inside.mean()</code></div>
+  <p data-en="Vectorisation. There is no for-loop throwing one dart at a time. We ask for a million x's and a million y's in two calls and settle all million hits in one comparison. In Python that is 50 to 100 times faster, and - more importantly - it forces the right mental model: a column of an array is one variable across all simulated worlds.">Vectorisation. There is no for-loop throwing one dart at a time. We ask for a million x's and a million y's in two calls and settle all million hits in one comparison. In Python that is 50 to 100 times faster, and - more importantly - it forces the right mental model: a column of an array is one variable across all simulated worlds.</p>
+  <p data-en="The mean of a boolean array is a proportion. True counts as one and False as zero, so the mean is exactly the fraction of hits. That is the gambler's dialect collapsing into the accountant's in front of you: a probability estimated as the average of an indicator.">The mean of a boolean array is a proportion. True counts as one and False as zero, so the mean is exactly the fraction of hits. That is the gambler's dialect collapsing into the accountant's in front of you: a probability estimated as the average of an indicator.</p>
+  <p data-en="The seed makes the randomness reproducible: run it tomorrow, get the identical answer. Why that is a superpower rather than a compromise is the last section of this lesson.">The seed makes the randomness reproducible: run it tomorrow, get the identical answer. Why that is a superpower rather than a compromise is the last section of this lesson.</p>
+ </details>
+</section>
+
+<section class="lesson" id="playground-darts">
+ <h2 data-en="Throw the darts">Throw the darts</h2>
+ <p data-en="Blue darts landed inside the quarter circle, red outside. The estimate is four times the blue fraction. Drag N and watch the estimate walk toward pi - slowly, and never in a straight line.">Blue darts landed inside the quarter circle, red outside. The estimate is four times the blue fraction. Drag N and watch the estimate walk toward pi - slowly, and never in a straight line.</p>
+ <div class="play mc-play">
+  <div class="panel">
+   <div class="ctrl"><label for="mcN"><span data-en="Darts thrown">Darts thrown</span><span class="val" id="mcNv"></span></label><input type="range" id="mcN" min="2" max="400" value="180" oninput="mcThrow()"></div>
+   <button type="button" class="mc-btn" onclick="mcReroll()" data-en="Throw again">Throw again</button>
+   <div aria-live="polite">
+    <div class="bignum" id="mcPi"></div>
+    <div class="bignum-label" data-en="estimate of pi">estimate of pi</div>
+    <div class="smallnum" id="mcErr"></div>
+   </div>
+  </div>
+  <div class="mc-board"><canvas id="mcCanvas" width="680" height="680" role="img" aria-label="Darts scattered in a square with an inscribed quarter circle"></canvas></div>
+ </div>
+ <p class="note" data-en="It is perfectly normal for the estimate at 200,000 darts to be momentarily worse than it was at 150,000. Convergence in probability is a drunkard weaving toward home, not a train on rails.">It is perfectly normal for the estimate at 200,000 darts to be momentarily worse than it was at 150,000. Convergence in probability is a drunkard weaving toward home, not a train on rails.</p>
+</section>
+
+<section class="lesson" id="lln">
+ <h2 data-en="Why it works: the law of large numbers">Why it works: the law of large numbers</h2>
+ <p data-en="The dartboard works because of a theorem you already believe: as you average more and more independent draws of the same random quantity, the average converges to that quantity's true expected value. Flip a fair coin ten times and you might see seven heads; flip it ten million times and the fraction will be flatteringly close to a half.">The dartboard works because of a theorem you already believe: as you average more and more independent draws of the same random quantity, the average converges to that quantity's true expected value. Flip a fair coin ten times and you might see seven heads; flip it ten million times and the fraction will be flatteringly close to a half.</p>
+ <p data-en="The intuition worth carrying is cancellation. Each draw misses the true value by some amount, sometimes high, sometimes low. Those misses are independent, so they have no reason to agree with each other, and when you add them up they partly cancel. The sum of N draws grows like N, but the accumulated error grows only like the square root of N - so the error per draw, which is what an average is, shrinks. Averaging doesn't remove randomness; it lets randomness eat itself.">The intuition worth carrying is cancellation. Each draw misses the true value by some amount, sometimes high, sometimes low. Those misses are independent, so they have no reason to agree with each other, and when you add them up they partly cancel. The sum of N draws grows like N, but the accumulated error grows only like the square root of N - so the error per draw, which is what an average is, shrinks. Averaging doesn't remove randomness; it lets randomness eat itself.</p>
+ <div class="callout"><span data-en="Note the quiet assumption in the word independent. The law needs draws that don't lean on each other. Break that - correlated inputs, a shared random seed across parallel workers, patients who share a clinic - and the cancellation is impaired: your samples are worth fewer than their count, and every error bar you compute is too small. That single failure is behind a startling share of expensive statistical bugs.">Note the quiet assumption in the word independent. The law needs draws that don't lean on each other. Break that - correlated inputs, a shared random seed across parallel workers, patients who share a clinic - and the cancellation is impaired: your samples are worth fewer than their count, and every error bar you compute is too small. That single failure is behind a startling share of expensive statistical bugs.</span></div>
+</section>
+
+<section class="lesson" id="sqrt-law">
+ <h2 data-en="How wrong are you? The square-root law">How wrong are you? The square-root law</h2>
+ <p data-en="The law of large numbers promises you arrive eventually. It says nothing about when, and &ldquo;eventually&rdquo; does not pay for compute. The question every practitioner actually needs is: my simulation gave me a number - if I ran it again, how different would the number be?">The law of large numbers promises you arrive eventually. It says nothing about when, and &ldquo;eventually&rdquo; does not pay for compute. The question every practitioner actually needs is: my simulation gave me a number - if I ran it again, how different would the number be?</p>
+ <p data-en="Start by treating the estimate as what it is: not a number, but a random variable with its own distribution, its own centre and its own spread. The central limit theorem tells you the shape of that distribution - bell-shaped, centred on the truth - and, more usefully, its width:">Start by treating the estimate as what it is: not a number, but a random variable with its own distribution, its own centre and its own spread. The central limit theorem tells you the shape of that distribution - bell-shaped, centred on the truth - and, more usefully, its width:</p>
+ <div class="formula-box">$$\text{SE} = \frac{\sigma}{\sqrt{N}}$$</div>
+ <p data-en="That is the standard error: the typical distance between your estimate and the truth. Two consequences run the whole field.">That is the standard error: the typical distance between your estimate and the truth. Two consequences run the whole field.</p>
+ <ul class="mc-dial">
+  <li><b data-en="Accuracy is bought in bulk.">Accuracy is bought in bulk.</b> <span data-en="The square root means halving your error costs four times the runs, and each extra correct digit costs a hundred times more. This is why brute force runs out of road, and why the professional toolkit is mostly about shrinking the numerator instead of buying the denominator.">The square root means halving your error costs four times the runs, and each extra correct digit costs a hundred times more. This is why brute force runs out of road, and why the professional toolkit is mostly about shrinking the numerator instead of buying the denominator.</span></li>
+  <li><b data-en="It does not care about dimension.">It does not care about dimension.</b> <span data-en="Nothing in that formula mentions how many variables you have. Deterministic grid methods die of combinatorial explosion as dimensions grow; Monte Carlo keeps plodding at the same rate whether the problem has 2 uncertain inputs or 200. We don't use Monte Carlo because it's fast. We use it because it's the only thing left standing when problems get big.">Nothing in that formula mentions how many variables you have. Deterministic grid methods die of combinatorial explosion as dimensions grow; Monte Carlo keeps plodding at the same rate whether the problem has 2 uncertain inputs or 200. We don't use Monte Carlo because it's fast. We use it because it's the only thing left standing when problems get big.</span></li>
+ </ul>
+ <details class="mc-more"><summary data-en="Standard deviation vs standard error - the classic confusion">Standard deviation vs standard error - the classic confusion</summary>
+  <p data-en="The standard deviation describes the spread of your individual draws: how much one simulated future differs from another. It does not shrink as you run more - it is a property of the thing you are modelling, and a million runs will not make the world less variable. The standard error describes the spread of your estimate. It shrinks like one over the square root of N, because it is the standard deviation divided by that square root.">The standard deviation describes the spread of your individual draws: how much one simulated future differs from another. It does not shrink as you run more - it is a property of the thing you are modelling, and a million runs will not make the world less variable. The standard error describes the spread of your estimate. It shrinks like one over the square root of N, because it is the standard deviation divided by that square root.</p>
+  <p data-en="Mixing them up produces two opposite disasters. Report the standard error when someone asked how variable outcomes are, and you make a risky business look like a sure thing. Report the standard deviation as your simulation's precision, and you throw away the accuracy you paid for. Ask which question is on the table: how uncertain is the world, or how uncertain is my answer about it?">Mixing them up produces two opposite disasters. Report the standard error when someone asked how variable outcomes are, and you make a risky business look like a sure thing. Report the standard deviation as your simulation's precision, and you throw away the accuracy you paid for. Ask which question is on the table: how uncertain is the world, or how uncertain is my answer about it?</p>
+ </details>
+ <details class="mc-more"><summary data-en="The dart game's own error bar, worked">The dart game's own error bar, worked</summary>
+  <p data-en="Each dart is a coin flip that lands inside with probability p = pi/4, about 0.7854. A proportion's standard deviation is the square root of p times one minus p, which here is about 0.41. Our estimate multiplies the fraction by 4, and multiplying a random variable by 4 multiplies its spread by 4, so the standard error of the pi estimate is about 1.64 divided by the square root of N.">Each dart is a coin flip that lands inside with probability p = pi/4, about 0.7854. A proportion's standard deviation is the square root of p times one minus p, which here is about 0.41. Our estimate multiplies the fraction by 4, and multiplying a random variable by 4 multiplies its spread by 4, so the standard error of the pi estimate is about 1.64 divided by the square root of N.</p>
+  <p data-en="Put numbers on it. At a thousand darts the standard error is about 0.052, so the estimate is worth roughly one decimal place. At a million it is about 0.0016 - three decimals, after a million throws. A Taylor series gets fifteen digits before your coffee cools. That is the honest disclaimer about this example: the dart game is a two-dimensional integral, and in two dimensions deterministic methods crush Monte Carlo. The square-root law's indifference to dimension is what makes the method matter, and you only see the payoff when the problem is far too big to draw.">Put numbers on it. At a thousand darts the standard error is about 0.052, so the estimate is worth roughly one decimal place. At a million it is about 0.0016 - three decimals, after a million throws. A Taylor series gets fifteen digits before your coffee cools. That is the honest disclaimer about this example: the dart game is a two-dimensional integral, and in two dimensions deterministic methods crush Monte Carlo. The square-root law's indifference to dimension is what makes the method matter, and you only see the payoff when the problem is far too big to draw.</p>
+ </details>
+</section>
+
+<section class="lesson" id="playground-error">
+ <h2 data-en="Run it again: the estimate is a random variable">Run it again: the estimate is a random variable</h2>
+ <p data-en="This is the picture beginners never think to ask for. Each bar is one complete run of the dart experiment at your chosen N. The spread of the histogram is what &ldquo;how wrong am I?&rdquo; means - and the theoretical square-root prediction is printed beside what the simulation actually did.">This is the picture beginners never think to ask for. Each bar is one complete run of the dart experiment at your chosen N. The spread of the histogram is what &ldquo;how wrong am I?&rdquo; means - and the theoretical square-root prediction is printed beside what the simulation actually did.</p>
+ <div class="play mc-play">
+  <div class="panel">
+   <div class="ctrl"><label for="mcEN"><span data-en="Darts per run">Darts per run</span><span class="val" id="mcENv"></span></label><input type="range" id="mcEN" min="100" max="20000" step="100" value="1000" oninput="mcRunsInput()"></div>
+   <div aria-live="polite">
+    <div class="bignum" id="mcSD"></div>
+    <div class="bignum-label" data-en="spread of the estimates, measured">spread of the estimates, measured</div>
+    <div class="smallnum" id="mcSE"></div>
+   </div>
+   <button type="button" class="mc-btn" onclick="mcRuns(1)" data-en="Re-run all 400">Re-run all 400</button>
+  </div>
+  <div class="mc-chart">
+   <div id="mcHist"></div>
+   <div class="mc-verdict softbox" id="mcVerdict"></div>
+  </div>
+ </div>
+ <p class="note" data-en="Two things to notice. The measured spread tracks the formula's prediction - that is the central limit theorem being right in front of you. And quadrupling the darts per run only halves the width: drag the slider from 1,000 to 4,000 and watch the histogram tighten by half, not by four.">Two things to notice. The measured spread tracks the formula's prediction - that is the central limit theorem being right in front of you. And quadrupling the darts per run only halves the width: drag the slider from 1,000 to 4,000 and watch the histogram tighten by half, not by four.</p>
+</section>
+
+<section class="lesson" id="seeds">
+ <h2 data-en="Where random numbers come from">Where random numbers come from</h2>
+ <p data-en="A confession: there is no randomness in your computer. Every number your simulation calls random came out of a deterministic algorithm - a pseudo-random generator - which, given a starting point, produces the identical stream forever. The starting point is the seed.">A confession: there is no randomness in your computer. Every number your simulation calls random came out of a deterministic algorithm - a pseudo-random generator - which, given a starting point, produces the identical stream forever. The starting point is the seed.</p>
+ <p data-en="This sounds like a compromise. It is a superpower. Fixing the seed makes a simulation reproduce exactly: your results become auditable, a colleague can rerun your analysis and get your number to the last digit, and a bug becomes findable because the failure happens the same way twice. A simulation that can't be reproduced can't really be reviewed - which is why every number quoted in this series comes from a seeded run you can repeat.">This sounds like a compromise. It is a superpower. Fixing the seed makes a simulation reproduce exactly: your results become auditable, a colleague can rerun your analysis and get your number to the last digit, and a bug becomes findable because the failure happens the same way twice. A simulation that can't be reproduced can't really be reviewed - which is why every number quoted in this series comes from a seeded run you can repeat.</p>
+ <div class="callout warn"><span data-en="The parallel trap, and it's how experts embarrass themselves. Split your simulation across eight cores for speed, and if each worker starts from the same seed, all eight produce the identical stream of &ldquo;random&rdquo; numbers. You now have one run's worth of information wearing eight runs' clothing. Your error bars shrink by a factor you did not earn, and nothing crashes - the code is happily, silently wrong. Spawn independent streams from one parent generator rather than seeding each worker by hand.">The parallel trap, and it's how experts embarrass themselves. Split your simulation across eight cores for speed, and if each worker starts from the same seed, all eight produce the identical stream of &ldquo;random&rdquo; numbers. You now have one run's worth of information wearing eight runs' clothing. Your error bars shrink by a factor you did not earn, and nothing crashes - the code is happily, silently wrong. Spawn independent streams from one parent generator rather than seeding each worker by hand.</span></div>
+</section>
+
+<div class="mc-nb">
+ <h3 data-en="Now go and run it">Now go and run it</h3>
+ <p data-en="Probability is a subject where everything makes sense until you sit down to write your own simulation. The companion notebook has every piece of code from this lesson, ready to run in your browser - no install, nothing to configure. Sections 2 to 5 match the sections above: the dartboard, the law of large numbers watched live, standard errors and confidence intervals, and the seed experiments including the parallel trap.">Probability is a subject where everything makes sense until you sit down to write your own simulation. The companion notebook has every piece of code from this lesson, ready to run in your browser - no install, nothing to configure. Sections 2 to 5 match the sections above: the dartboard, the law of large numbers watched live, standard errors and confidence intervals, and the seed experiments including the parallel trap.</p>
+ <div class="row">
+  <a class="pill" href="https://colab.research.google.com/github/StatExamPro/statexampro.com/blob/main/notebooks/monte-carlo-entry.ipynb" rel="noopener" target="_blank" onclick="sxpGo('colab-open-monte-carlo-entry','Open the entry notebook in Colab')" data-en="Open in Colab">Open in Colab</a>
+  <a class="pill ghost" href="/notebooks/monte-carlo-entry.ipynb" download data-en="Download the notebook">Download the notebook</a>
+ </div>
+</div>
+
+<section class="lesson" id="next">
+ <h2 data-en="What's next in this series">What's next in this series</h2>
+ <ul class="mc-next">
+  <li><b><a href="/lessons/monte-carlo/recipe-and-projects/" data-en="Part 2 - the recipe, and two real projects.">Part 2 - the recipe, and two real projects.</a></b> <span data-en="Turning uniform random numbers into any distribution you want, the five-step recipe every simulation follows, then a valuation DCF rebuilt as a distribution of value, and statistical power derived by simulation instead of a formula.">Turning uniform random numbers into any distribution you want, the five-step recipe every simulation follows, then a valuation DCF rebuilt as a distribution of value, and statistical power derived by simulation instead of a formula.</span></li>
+  <li><b><a href="/lessons/monte-carlo/paths-and-options/" data-en="Part 3 - paths and options.">Part 3 - paths and options.</a></b> <span data-en="What changes when time enters: random walks, geometric Brownian motion, and the option-pricing workflow certified against Black-Scholes. Correlated inputs via Cholesky, and the dependence modelling error that helped detonate 2008.">What changes when time enters: random walks, geometric Brownian motion, and the option-pricing workflow certified against Black-Scholes. Correlated inputs via Cholesky, and the dependence modelling error that helped detonate 2008.</span></li>
+  <li><b><a href="/lessons/monte-carlo/variance-reduction/" data-en="Part 4 - beating the square-root law.">Part 4 - beating the square-root law.</a></b> <span data-en="Antithetic and control variates, importance sampling for rare events, quasi-Monte Carlo, simulation studies as a science, and the bridge to MCMC.">Antithetic and control variates, importance sampling for rare events, quasi-Monte Carlo, simulation studies as a science, and the bridge to MCMC.</span></li>
+ </ul>
+ <p class="note"><span data-en="Already run a Monte Carlo on this site without noticing? The">Already run a Monte Carlo on this site without noticing? The</span> <a href="/stat-questions/multiple-comparisons/" data-en="look-everywhere simulator">look-everywhere simulator</a> <span data-en="in our multiple-comparisons case does exactly this: simulate the null many times, take the quantile of the maximum. That pattern is how multiple-comparison corrections and permutation tests work, and Part 4 takes it professional.">in our multiple-comparisons case does exactly this: simulate the null many times, take the quantile of the maximum. That pattern is how multiple-comparison corrections and permutation tests work, and Part 4 takes it professional.</span></p>
+</section>
+
+<section class="lesson mc-faq" id="faq">
+ <h2 data-en="Frequently asked">Frequently asked</h2>
+ <details>
+  <summary data-en="What is Monte Carlo simulation, in one sentence?">What is Monte Carlo simulation, in one sentence?</summary>
+  <p data-en="If a quantity is hard to compute exactly, express it as an average over random outcomes, then generate lots of random outcomes and take the average. Every Monte Carlo method is that sentence plus creativity about what you sample and how.">If a quantity is hard to compute exactly, express it as an average over random outcomes, then generate lots of random outcomes and take the average. Every Monte Carlo method is that sentence plus creativity about what you sample and how.</p>
+ </details>
+ <details>
+  <summary data-en="How many Monte Carlo simulations do I need?">How many Monte Carlo simulations do I need?</summary>
+  <p data-en="There is no universal number, but there is a law: the error shrinks like one over the square root of N, so halving it costs four times the runs and each extra digit costs a hundred times more. Don't guess N - compute the standard error of your own estimate and choose N to make it small enough for the decision you're making.">There is no universal number, but there is a law: the error shrinks like one over the square root of N, so halving it costs four times the runs and each extra digit costs a hundred times more. Don't guess N - compute the standard error of your own estimate and choose N to make it small enough for the decision you're making.</p>
+ </details>
+ <details>
+  <summary data-en="What is the difference between Monte Carlo, the bootstrap and MCMC?">What is the difference between Monte Carlo, the bootstrap and MCMC?</summary>
+  <p data-en="Plain Monte Carlo samples from a model you chose. The bootstrap resamples your observed dataset, so the randomness comes from your data rather than a model. MCMC is for distributions you cannot sample from directly: it builds a Markov chain whose long-run behaviour mimics the target, and its samples are not independent.">Plain Monte Carlo samples from a model you chose. The bootstrap resamples your observed dataset, so the randomness comes from your data rather than a model. MCMC is for distributions you cannot sample from directly: it builds a Markov chain whose long-run behaviour mimics the target, and its samples are not independent.</p>
+ </details>
+ <details>
+  <summary data-en="Why does a Monte Carlo simulation need a random seed?">Why does a Monte Carlo simulation need a random seed?</summary>
+  <p data-en="Because computer randomness is a deterministic generator, and the seed is its starting point. Fixing it makes the run reproduce exactly, which is what makes a result auditable and a bug findable. It is a feature, not a compromise.">Because computer randomness is a deterministic generator, and the seed is its starting point. Fixing it makes the run reproduce exactly, which is what makes a result auditable and a bug findable. It is a feature, not a compromise.</p>
+ </details>
+</section>
+
+<section class="lesson" id="sources">
+ <h2 data-en="Sources">Sources</h2>
+ <ul class="mc-src">
+  <li><a href="https://www.reddit.com/r/AskStatistics/comments/1utlfts/which_is_best_guide_to_understand_monte_carlo/" rel="nofollow noopener" target="_blank">r/AskStatistics</a> <span data-en="- the question this lesson answers.">- the question this lesson answers.</span></li>
+  <li><span data-en="Metropolis, N. and Ulam, S. (1949). The Monte Carlo Method.">Metropolis, N. and Ulam, S. (1949). The Monte Carlo Method.</span> <a href="https://doi.org/10.1080/01621459.1949.10483310" rel="noopener" target="_blank">Journal of the American Statistical Association</a> <span data-en="- the paper that named and framed the method.">- the paper that named and framed the method.</span></li>
+  <li><span data-en="Eckhardt, R. (1987). Stan Ulam, John von Neumann, and the Monte Carlo Method.">Eckhardt, R. (1987). Stan Ulam, John von Neumann, and the Monte Carlo Method.</span> <a href="https://web.archive.org/web/20140909230946/http://library.lanl.gov/cgi-bin/getfile?15-13.pdf" rel="noopener" target="_blank">Los Alamos Science</a> <span data-en="- the solitaire story, from the people who were there.">- the solitaire story, from the people who were there.</span></li>
+ </ul>
+</section>
+
+<div class="cta">
+ <p data-en="Simulation is how the traps in medical statistics get proven rather than argued about. Stat Exam Pro drills the exam-style questions behind them, with worked answers.">Simulation is how the traps in medical statistics get proven rather than argued about. Stat Exam Pro drills the exam-style questions behind them, with worked answers.</p>
+ <a href="https://apps.apple.com/us/app/stat-exam-pro/id6755912771" class="btn" onclick="sxpGo('app-store-click-monte-carlo-bottom','App Store button (Monte Carlo part 1)')">
+  <span class="apple-icon"></span>
+  <span data-en="Get it on iPhone">Get it on iPhone</span>
+ </a>
+</div>
+
+</main>
+</div>
+<footer>
+ <p>&copy; 2026 Stat Exam Pro</p>
+ <p><a href="/">Home</a><span style="opacity:.3">|</span><a href="/calculators/">Calculators</a>: <a href="/ppv-calculator/">PPV/NPV</a><span style="opacity:.3">|</span><a href="/nnt-calculator/">NNT</a><span style="opacity:.3">|</span><a href="/roc-curve/">ROC</a><span style="opacity:.3">|</span><a href="/kaplan-meier/">Kaplan-Meier</a><span style="opacity:.3">|</span><a href="/screening-bias/">Screening bias</a></p>
+ <p><a href="/lessons/">Lessons</a><span style="opacity:.3">|</span><a href="/fails/">Stat Fails</a>: <a href="/fails/hiv-false-positives/">The counsellors who were 100% sure</a><span style="opacity:.3">|</span><a href="/fails/the-1995-pill-scare/">The 1995 pill scare</a><span style="opacity:.3">|</span><a href="/fails/epic-sepsis-model/">The sepsis AI</a><span style="opacity:.3">|</span><a href="/fails/giuliani-prostate-cancer/">The 82% survival myth</a></p>
+ <p><a href="/fagan-nomogram/">Fagan nomogram</a><span style="opacity:.3">|</span><a href="/exercises/">Exercises</a><span style="opacity:.3">|</span><a href="/cheatsheets/">Cheat sheets</a><span style="opacity:.3">|</span><a href="/studies/">Known studies &amp; datasets</a><span style="opacity:.3">|</span><a href="/privacy.html">Privacy Policy</a><span style="opacity:.3">|</span><a href="mailto:support@statexampro.com">Support</a></p>
+</footer>
+<script src="../../../site.js"></script>
+<script>
+var LANG='en';
+var PI=Math.PI;
+// --- playground 1: the dartboard -------------------------------------------------
+var mcSeed=1;
+function mcRnd(){ mcSeed=(mcSeed*1664525+1013904223)%4294967296; return mcSeed/4294967296; }
+function mcCount(n){                       // slider position -> darts (log scale, 100 .. 200k)
+  return Math.round(100*Math.pow(10,(n-2)/398*3.3));
+}
+function mcThrow(){
+  var N=mcCount(+document.getElementById('mcN').value);
+  document.getElementById('mcNv').textContent=sxpInt(N);
+  var c=document.getElementById('mcCanvas'), g=c.getContext('2d'), W=c.width;
+  var cs=getComputedStyle(document.body);
+  var accent=cs.getPropertyValue('--accent').trim()||'#0071e3';
+  var fn=cs.getPropertyValue('--fn').trim()||'#ff3b30';
+  var hair=cs.getPropertyValue('--hairline').trim()||'#d2d2d7';
+  g.clearRect(0,0,W,W);
+  g.strokeStyle=hair; g.lineWidth=2; g.strokeRect(1,1,W-2,W-2);
+  g.beginPath(); g.arc(0,W,W,-Math.PI/2,0); g.stroke();       // the quarter circle
+  var inside=0, draw=Math.min(N,4000), step=N/draw, next=0, drawn=0;
+  var s=mcSeed;                                                // replay the same stream for dots
+  for(var i=0;i<N;i++){
+    var x=mcRnd(), y=mcRnd();
+    var hit=(x*x+y*y)<=1; if(hit)inside++;
+    if(i>=next && drawn<draw){                                 // thin the dots, keep the maths exact
+      next+=step; drawn++;
+      g.fillStyle=hit?accent:fn; g.globalAlpha=N>20000?0.35:0.7;
+      g.fillRect(x*W-1.5,(1-y)*W-1.5,3,3);
+    }
+  }
+  g.globalAlpha=1;
+  mcSeed=s;                                                    // so dragging N is stable, not a re-roll
+  var pi=4*inside/N, err=Math.abs(pi-PI);
+  document.getElementById('mcPi').textContent=sxpNum(pi.toFixed(4));
+  document.getElementById('mcErr').textContent='off by '+sxpNum(err.toFixed(4))+'  ·  '+sxpInt(inside)+' of '+sxpInt(N)+' inside';
+}
+function mcReroll(){ mcSeed=Math.floor(Math.random()*4294967296); mcThrow(); }
+// --- playground 2: 400 independent runs ------------------------------------------
+var RUNS=400, mcTimer=null;
+function mcRunsInput(){                      // 400 runs x 20k darts is ~300ms: far too slow to
+  var N=+document.getElementById('mcEN').value;   // recompute on every tick of a slider drag, so
+  document.getElementById('mcENv').textContent=sxpInt(N);  // the label answers instantly and the
+  clearTimeout(mcTimer);                                   // simulation waits for you to settle.
+  mcTimer=setTimeout(mcRuns,130);
+}
+function mcRuns(reroll){
+  var N=+document.getElementById('mcEN').value;
+  document.getElementById('mcENv').textContent=sxpInt(N);
+  if(reroll===1) mcSeed=Math.floor(Math.random()*4294967296);
+  var est=[], sum=0;
+  for(var r=0;r<RUNS;r++){
+    var hit=0;
+    for(var i=0;i<N;i++){ var x=mcRnd(), y=mcRnd(); if(x*x+y*y<=1)hit++; }
+    var p=4*hit/N; est.push(p); sum+=p;
+  }
+  var mean=sum/RUNS, v=0;
+  for(var k=0;k<RUNS;k++){ v+=(est[k]-mean)*(est[k]-mean); }
+  var sd=Math.sqrt(v/(RUNS-1));
+  var se=4*Math.sqrt((PI/4)*(1-PI/4)/N);            // the formula's prediction: about 1.64/sqrt(N)
+  document.getElementById('mcSD').textContent=sxpNum(sd.toFixed(3));
+  document.getElementById('mcSE').textContent='the square-root law predicts '+sxpNum(se.toFixed(3));
+  mcHistDraw(est);
+  var ratio=sd/se;
+  var v2=document.getElementById('mcVerdict');
+  if(Math.abs(ratio-1)<0.15) v2.innerHTML='<b>The formula called it.</b> Measured spread and predicted spread agree - that is the central limit theorem, not a coincidence. Quadruple the darts and this halves.';
+  else v2.innerHTML='<b>Measured and predicted differ a little</b> - with only '+RUNS+' runs the measured spread has its own error bar. Re-run and it will dance around the prediction.';
+}
+function mcHistDraw(est){
+  var W=560,H=230,ML=8,MR=8,MT=22,MB=26,pw=W-ML-MR,ph=H-MT-MB;
+  var lo=Math.min.apply(null,est), hi=Math.max.apply(null,est);
+  var pad=(hi-lo)*0.08||0.01; lo-=pad; hi+=pad;
+  var BINS=40, counts=new Array(BINS).fill(0);
+  for(var i=0;i<est.length;i++){ var b=Math.floor((est[i]-lo)/(hi-lo)*BINS); if(b>=0&&b<BINS)counts[b]++; }
+  var cmax=Math.max.apply(null,counts)||1;
+  var X=function(v){ return ML+(v-lo)/(hi-lo)*pw; };
+  var s=['<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Histogram of 400 independent estimates of pi">'];
+  for(var b2=0;b2<BINS;b2++){
+    var bx=ML+b2/BINS*pw, bw=pw/BINS-1, bh=counts[b2]/cmax*ph;
+    s.push('<rect x="'+bx.toFixed(1)+'" y="'+(MT+ph-bh).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="var(--accent)" opacity="0.34"/>');
+  }
+  if(PI>lo&&PI<hi){
+    s.push('<line x1="'+X(PI).toFixed(1)+'" y1="'+MT+'" x2="'+X(PI).toFixed(1)+'" y2="'+(MT+ph+4)+'" stroke="var(--fn)" stroke-width="2.4"/>');
+    s.push('<text x="'+X(PI).toFixed(1)+'" y="'+(MT-6)+'" font-size="11" font-weight="700" fill="var(--fn)" text-anchor="middle">true pi</text>');
+  }
+  s.push('<line x1="'+ML+'" y1="'+(MT+ph)+'" x2="'+(ML+pw)+'" y2="'+(MT+ph)+'" stroke="var(--hairline)" stroke-width="1"/>');
+  s.push('<text x="'+ML+'" y="'+(MT+ph+18)+'" font-size="10" fill="var(--text-sec)">'+sxpNum(lo.toFixed(2))+'</text>');
+  s.push('<text x="'+(ML+pw)+'" y="'+(MT+ph+18)+'" font-size="10" fill="var(--text-sec)" text-anchor="end">'+sxpNum(hi.toFixed(2))+'</text>');
+  s.push('</svg>');
+  document.getElementById('mcHist').innerHTML=s.join('');
+}
+window.sxpOnTheme=function(){ mcThrow(); };
+mcThrow(); mcRuns();
+</script>
+<script>
+(function(){var b=document.getElementById('burger'),s=document.getElementById('scrim');
+function mob(){return matchMedia('(max-width:900px)').matches;}
+try{if(localStorage.getItem('sxp-nav-collapsed')==='1')document.body.classList.add('nav-collapsed');}catch(e){}
+b.addEventListener('click',function(){if(mob()){document.body.classList.toggle('nav-open');}else{var c=document.body.classList.toggle('nav-collapsed');try{localStorage.setItem('sxp-nav-collapsed',c?'1':'0');}catch(e){}}});
+s.addEventListener('click',function(){document.body.classList.remove('nav-open');});})();
+</script>
+</body>
+</html>
